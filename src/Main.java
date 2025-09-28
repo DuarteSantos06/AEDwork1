@@ -102,6 +102,7 @@ public class Main {
             createServicesWithCapacity(in,homeAway);
         }else{
         System.out.println(INVALID_SERVICE_TYPE);
+
         }
     }
 
