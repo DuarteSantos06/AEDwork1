@@ -1,4 +1,5 @@
 package dataStructures;
+
 import dataStructures.exceptions.NoSuchElementException;
 
 /**
@@ -11,15 +12,30 @@ import dataStructures.exceptions.NoSuchElementException;
  */
 public class FilterIterator<E> implements Iterator<E> {
 
-    //TODO: Left as an exercise.
+    /**
+     *  Iterator of elements to filter.
+     */
+    private Iterator<E> iterator;
+
+    /**
+     *  Filter.
+     */
+    private Predicate<E> filter;
+
+    /**
+     * Node with the next element in the iteration.
+     */
+    private E nextToReturn;
 
     /**
      *
      * @param list to be iterated
-     * @param criterion filter
+     * @param filter
      */
-    public FilterIterator(Iterator<E> list, Predicate<E> criterion) {
-        //TODO: Left as an exercise.
+    public FilterIterator(Iterator<E> list, Predicate<E> filter) {
+        iterator = list;
+        this.filter = filter;
+        nextToReturn = null;
     }
 
     /**
@@ -28,8 +44,13 @@ public class FilterIterator<E> implements Iterator<E> {
      * @return true iff the iteration has more elements
      */
     public boolean hasNext() {
-        //TODO: Left as an exercise.
-        return true;
+        while (nextToReturn == null && iterator.hasNext()) {
+            E candidate = iterator.next();
+            if (filter.check(candidate)) {
+                nextToReturn = candidate;
+            }
+        }
+        return nextToReturn != null;
     }
 
     /**
@@ -38,9 +59,13 @@ public class FilterIterator<E> implements Iterator<E> {
      * @return the next element in the iteration
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
-    public E next() {
-        //TODO: Left as an exercise.
-        return null;
+    public E next()throws NoSuchElementException {
+        if(!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        E element = nextToReturn;
+        nextToReturn = null;
+        return element;
     }
 
     /**
@@ -48,7 +73,8 @@ public class FilterIterator<E> implements Iterator<E> {
      * After rewind, if the iteration is not empty, next will return the first element.
      */
     public void rewind() {
-        //TODO: Left as an exercise.
+        nextToReturn = null;
+        iterator.rewind();
     }
 
 }

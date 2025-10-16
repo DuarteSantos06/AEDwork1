@@ -1,13 +1,17 @@
 package dataStructures;
+
 import dataStructures.exceptions.*;
+import Package.StudentComparator;
+
+
 /**
  * Sorted Doubly linked list Implementation
  * @author AED  Team
  * @version 1.0
  * @param <E> Generic Element
- * 
+ *
  */
-public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedList<E> {
+public class SortedDoublyLinkedList<E> implements SortedList<E> {
 
     /**
      *  Node at the head of the list.
@@ -17,17 +21,21 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      * Node at the tail of the list.
      */
     private DoublyListNode<E> tail;
-    /**
-     * Number of elements in the list.
+    /**     * Number of elements in the list.
      */
     private int currentSize;
+    /**
+     * Comparator of elements.
+     */
+    private final Comparator<E> comparator;
     /**
      * Constructor of an empty sorted double linked list.
      * head and tail are initialized as null.
      * currentSize is initialized as 0.
      */
-    public SortedDoublyLinkedList( ) {
-        //TODO: Left as an exercise.
+    public SortedDoublyLinkedList(Comparator<E> comparator) {
+        currentSize = 0;
+        this.comparator = comparator;
     }
 
     /**
@@ -35,8 +43,7 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      * @return true if list is empty
      */
     public boolean isEmpty() {
-        //TODO: Left as an exercise.
-        return true;
+        return currentSize==0;
     }
 
     /**
@@ -45,8 +52,7 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      */
 
     public int size() {
-        //TODO: Left as an exercise.
-        return 0;
+        return currentSize;
     }
 
     /**
@@ -62,9 +68,11 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      * @return first element in the list
      * @throws NoSuchElementException - if size() == 0
      */
-    public E getMin( ) {
-        //TODO: Left as an exercise.
-        return null;
+    public E getMin( ) throws NoSuchElementException {
+        if(currentSize==0){
+            throw new NoSuchElementException();
+        }
+        return head.getElement();
     }
 
     /**
@@ -72,17 +80,29 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      * @return last element in the list
      * @throws NoSuchElementException - if size() == 0
      */
-    public E getMax( ) {
-        //TODO: Left as an exercise.
-        return null;
+    public E getMax( ) throws NoSuchElementException {
+        if(currentSize==0){
+            throw new NoSuchElementException();
+        }
+        return tail.getElement();
     }
     /**
      * Returns the first occurrence of the element equals to the given element in the list.
      * @return element in the list or null
      */
-    @Override
     public E get(E element) {
-        //TODO: Left as an exercise.
+        DoublyListNode<E> current = head;
+
+        while(current!=null) {
+            int cmp = comparator.compare(element, current.getElement());
+            if(cmp==0){
+                return current.getElement();
+
+            }else if(cmp<0){
+                return null;
+            }
+            current=current.getNext();
+        }
         return null;
     }
 
@@ -93,8 +113,7 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      * @return true iff the element exists in the list.
      */
     public boolean contains(E element) {
-        //TODO: Left as an exercise.
-        return true;
+        return get(element)!=null;
     }
 
     /**
@@ -103,7 +122,49 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      * @param element to be inserted
      */
     public void add(E element) {
-        //TODO: Left as an exercise.
+        DoublyListNode<E> newNode = new DoublyListNode<>(element);
+
+        if(head==null){
+            head=tail=newNode;
+            currentSize++;
+            return;
+        }
+
+        DoublyListNode<E> current = head;
+
+        while(current!=null) {
+            int cmp = comparator.compare(element, current.getElement());
+
+            if(cmp==0){
+                newNode.setNext(current.getNext());
+                newNode.setPrevious(current);
+                if(current.getNext()==null){
+                    tail=newNode;
+                }else{
+                    current.getNext().setPrevious(newNode);
+                }
+                currentSize++;
+                current.setNext(newNode);
+                return;
+
+            }else if(cmp<0){
+                newNode.setNext(current);
+                newNode.setPrevious(current.getPrevious());
+                if(current.getPrevious()==null){
+                    head=newNode;
+                }else{
+                    current.getPrevious().setNext(newNode);
+                }
+                current.setPrevious(newNode);
+                currentSize++;
+                return;
+            }
+            current=current.getNext();
+        }
+        tail.setNext(newNode);
+        newNode.setPrevious(tail);
+        tail = newNode;
+        currentSize++;
     }
 
     /**
@@ -111,7 +172,34 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      * @return element removed from the list or null if !belongs(element)
      */
     public E remove(E element) {
-        //TODO: Left as an exercise.
-        return null;
+        if(head==null){
+            return null;
+        }
+
+        DoublyListNode<E> current = head;
+        E elementRemoved=null;
+        while(current!=null) {
+            int cmp = comparator.compare(element, current.getElement());
+            if(cmp==0){
+                elementRemoved = current.getElement();
+                if(current==head){
+                    head=current.getNext();
+                    if(head!=null){
+                        head.setPrevious(null);
+                    }else{
+                        tail=null;
+                    }
+                }else if(current==tail){
+                    tail=current.getPrevious();
+                    tail.setNext(null);
+                }else{
+                    current.getPrevious().setNext(current.getNext());
+                    current.getNext().setPrevious(current.getPrevious());
+                }
+            }
+            currentSize--;
+            current=current.getNext();
+        }
+        return elementRemoved;
     }
 }

@@ -1,7 +1,11 @@
 import java.util.Scanner;
 import Package.HomeAway;
+import Package.Services.Services;
+import Package.Students.Students;
+import dataStructures.Iterator;
+import dataStructures.TwoWayIterator;
 
-public class Main {
+public class Main extends HomeAway {
 
     private static final String BOUNDS="BOUNDS";
     private static final String EXIT="EXIT";
@@ -9,7 +13,28 @@ public class Main {
     private static final String SAVE="SAVE";
     private static final String LOAD="LOAD";
     private static final String SERVICE="SERVICE";
+    private static final String SERVICES="SERVICES";
+    private static final String STUDENT="STUDENT";
+    private static final String LEAVE="LEAVE";
+    private static final String STUDENTS="STUDENTS";
+    private static final String GO="GO";
+    private static final String MOVE="MOVE";
+    private static final String USERS="USERS";
+    private static final String WHERE="WHERE";
+    private static final String VISITED="VISITED";
+    private static final String STAR="STAR";
+    private static final String RANKING="RANKING";
+    private static final String RANKED="RANKED";
+    private static final String TAG="TAG";
+    private static final String FIND="FIND";
 
+    private static final String MOVE_OUTPUT="lodging %s is now %s's home. %s is at home.\n";
+    private static final String GO_OUTPUT="%s is now at %s.\n";
+    private static final String STUDENT_CREATED="%s added.\n";
+    private static final String SERVICE_CREATED="%s %s added.\n";
+    private static final String AREA_CREATED="%s created.\n";
+    private static final String WHERE_OUTPUT="%s is at %s %s (%d, %d).\n";
+    private static final String LIST_STUDENTS="%s: %s at %s.\n";
     private static final String EXIT_OUTPUT="Bye!";
     private static final String INVALID_SERVICE_TYPE="Invalid service type!";
     private static final String SAVED="%s saved.\n";
@@ -30,7 +55,7 @@ public class Main {
             "visited - Lists locations visited by one student\n" +
             "ranking - Lists services ordered by star\n" +
             "ranked - Lists the service(s) of the indicated type with the given score that are closer to the student location\n" +
-            "tag - Lists all services that have at least one review whose description contains the specified word. This list is from the most recent review to the oldest\n" +
+            "tag - Lists all services that have at least one review whose description contains the specified word\n" +
             "find - Finds the most relevant service of a certain type, for a specific student\n" +
             "help - Shows the available commands\n" +
             "exit - Terminates the execution of the program";
@@ -51,89 +76,322 @@ public class Main {
             comm=in.next().toUpperCase();
             switch(comm) {
                 case BOUNDS-> createArea(in,homeAway);
-                case SAVE-> saveArea(in,homeAway);
+                case SAVE-> saveArea(homeAway);
                 case LOAD-> loadArea(in,homeAway);
                 case SERVICE -> createService(in,homeAway);
+                case SERVICES-> listServices(homeAway);
+                case STUDENT-> createStudent(in,homeAway);
+                case LEAVE-> leave(in,homeAway);
+                case STUDENTS-> listStudents(in,homeAway);
+                case GO->go(in,homeAway);
+                case MOVE-> move(in,homeAway);
+                case USERS-> listUsers(in,homeAway);
+                case WHERE-> where(in,homeAway);
+                case VISITED-> listVisited(in,homeAway);
+                case STAR-> evaluate(in,homeAway);
+                case RANKING-> ranking(homeAway);
+                case RANKED-> ranked(in,homeAway);
+                case TAG-> tag(in,homeAway);
+                case FIND-> find(in,homeAway);
                 case HELP->System.out.println(HELP_OUTPUT);
-                case EXIT->System.out.println(EXIT_OUTPUT);
+                case EXIT->exit(homeAway);
                 default-> System.out.println(UNKNOWN_COMMAND);
             }
+
         }while(!comm.equals(EXIT));
+    }
+
+    private static void exit(HomeAway homeAway) {
+        try{
+            String name=homeAway.saveArea();
+            System.out.println(EXIT_OUTPUT);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void createArea(Scanner in, HomeAway homeAway) {
         try {
-            int minLongitude = in.nextInt();
-            int minLatitude = in.nextInt();
-            int maxLongitude = in.nextInt();
-            int maxLatitude = in.nextInt();
-            String name = in.nextLine();
-            homeAway.createArea(name, minLongitude, minLatitude, maxLongitude, maxLatitude);
+            long topLatitude = in.nextLong();
+            long leftLongitude = in.nextLong();
+            long bottomLatitude = in.nextLong();
+            long rightLongitude = in.nextLong();
+            String name = in.nextLine().trim();
+            homeAway.createArea(name, topLatitude, leftLongitude, bottomLatitude, rightLongitude);
+            System.out.printf(AREA_CREATED,name);
         } catch (Exception e) {
-            System.out.println();
+            System.out.println(e.getMessage());
         }
     }
 
-    private static void saveArea(Scanner in, HomeAway homeAway) {
+    private static void saveArea( HomeAway homeAway) {
         try {
             String name=homeAway.saveArea();
             System.out.printf(SAVED,name);
         } catch (Exception e) {
-            System.out.println();
+            System.out.println(e.getMessage());
         }
     }
 
     private static void loadArea(Scanner in, HomeAway homeAway) {
         try{
-            String name=in.nextLine();
-            homeAway.loadArea(name);
+            String name=in.nextLine().trim();
+
+            System.out.println(homeAway.loadArea(name)+" loaded.");
         }catch (Exception e){
-            System.out.println();
+            System.out.println(e.getMessage());
         }
     }
 
     private static void createService(Scanner in, HomeAway homeAway) {
-        String type=in.next();
-
+        String type=in.next().trim().toLowerCase();
         if(type.equals(LEISURE)){
             createLeisure(in,homeAway);
         }
         else if(type.equals(LODGING)||type.equals(EATING)){
-            createServicesWithCapacity(in,homeAway);
+            createServicesWithCapacity(in,homeAway,type);
         }else{
         System.out.println(INVALID_SERVICE_TYPE);
-
+        in.nextLine();
         }
     }
 
-    private static void createServicesWithCapacity(Scanner in, HomeAway homeAway) {
+    private static void createServicesWithCapacity(Scanner in, HomeAway homeAway,String type) {
         try{
-            String type=in.next();
-            int latitude=in.nextInt();
-            int longitude=in.nextInt();
+            long latitude=in.nextLong();
+            long longitude=in.nextLong();
             int price=in.nextInt();
             int capacity=in.nextInt();
-            String name=in.nextLine();
+            String name=in.nextLine().trim();
             if(type.equals(EATING)){
                 homeAway.createEating(latitude,longitude,price,capacity,name);
             }
             else if(type.equals(LODGING)){
                 homeAway.createLodging(latitude,longitude,price,capacity,name);
             }
-        }catch (Exception e){}
+            System.out.printf(SERVICE_CREATED,type,name);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void createLeisure(Scanner in, HomeAway homeAway) {
         try{
-            int latitude=in.nextInt();
-            int longitude=in.nextInt();
+            long latitude=in.nextLong();
+            long longitude=in.nextLong();
             int price=in.nextInt();
             int discount=in.nextInt();
-            String name=in.nextLine();
+            String name=in.nextLine().trim();
             homeAway.createLeisure(latitude,longitude,price,  discount,name);
-        }catch (Exception e){}
+            System.out.printf(SERVICE_CREATED,LEISURE,name);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
+    private static void listServices( HomeAway homeAway) {
+        try{
+            Iterator<Services> it=homeAway.listAllServices();
+            while(it.hasNext()){
+                Services s=it.next();
+                System.out.printf("%s: %s (%d, %d).\n",s.getName(),s.getType(),s.getLatitude(),s.getLongitude());
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void createStudent(Scanner in, HomeAway homeAway) {
+        try{
+            String type=in.next().trim();
+            in.nextLine();
+            String name=in.nextLine();
+            String country=in.nextLine();
+            String lodging=in.nextLine();
+            homeAway.createStudent(type,name,country,lodging);
+            System.out.printf(STUDENT_CREATED,name);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void leave(Scanner in, HomeAway homeAway) {
+        try{
+            String name=in.nextLine().trim();
+            homeAway.leave(name);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void listStudents(Scanner in, HomeAway homeAway) {
+        try{
+            String country=in.nextLine().trim();
+            if(country.equals("all")){
+                Iterator<Students> it=homeAway.listAllStudents();
+                while(it.hasNext()){
+                    Students s=it.next();
+                    System.out.printf(LIST_STUDENTS,s.getName(),s.getType(),s.getNameLocation());
+                }
+            }else{
+                Iterator<Students> it=homeAway.listStudentsByCountry(country);
+                while(it.hasNext()){
+                    Students s=it.next();
+                    System.out.printf(LIST_STUDENTS,s.getName(),s.getType(),s.getNameLocation());
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void go(Scanner in, HomeAway homeAway) {
+        try{
+            String name=capitalizeTheName(in.nextLine().trim());
+            String location=in.nextLine();
+            homeAway.go(name,location);
+            System.out.printf(GO_OUTPUT,name,location);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void move(Scanner in, HomeAway homeAway) {
+        try{
+            String name=capitalizeTheName(in.nextLine().trim());
+            String location=in.nextLine();
+            homeAway.move(name,location);
+            System.out.printf(MOVE_OUTPUT,location,name,name);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void listUsers(Scanner in, HomeAway homeAway) {
+        try{
+            String order=in.next().trim();
+            String place=capitalizeTheName(in.nextLine().trim());
+            TwoWayIterator<Students> it=homeAway.listUsersByOrder(place);
+            if(order.equals(">")){
+                while(it.hasNext()){
+                    Students s=it.next();
+                    System.out.printf(LIST_STUDENTS,s.getName(),s.getType(),s.getNameLocation());
+                }
+            }else if(order.equals("<")){
+                it.fullForward();
+                while(it.hasPrevious()){
+                    Students s=it.previous();
+                    System.out.printf(LIST_STUDENTS,s.getName(),s.getType(),s.getNameLocation());
+                }
+            }else{
+                System.out.println("This order does not exist!");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void where(Scanner in, HomeAway homeAway) {
+        try{
+            String name= capitalizeTheName(in.nextLine().trim());
+            Services location=homeAway.where(name);
+            name=capitalizeTheName(name);
+            System.out.printf(WHERE_OUTPUT,name,location.getName(),location.getType(),location.getLatitude(),location.getLongitude());
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void listVisited(Scanner in, HomeAway homeAway) {
+        try{
+            String name=in.nextLine().trim();
+            Iterator<Services> it=homeAway.getVisited(name);
+            while(it.hasNext()){
+                Services s=it.next();
+                System.out.println(s.getName());
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void evaluate(Scanner in, HomeAway homeAway) {
+        try{
+            int star=in.nextInt();
+            String nameService= capitalizeTheName(in.nextLine().trim());
+            String description=in.nextLine();
+            homeAway.evaluate(star,nameService,description);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void ranking(HomeAway homeAway) {
+        try{
+            Iterator<Services> it=homeAway.getRanking();
+            while(it.hasNext()){
+                Services s=it.next();
+                System.out.println(s.getName());
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void ranked(Scanner in, HomeAway homeAway) {
+        try{
+            String type=in.next().trim();
+            int star=in.nextInt();
+            String name=in.nextLine();
+            Iterator<Services> it=homeAway.getRanked(type,star,name);
+            while(it.hasNext()){
+                Services s=it.next();
+                System.out.println(s.getName());
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void tag(Scanner in, HomeAway homeAway) {
+        try{
+            String tag=in.nextLine().trim();
+            Iterator<Services> it=homeAway.getTag(tag);
+            while(it.hasNext()){
+                Services s=it.next();
+                System.out.println(s.getName());
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void find (Scanner in, HomeAway homeAway){
+        try{
+            String name=in.nextLine().trim();
+            String type=in.nextLine();
+            Services s=homeAway.find(name,type);
+            System.out.println(s.getName());
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //chatgpt
+    private static String capitalizeTheName(String name){
+        String[] words = name.trim().toLowerCase().split("\\s+");
+        StringBuilder sb = new StringBuilder();
+
+        for (String w : words) {
+            if (!w.isEmpty()) {
+                sb.append(Character.toUpperCase(w.charAt(0)))
+                        .append(w.substring(1))
+                        .append(" ");
+            }
+        }
+        return sb.toString().trim();
+    }
+//chatgpt
 
 
 

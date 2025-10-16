@@ -1,19 +1,47 @@
 package Package.Services;
 
-public class ServicesWithCapacity extends Services {
+import Package.Students.Students;
+import dataStructures.DoublyLinkedList;
 
-    private int latitude;
-    private int longitude;
-    private int money;
+public class ServicesWithCapacity extends Services implements ServicesWithCapacityInterface{
+
+
     private int capacity;
-    private String name;
+    private DoublyLinkedList<Students> students;
+    private int currentOccupation;
+    private String type;
 
-    public ServicesWithCapacity(int latitude, int longitude, int money, int capacity,String name){
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.money = money;
+    public ServicesWithCapacity(long latitude, long longitude, int price, int capacity,String name,String type){
+        super(latitude,longitude,price,name,type);
         this.capacity = capacity;
-        this.name=name;
+        students = new DoublyLinkedList<>();
+        this.currentOccupation = 0;
+        this.type=type;
+    }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getCurrentOccupation() {
+        return currentOccupation;
+    }
+
+    public DoublyLinkedList<Students> getStudents(){
+        return students;
+    }
+
+    public boolean isFull(){
+        return currentOccupation ==capacity;
+    }
+
+    public void addStudent(Students s){
+        currentOccupation++;
+        students.addLast(s);
+    }
+
+    public void removeStudent(Students s){
+        currentOccupation--;
+        students.remove(students.indexOf(s));
     }
 }

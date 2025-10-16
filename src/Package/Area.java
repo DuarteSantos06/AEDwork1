@@ -1,36 +1,72 @@
 package Package;
 
-public class Area {
+import Package.Services.Services;
+import Package.Students.Students;
+import dataStructures.ListInArray;
+import dataStructures.SortedDoublyLinkedList;
+import dataStructures.SortedList;
+import dataStructures.List;
+
+import java.io.Serializable;
+
+public class Area implements AreaInterface, Serializable {
 
     private String name;
-    private int minLongitude ;
-    private int minLatitude ;
-    private int maxLongitude ;
-    private int maxLatitude;
+    private long topLatitude;
+    private long leftLongitude;
+    private long bottomLatitude;
+    private long rightLongitude;
+    private List<Services> services;
+    private SortedList<Students> students;
+    private List<Students>studentsByRegistration;
 
-    public Area(String name, int minLongitude, int minLatitude, int maxLongitude, int maxLatitude) {
+    public Area(String name, long topLatitude, long leftLongitude, long bottomLatitude, long rightLongitude) {
         this.name = name;
-        this.minLongitude = minLongitude;
-        this.minLatitude = minLatitude;
-        this.maxLongitude = maxLongitude;
-        this.maxLatitude = maxLatitude;
+        this.topLatitude = topLatitude;
+        this.leftLongitude = leftLongitude;
+        this.bottomLatitude = bottomLatitude;
+        this.rightLongitude = rightLongitude;
+        services = new ListInArray<>(10);
+        students = new SortedDoublyLinkedList<>(new StudentComparator());
+        studentsByRegistration=new ListInArray<>(10);
     }
 
     public String getName() {
         return name;
     }
 
-    public int getMinLongitude() {
-        return minLongitude;
+    public long getTopLatitude() {
+        return topLatitude;
     }
-    public int getMinLatitude() {
-        return minLatitude;
+    public long getLeftLongitude() {
+        return leftLongitude;
     }
 
-    public int getMaxLongitude() {
-        return maxLongitude;
+    public long getBottomLatitude() {
+        return bottomLatitude;
     }
-    public int getMaxLatitude() {
-        return maxLatitude;
+    public long getRightLongitude() {
+        return rightLongitude;
+    }
+
+    public void addService(Services service){
+        services.addLast(service);
+    }
+
+    public List<Students> getStudentsByRegistration(){
+        return studentsByRegistration;
+    }
+
+    public void addStudent(Students student){
+        students.add(student);
+        studentsByRegistration.addLast(student);
+    }
+
+    public List<Services> getServices(){
+        return services;
+    }
+
+    public SortedList<Students> getStudents(){
+        return students;
     }
 }

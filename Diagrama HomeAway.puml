@@ -1,0 +1,453 @@
+@startuml
+class dataStructures.SortedDoublyLinkedList {
+- DoublyListNode<E> head
+- DoublyListNode<E> tail
+- int currentSize
++ boolean isEmpty()
++ int size()
++ Iterator<E> iterator()
++ E getMin()
++ E getMax()
++ E get(E)
++ boolean contains(E)
++ void add(E)
++ E remove(E)
+}
+
+
+class dataStructures.FilterIterator {
++ boolean hasNext()
++ E next()
++ void rewind()
+}
+
+class Package.Exceptions.InvalidLocation {
+}
+interface Package.Students.StudentsInterface {
+~ String getName()
+~ String getCountry()
+~ String getType()
+~ String getNameLocation()
+~ Services getLocation()
+~ void go(Services)
+~ void move(Lodging)
+}
+
+interface Package.Services.ServicesInterface {
+~ String getName()
+~ int getLatitude()
+~ int getLongitude()
+~ int getPrice()
+~ void evaluate(int,String)
+~ float getEvaluation()
+}
+
+interface Package.HomeAwayInterface {
+~ void createArea(String,int,int,int,int)
+~ String saveArea()
+~ void loadArea(String)
+~ void createEating(int,int,int,int,String)
+~ void createLodging(int,int,int,int,String)
+~ void createLeisure(int,int,int,int,String)
+~ void createStudent(String,String,String,String)
+~ void leave(String)
+~ Iterator<Students> listAllStudents()
+~ Iterator<Students> listStudentsByCountry(String)
+~ TwoWayIterator<Students> listUsersByOrder(String)
+~ void go(String,String)
+~ void move(String,String)
+~ Services where(String)
+~ Iterator<Services> getVisited(String)
+~ void evaluate(int,String,String)
+~ Iterator<Services> getRanking()
+}
+
+abstract class Package.Students.Students {
+- String locationName
+- int latitudeHome
+- int longitudeHome
+- int latitudeLocation
+- int longitudeLocation
+- String home
+- String name
+- String country
+- String type
+- Services location
++ int compareTo(Students)
++ String getName()
++ String getCountry()
++ String getType()
++ String getNameLocation()
++ Services getLocation()
++ void go(Services)
++ void move(Lodging)
+}
+
+
+interface Package.Services.ServicesWithCapacityInterface {
+~ int getCapacity()
+~ int getCurrentOccupation()
+~ DoublyLinkedList<Students> getStudents()
+}
+
+interface dataStructures.SortedList {
+~ boolean isEmpty()
+~ int size()
+~ Iterator<E> iterator()
+~ E getMin()
+~ E getMax()
+~ boolean contains(E)
+~ E get(E)
+~ void add(E)
+~ E remove(E)
+}
+
+class Package.Students.Thrifty {
+}
+interface dataStructures.List {
+~ {static} int NOT_FOUND
+~ boolean isEmpty()
+~ int size()
+~ Iterator<E> iterator()
+~ E getFirst()
+~ E getLast()
+~ E get(int)
+~ int indexOf(E)
+~ void addFirst(E)
+~ void addLast(E)
+~ void add(int,E)
+~ E removeFirst()
+~ E removeLast()
+~ E remove(int)
+}
+
+
+class Package.Services.Lodging {
+}
+abstract class Package.Services.Services {
+# String name
+# int latitude
+# int longitude
+# int price
+# float star
+# int countEvaluations
+# ListInArray<String> reviews
+# String type
++ String getName()
++ int getLatitude()
++ int getLongitude()
++ int getPrice()
++ void evaluate(int,String)
++ float getEvaluation()
++ ListInArray<String> getReviews()
++ String getType()
+}
+
+
+class dataStructures.ArrayIterator {
+- E[] elems
+- int counter
+- int current
++ void rewind()
++ boolean hasNext()
++ E next()
+}
+
+
+class dataStructures.exceptions.InvalidPositionException {
+~ {static} long serialVersionUID
+}
+
+class dataStructures.ListInArray {
+- {static} int FACTOR
+- E[] elems
+- int counter
++ boolean isEmpty()
++ int size()
++ Iterator<E> iterator()
++ E getFirst()
++ E getLast()
++ E get(int)
++ int indexOf(E)
++ void addFirst(E)
++ void addLast(E)
++ void add(int,E)
++ E removeFirst()
++ E removeLast()
++ E remove(int)
+}
+
+
+class dataStructures.DoublyListNode {
+~ {static} long serialVersionUID
+- E element
+- DoublyListNode<E> previous
+- DoublyListNode<E> next
++ E getElement()
++ DoublyListNode<E> getPrevious()
++ DoublyListNode<E> getNext()
++ void setElement(E)
++ void setPrevious(DoublyListNode<E>)
++ void setNext(DoublyListNode<E>)
+}
+
+
+class Package.Exceptions.InvalidPrice {
+}
+class Package.Area {
+- String name
+- int minLongitude
+- int minLatitude
+- int maxLongitude
+- int maxLatitude
++ String getName()
++ int getMinLongitude()
++ int getMinLatitude()
++ int getMaxLongitude()
++ int getMaxLatitude()
+}
+
+
+class Package.Services.Leisure {
+}
+interface dataStructures.Iterator {
+~ boolean hasNext()
+~ E next()
+~ void rewind()
+}
+
+class Package.Services.ServicesWithCapacity {
+- int latitude
+- int longitude
+- int money
+- int capacity
+- String name
+- DoublyLinkedList<Students> students
+- int currentOccuaption
+- String type
++ int getCapacity()
++ int getCurrentOccupation()
++ DoublyLinkedList<Students> getStudents()
+}
+
+
+class dataStructures.exceptions.NoSuchElementException {
+~ {static} long serialVersionUID
+}
+
+class Package.Services.Eating {
+}
+class Package.HomeAway {
+- {static} String THRIFTY
+- {static} String OUTGOING
+- {static} String BOOKISH
+- Area currentArea
+- SortedDoublyLinkedList<Students> students
+- ListInArray<Services> services
++ void HomeAway()
++ void createArea(String,int,int,int,int)
++ String saveArea()
++ void loadArea(String)
++ void createEating(int,int,int,int,String)
++ void createLodging(int,int,int,int,String)
++ void createLeisure(int,int,int,int,String)
+- boolean isInValidBounds(int,int)
++ void createStudent(String,String,String,String)
++ void leave(String)
+- Lodging findLodging(String)
+- boolean lodgingExists(String)
+- boolean lodgingIsFull(String)
++ Iterator<Students> listAllStudents()
++ Iterator<Students> listStudentsByCountry(String)
++ void go(String,String)
++ void move(String,String)
++ TwoWayIterator<Students> listUsersByOrder(String)
++ Services where(String)
+- Students findStudent(String)
+- Services findService(String)
++ Iterator<Services> getVisited(String)
++ void evaluate(int,String,String)
++ Iterator<Services> getRanking()
+- DoublyLinkedList<Services> orderedServices()
++ Iterator<Services> getRanked(String,int,String)
++ Iterator<Services> getTag(String)
++ Services find(String,String)
+}
+
+
+class dataStructures.TwoWayDoublyIterator {
+- DoublyListNode<E> lastNode
+~ DoublyListNode<E> prevToReturn
++ boolean hasPrevious()
++ E next()
++ E previous()
++ void fullForward()
++ void rewind()
+}
+
+
+interface dataStructures.TwoWayList {
+~ TwoWayIterator<E> twoWayiterator()
+}
+
+class Package.Students.Bookish {
+}
+interface dataStructures.TwoWayIterator {
+~ boolean hasPrevious()
+~ E previous()
+~ void fullForward()
+}
+
+class Package.Exceptions.StudentNotFound {
+}
+class dataStructures.DoublyIterator {
+- DoublyListNode<E> firstNode
+~ DoublyListNode<E> nextToReturn
++ E next()
++ void rewind()
++ boolean hasNext()
+}
+
+
+interface Package.AreaInterface {
+~ String getName()
+~ int getMinLongitude()
+~ int getMinLatitude()
+~ int getMaxLongitude()
+~ int getMaxLatitude()
+}
+
+interface Package.Students.StudentsKeepVisitedInterface {
+~ void addVisited(Services)
+~ DoublyLinkedList<Services> getVisited()
+}
+
+class dataStructures.DoublyLinkedList {
+- DoublyListNode<E> head
+- DoublyListNode<E> tail
+- int currentSize
++ boolean isEmpty()
++ int size()
++ TwoWayIterator<E> twoWayiterator()
++ Iterator<E> iterator()
++ void addFirst(E)
++ void addLast(E)
++ E getFirst()
++ E getLast()
+~ void removeFirstNode()
+~ void removeLastNode()
++ E get(int)
++ int indexOf(E)
++ void add(int,E)
++ E removeFirst()
++ E removeLast()
++ E remove(int)
+}
+
+
+interface dataStructures.Predicate {
+~ boolean check(E)
+}
+
+class Main {
+- {static} String BOUNDS
+- {static} String EXIT
+- {static} String HELP
+- {static} String SAVE
+- {static} String LOAD
+- {static} String SERVICE
+- {static} String SERVICES
+- {static} String STUDENT
+- {static} String LEAVE
+- {static} String STUDENTS
+- {static} String GO
+- {static} String MOVE
+- {static} String USERS
+- {static} String WHERE
+- {static} String VISITED
+- {static} String STAR
+- {static} String RANKING
+- {static} String RANKED
+- {static} String TAG
+- {static} String FIND
+- {static} String WHERE_OUTPUT
+- {static} String LIST_STUDENTS
+- {static} String EXIT_OUTPUT
+- {static} String INVALID_SERVICE_TYPE
+- {static} String SAVED
+- {static} String UNKNOWN_COMMAND
+- {static} String HELP_OUTPUT
+- {static} String EATING
+- {static} String LODGING
+- {static} String LEISURE
++ {static} void main(String[])
+- {static} void createArea(Scanner,HomeAway)
+- {static} void saveArea(Scanner,HomeAway)
+- {static} void loadArea(Scanner,HomeAway)
+- {static} void createService(Scanner,HomeAway)
+- {static} void createServicesWithCapacity(Scanner,HomeAway)
+- {static} void createLeisure(Scanner,HomeAway)
+- {static} void createStudent(Scanner,HomeAway)
+- {static} void leave(Scanner,HomeAway)
+- {static} void listStudents(Scanner,HomeAway)
+- {static} void go(Scanner,HomeAway)
+- {static} void move(Scanner,HomeAway)
+- {static} void listUsers(Scanner,HomeAway)
+- {static} void where(Scanner,HomeAway)
+- {static} void listVisited(Scanner,HomeAway)
+- {static} void evaluate(Scanner,HomeAway)
+- {static} void ranking(HomeAway)
+- {static} void ranked(Scanner,HomeAway)
+- {static} void tag(Scanner,HomeAway)
+- {static} void find(Scanner,HomeAway)
+}
+
+
+abstract class Package.Students.StudentsKeepVisited {
+# DoublyLinkedList<Services> visitedLocations
++ void addVisited(Services)
++ DoublyLinkedList<Services> getVisited()
+}
+
+
+class Package.Students.Outgoing {
+}
+
+
+dataStructures.SortedList <|.. dataStructures.SortedDoublyLinkedList
+dataStructures.Iterator <|.. dataStructures.FilterIterator
+Package.Exceptions.Exception <|-- Package.Exceptions.InvalidLocation
+Package.Students.Comparable <|.. Package.Students.Students
+Package.Students.StudentsInterface <|.. Package.Students.Students
+Package.Services.ServicesInterface <|-- Package.Services.ServicesWithCapacityInterface
+java.io.Serializable <|-- dataStructures.SortedList
+Package.Students.Students <|-- Package.Students.Thrifty
+java.io.Serializable <|-- dataStructures.List
+Package.Services.ServicesWithCapacity <|-- Package.Services.Lodging
+Package.Services.ServicesInterface <|.. Package.Services.Services
+dataStructures.Iterator <|.. dataStructures.ArrayIterator
+dataStructures.exceptions.RuntimeException <|-- dataStructures.exceptions.InvalidPositionException
+dataStructures.List <|.. dataStructures.ListInArray
+java.io.Serializable <|.. dataStructures.DoublyListNode
+Package.Exceptions.Exception <|-- Package.Exceptions.InvalidPrice
+Package.AreaInterface <|.. Package.Area
+Package.Services.Services <|-- Package.Services.Leisure
+Package.Services.ServicesWithCapacityInterface <|.. Package.Services.ServicesWithCapacity
+Package.Services.Services <|-- Package.Services.ServicesWithCapacity
+dataStructures.exceptions.RuntimeException <|-- dataStructures.exceptions.NoSuchElementException
+Package.Services.ServicesWithCapacity <|-- Package.Services.Eating
+Package.HomeAwayInterface <|.. Package.HomeAway
+dataStructures.TwoWayIterator <|.. dataStructures.TwoWayDoublyIterator
+dataStructures.DoublyIterator <|-- dataStructures.TwoWayDoublyIterator
+dataStructures.List <|-- dataStructures.TwoWayList
+Package.Students.StudentsKeepVisited <|-- Package.Students.Bookish
+dataStructures.Iterator <|-- dataStructures.TwoWayIterator
+Package.Exceptions.Exception <|-- Package.Exceptions.StudentNotFound
+dataStructures.Iterator <|.. dataStructures.DoublyIterator
+Package.Students.StudentsInterface <|-- Package.Students.StudentsKeepVisitedInterface
+dataStructures.TwoWayList <|.. dataStructures.DoublyLinkedList
+Package.HomeAway <|-- Main
+Package.Students.StudentsKeepVisitedInterface <|.. Package.Students.StudentsKeepVisited
+Package.Students.Students <|-- Package.Students.StudentsKeepVisited
+Package.Students.StudentsKeepVisited <|-- Package.Students.Outgoing
+@enduml
