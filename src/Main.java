@@ -28,6 +28,12 @@ public class Main extends HomeAway {
     private static final String TAG="TAG";
     private static final String FIND="FIND";
 
+    private static final String NO_SERVICES_TAGGED="There are no services with this tag!";
+    private static final String TAG_OUTPUT="%s %s\n";
+    private static final String SERVICES_DESCENDING= "Services sorted in descending order";
+    private static final String RANKING_OUTPUT="%s: %d\n";
+    private static final String EVALUATION_OUTPUT="Your evaluation has been registered!";
+    private static final String LIST_USERS="%s: %s\n";
     private static final String MOVE_OUTPUT="lodging %s is now %s's home. %s is at home.\n";
     private static final String GO_OUTPUT="%s is now at %s.\n";
     private static final String STUDENT_CREATED="%s added.\n";
@@ -249,8 +255,8 @@ public class Main extends HomeAway {
         try{
             String name=capitalizeTheName(in.nextLine().trim());
             String location=in.nextLine();
-            homeAway.go(name,location);
-            System.out.printf(GO_OUTPUT,name,location);
+            String nameService=homeAway.go(name,location);
+            System.out.printf(GO_OUTPUT,name,nameService);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -259,9 +265,9 @@ public class Main extends HomeAway {
     private static void move(Scanner in, HomeAway homeAway) {
         try{
             String name=capitalizeTheName(in.nextLine().trim());
-            String location=in.nextLine();
-            homeAway.move(name,location);
-            System.out.printf(MOVE_OUTPUT,location,name,name);
+            String location=in.nextLine().trim();
+            String newHome=homeAway.move(name,location);
+            System.out.printf(MOVE_OUTPUT,newHome,name,name);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -270,21 +276,21 @@ public class Main extends HomeAway {
     private static void listUsers(Scanner in, HomeAway homeAway) {
         try{
             String order=in.next().trim();
-            String place=capitalizeTheName(in.nextLine().trim());
+            String place=in.nextLine().trim();
             TwoWayIterator<Students> it=homeAway.listUsersByOrder(place);
             if(order.equals(">")){
                 while(it.hasNext()){
                     Students s=it.next();
-                    System.out.printf(LIST_STUDENTS,s.getName(),s.getType(),s.getNameLocation());
+                    System.out.printf(LIST_USERS,s.getName(),s.getType());
                 }
             }else if(order.equals("<")){
                 it.fullForward();
                 while(it.hasPrevious()){
                     Students s=it.previous();
-                    System.out.printf(LIST_STUDENTS,s.getName(),s.getType(),s.getNameLocation());
+                    System.out.printf(LIST_USERS,s.getName(),s.getType());
                 }
             }else{
-                System.out.println("This order does not exist!");
+                System.out.println("This order does not exists!");
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -321,6 +327,7 @@ public class Main extends HomeAway {
             String nameService= capitalizeTheName(in.nextLine().trim());
             String description=in.nextLine();
             homeAway.evaluate(star,nameService,description);
+            System.out.println(EVALUATION_OUTPUT);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -328,10 +335,11 @@ public class Main extends HomeAway {
 
     private static void ranking(HomeAway homeAway) {
         try{
+            System.out.println(SERVICES_DESCENDING);
             Iterator<Services> it=homeAway.getRanking();
             while(it.hasNext()){
                 Services s=it.next();
-                System.out.println(s.getName());
+                System.out.printf(RANKING_OUTPUT,s.getName(),s.getEvaluation());
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -357,9 +365,12 @@ public class Main extends HomeAway {
         try{
             String tag=in.nextLine().trim();
             Iterator<Services> it=homeAway.getTag(tag);
+            if(!it.hasNext()){
+            System.out.println(NO_SERVICES_TAGGED);
+            }
             while(it.hasNext()){
                 Services s=it.next();
-                System.out.println(s.getName());
+                System.out.printf(TAG_OUTPUT,s.getType(),s.getName());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());

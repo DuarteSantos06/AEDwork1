@@ -9,7 +9,7 @@ public interface ServicesInterface {
 
     int getPrice();
 
-    void evaluate(int star, String description);
+    void evaluate(int star, String description,int evaluateCounter);
 
     int getEvaluation();
 }

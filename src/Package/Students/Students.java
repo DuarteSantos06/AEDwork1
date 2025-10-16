@@ -1,9 +1,6 @@
 package Package.Students;
 
-import Package.Services.Eating;
-import Package.Services.Lodging;
-import Package.Services.Services;
-import Package.Services.ServicesWithCapacity;
+import Package.Services.*;
 
 import java.io.Serializable;
 
@@ -77,6 +74,9 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
                 cheapestEating = eating;
             }
         }
+        if(!(this instanceof Thrifty)){
+            ((StudentsKeepVisited)this).addVisited(location);
+        }
     }
 
     public void move(Lodging home){
@@ -84,6 +84,10 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
         this.home.removeStudent(this);
         this.location=home;
         this.home =home;
+        if(!(this instanceof Thrifty)){
+            ((StudentsKeepVisited)this).addVisited(location);
+        }
+
     }
 
 }

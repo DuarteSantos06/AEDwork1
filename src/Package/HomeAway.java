@@ -15,10 +15,10 @@ public class HomeAway implements HomeAwayInterface{
     private static final String BOOKISH="bookish";
 
     private Area currentArea;
-
-
+    private int evaluateCounter;
 
     public HomeAway() {
+        this.evaluateCounter=0;
     }
 
     public void createArea(String name, long topLatitude, long leftLongitude, long bottomLatitude, long rightLongitude)throws AreaAlreadyExists,InvalidLocation {
@@ -154,14 +154,14 @@ public class HomeAway implements HomeAwayInterface{
                 student = new Thrifty(name,country,lodging,home);
             }else if(type.equals(OUTGOING)){
                 student = new Outgoing(name,country,lodging,home);
+                ((Outgoing)student).addVisited(home);
             }else {
                 student = new Bookish(name, country, lodging, home);
             }
             currentArea.addStudent(student);
             home.addStudent(student);
-            if(type.equals(OUTGOING)||type.equals(BOOKISH)){
-                ((StudentsKeepVisited)student).addVisited(home);
-            }
+
+
         }
     }
 
@@ -211,16 +211,6 @@ public class HomeAway implements HomeAwayInterface{
         return lodging.getCapacity()<=lodging.getCurrentOccupation();
     }
 
-    private boolean ServiceExists(String name){
-        List<Services>services=currentArea.getServices();
-        for(int i=0;i<services.size();i++){
-            Services s=services.get(i);
-            if(s.getName().equals(name)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public Iterator<Students> listAllStudents()throws NoToList {
         Iterator<Students>it=currentArea.getStudents().iterator();
@@ -238,10 +228,10 @@ public class HomeAway implements HomeAwayInterface{
         return it;
     }
 
-    public Students  go(String name,String location) throws StudentNotFound,InvalidLocation,AlreadyThere,Expensive{
+    public String  go(String name,String location) throws StudentNotFound,InvalidLocation,AlreadyThere,Expensive{
         Students s=findStudent(name);
         Services service=findService(location);
-        if(!ServiceExists(location)){
+        if(service==null){
             throw new InvalidLocation("Unknown "+location+ '!');
         }
         else if(s==null){
@@ -260,17 +250,16 @@ public class HomeAway implements HomeAwayInterface{
         Eating eating=s.getCheapestEating();
         s.go(service);
 
-
         if(eating!=null){
             if(s instanceof Thrifty && eating.getPrice()<service.getPrice() && service instanceof Eating){
                 throw new Expensive(name+" is now at "+ location+". "+name+" is distracted!");
             }
         }
-        return s;
+        return service.getName();
 
     }
 
-    public void move(String name,String location) throws StudentNotFound,InvalidLocation,LodgingIsFull,CantMove{
+    public String move(String name,String location) throws StudentNotFound,InvalidLocation,LodgingIsFull,CantMove{
         Students s=findStudent(name);
         Services service=findService(location);
         if(service==null){
@@ -290,6 +279,7 @@ public class HomeAway implements HomeAwayInterface{
             }
         }
         s.move((Lodging)service);
+        return service.getName();
 
 
     }
@@ -297,15 +287,15 @@ public class HomeAway implements HomeAwayInterface{
     public TwoWayIterator<Students> listUsersByOrder(String place)throws ServiceNotExists,InvalidLocation,Empty{
         Services s=findService(place);
         if(s==null){
-            throw new ServiceNotExists(place+"does not exists!");
+            throw new ServiceNotExists(place+" does not exist!");
         }else if(s instanceof Leisure){
-            throw new InvalidLocation(place+"does not control student entry and exit!");
+            throw new InvalidLocation(s.getName()+" does not control student entry and exit!");
         }
 
         DoublyLinkedList<Students>list=((ServicesWithCapacity) s).getStudents();
 
         if(list.isEmpty()){
-            throw new Empty("No students on "+place+"!");
+            throw new Empty("No students on "+s.getName()+"!");
         }
         return list.twoWayiterator();
 
@@ -356,24 +346,27 @@ public class HomeAway implements HomeAwayInterface{
     public Iterator<Services> getVisited(String name)throws StudentNotFound,InvalidStudentType,NoToList{
         Students s=findStudent(name);
         if(s==null){
-            throw new StudentNotFound(name+"does not exist!");
+            throw new StudentNotFound(name+" does not exist!");
         }else if(s instanceof Thrifty){
-            throw new InvalidStudentType(name+"is thrifty!");
+            throw new InvalidStudentType(s.getName()+" is thrifty!");
         }
         ListInArray<Services>visited= ((StudentsKeepVisited)s).getVisited();
         if(visited.isEmpty()){
-            throw new NoToList(name+"has not visited any locations!");
+            throw new NoToList(s.getName()+" has not visited any locations!");
         }
         return visited.iterator();
 
     }
 
-    public void evaluate(int star,String nameService,String description){
+    public void evaluate(int star,String nameService,String description)throws InvalidStar,ServiceNotExists{
         Services s=findService(nameService);
+        if(star<1||star>5){
+            throw new InvalidStar("Invalid evaluation!");
+        }
         if(s==null){
-            //
+            throw new ServiceNotExists(nameService+" does not exist!");
         }else{
-            s.evaluate(star,description);
+            s.evaluate(star,description,evaluateCounter++);
         }
     }
 
@@ -389,12 +382,18 @@ public class HomeAway implements HomeAwayInterface{
         }
         for(int i=0;i<ranking.size()-1;i++){
             for(int j=0;j<ranking.size()-1-i;j++) {
-                if (ranking.get(j).getEvaluation() < ranking.get(j + 1).getEvaluation()){
+                Services a = ranking.get(j);
+                Services b = ranking.get(j + 1);
+                if (a.getEvaluation() < b.getEvaluation()){
                     Services first = ranking.remove(j);
                     Services second = ranking.remove(j);
                     ranking.add(j, first);
                     ranking.add(j, second);
-
+                }else if(a.getEvaluation()==b.getEvaluation() && a.getLastEvaluated() > b.getLastEvaluated()){
+                    ranking.remove(j);
+                    ranking.remove(j);
+                    ranking.add(j, a);
+                    ranking.add(j, b);
                 }
             }
         }
@@ -421,12 +420,20 @@ public class HomeAway implements HomeAwayInterface{
 
         for(int i=0;i<services.size();i++){
             Services s=services.get(i);
-            if(s.getReviews().indexOf(tag)!=-1){
-                result.addLast(s);
+            List<String>tags=s.getReviews();
+            for(int j=0;j<tags.size();j++){
+                String[] words = tags.get(j).split("\\s+");
+                for (String word : words) {
+                    if (word.equalsIgnoreCase(tag) && result.indexOf(s) == -1) {
+                        result.addLast(s);
+                        break;
+                    }
+                }
             }
         }
         return result.iterator();
     }
+
 
     public Services find(String name,String type){
         FilterIterator<Services>it= new FilterIterator<>(currentArea.getServices().iterator(),s->s.getType().equalsIgnoreCase(type));
@@ -454,7 +461,7 @@ public class HomeAway implements HomeAwayInterface{
         Services highest=it.next();
         while(it.hasNext()){
             Services s=it.next();
-            if(s.getPrice()>highest.getEvaluation()){
+            if(s.getEvaluation()>highest.getEvaluation()){
                 highest=s;
             }
         }

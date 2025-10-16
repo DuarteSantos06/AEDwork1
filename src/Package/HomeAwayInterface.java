@@ -28,11 +28,11 @@ public interface HomeAwayInterface {
     Iterator<Students> listStudentsByCountry(String country)throws NoToList;
     TwoWayIterator<Students> listUsersByOrder(String place)throws ServiceNotExists,InvalidLocation,Empty;
 
-    Students go(String name, String location) throws StudentNotFound,InvalidLocation,AlreadyThere, Expensive;
-    void move(String name, String location) throws StudentNotFound,InvalidLocation,LodgingIsFull,CantMove;
+    String go(String name, String location) throws StudentNotFound,InvalidLocation,AlreadyThere, Expensive;
+    String move(String name, String location) throws StudentNotFound,InvalidLocation,LodgingIsFull,CantMove;
     Services where(String name)throws StudentNotFound;
 
     Iterator<Services> getVisited(String name)throws StudentNotFound,InvalidStudentType,NoToList;
-    void evaluate(int star, String nameService, String description);
+    void evaluate(int star, String nameService, String description)throws InvalidStar,ServiceNotExists;
     Iterator<Services> getRanking();
 }

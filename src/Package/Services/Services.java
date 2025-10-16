@@ -14,16 +14,21 @@ public  abstract class Services implements ServicesInterface, Serializable {
     protected int countEvaluations;
     protected ListInArray<String> reviews;
     protected String type;
+    protected int numberEvaluated;
 
     public Services(long latitude, long longitude, int price,String name,String type){
         this.latitude = latitude;
         this.longitude = longitude;
         this.price = price;
         this.name=name;
-        this.star=3;
+        this.star=4;
         this.countEvaluations=1;
         this.type=type;
         reviews = new ListInArray<>(10) ;
+    }
+
+    public int getLastEvaluated(){
+        return numberEvaluated;
     }
 
     public String getName() {
@@ -42,9 +47,20 @@ public  abstract class Services implements ServicesInterface, Serializable {
         return price;
     }
 
-    public void evaluate(int star,String description){
-        this.star=(star+this.star)/countEvaluations;
-        reviews.addLast(description);
+    public void evaluate(int star,String description,int evaluateCounter){
+        countEvaluations++;
+        float newStar = ((this.star * (countEvaluations - 1)) + star) / countEvaluations;
+        if(this.star>5){
+            this.star=5;
+        }else if(this.star<1){
+            this.star=1;
+        }
+        if(Math.round(newStar)!=Math.round(this.star)) {
+            this.numberEvaluated=evaluateCounter;
+        }
+        this.star=newStar;
+
+        reviews.addLast(description.toLowerCase());
     }
 
     public int getEvaluation(){
