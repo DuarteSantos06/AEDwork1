@@ -57,6 +57,15 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
         return cheapestEating;
     }
 
+    public void leave(){
+        if(this.location instanceof ServicesWithCapacity){
+            ((ServicesWithCapacity) this.location).removeStudent(this);
+        }
+        if(!location.getName().equals(home.getName())){
+            home.removeStudent(this);
+        }
+    }
+
 
 
 

@@ -43,9 +43,7 @@ public  abstract class Services implements ServicesInterface, Serializable {
         return longitude;
     }
 
-    public int getPrice() {
-        return price;
-    }
+    public abstract float getPrice();
 
     public void evaluate(int star,String description,int evaluateCounter){
         countEvaluations++;

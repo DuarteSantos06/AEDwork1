@@ -22,7 +22,7 @@ public interface HomeAwayInterface {
 
     // Estudantes
     void createStudent(String type, String name, String country, String lodging)throws InvalidStudentType,LodgingNotExists,LodgingIsFull,StudentAlreadyExists;
-    void leave(String name) throws StudentNotFound;
+    String leave(String name) throws StudentNotFound;
 
     Iterator<Students> listAllStudents()throws NoToList;
     Iterator<Students> listStudentsByCountry(String country)throws NoToList;

@@ -28,6 +28,8 @@ public class Main extends HomeAway {
     private static final String TAG="TAG";
     private static final String FIND="FIND";
 
+    private static final String LEAVE_OUTPUT="%s has left.\n";
+    private static final String RANKED_PHRASE="%s services closer with %d average\n";
     private static final String NO_SERVICES_TAGGED="There are no services with this tag!";
     private static final String TAG_OUTPUT="%s %s\n";
     private static final String SERVICES_DESCENDING= "Services sorted in descending order";
@@ -224,7 +226,8 @@ public class Main extends HomeAway {
     private static void leave(Scanner in, HomeAway homeAway) {
         try{
             String name=in.nextLine().trim();
-            homeAway.leave(name);
+            String nameLeft=homeAway.leave(name);
+            System.out.printf(LEAVE_OUTPUT,nameLeft);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -299,10 +302,10 @@ public class Main extends HomeAway {
 
     private static void where(Scanner in, HomeAway homeAway) {
         try{
-            String name= capitalizeTheName(in.nextLine().trim());
+            String name= in.nextLine().trim();
             Services location=homeAway.where(name);
             name=capitalizeTheName(name);
-            System.out.printf(WHERE_OUTPUT,name,location.getName(),location.getType(),location.getLatitude(),location.getLongitude());
+            System.out.printf(WHERE_OUTPUT,capitalizeTheName(name),location.getName(),location.getType(),location.getLatitude(),location.getLongitude());
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -350,8 +353,9 @@ public class Main extends HomeAway {
         try{
             String type=in.next().trim();
             int star=in.nextInt();
-            String name=in.nextLine();
+            String name=in.nextLine().trim();
             Iterator<Services> it=homeAway.getRanked(type,star,name);
+            System.out.printf(RANKED_PHRASE,type,star);
             while(it.hasNext()){
                 Services s=it.next();
                 System.out.println(s.getName());

@@ -13,6 +13,10 @@ public class HomeAway implements HomeAwayInterface{
     private static final String THRIFTY="thrifty";
     private static final String OUTGOING="outgoing";
     private static final String BOOKISH="bookish";
+    private static final String LEISURE="leisure";
+    private static final String EATING="eating";
+    private static final String LODGING="lodging";
+
 
     private Area currentArea;
     private int evaluateCounter;
@@ -176,12 +180,15 @@ public class HomeAway implements HomeAwayInterface{
         return false;
     }
 
-    public void leave(String name) throws StudentNotFound {
+    public String leave(String name) throws StudentNotFound {
         Students s=findStudent(name);
         if(s==null){
             throw new StudentNotFound(name+"does not exist!");
         }
-        currentArea.getStudents().remove(s);
+        String nameToReturn=s.getName();
+        s.leave();
+        currentArea.removeStudent(s);
+        return nameToReturn;
     }
 
     private Lodging findLodging(String name){
@@ -400,18 +407,60 @@ public class HomeAway implements HomeAwayInterface{
         return ranking;
     }
 
-    public Iterator<Services>getRanked(String type,int star,String name){
-        DoublyLinkedList<Services> result = new DoublyLinkedList<>();
+    public Iterator<Services>getRanked(String type,int star,String name)throws InvalidStar,StudentNotFound,InvalidType,ServiceNotExists{
         Iterator<Services> it = currentArea.getServices().iterator();
-
-        while (it.hasNext()) {
-            Services s = it.next();
-            if (s.getType().equals(type) && Math.round(s.getEvaluation()) == star) {
-                result.addLast(s);
-            }
+        Students student = findStudent(name);
+        if(star<1||star>5){
+            throw new InvalidStar("Invalid stars!");
+        }else if(student==null){
+            throw new StudentNotFound(name+" does not exist!");
+        }else if(!type.equals(LEISURE) && !type.equals(EATING) && !type.equals(LODGING) ){
+            throw new InvalidType("Invalid service type!");
+        }
+        FilterIterator<Services>itByType=new FilterIterator<>(it,s->s.getType().equalsIgnoreCase(type));
+        if(!itByType.hasNext()){
+            throw new ServiceNotExists("No "+type+" services!");
+        }
+        FilterIterator<Services>itByStar=new FilterIterator<>(itByType,s->s.getEvaluation()==star);
+        if(!itByStar.hasNext()){
+            throw new ServiceNotExists("No "+type+" services with average!");
         }
 
+        DoublyLinkedList<Services>result=closest(itByStar,student);
+
+
+
         return result.iterator();
+    }
+
+    private DoublyLinkedList<Services> closest(FilterIterator<Services>itByStar,Students student){
+        DoublyLinkedList<Services> closest = new DoublyLinkedList<>();
+        long minDistance = Long.MAX_VALUE;
+
+        while(itByStar.hasNext()){
+            Services s = itByStar.next();
+            long distance = Math.abs(s.getLatitude() - student.getLocation().getLatitude())
+                    + Math.abs(s.getLongitude() - student.getLocation().getLongitude());
+
+            if(distance < minDistance){
+                closest = new DoublyLinkedList<>();
+                closest.addLast(s);
+                minDistance = distance;
+            } else if(distance == minDistance){
+                closest.addLast(s);
+            }
+        }
+        for(int i = 0; i < closest.size() - 1; i++){
+            for(int j = 0; j < closest.size() - 1 - i; j++){
+                Services a = closest.get(j);
+                Services b = closest.get(j+1);
+                if(a.getLastEvaluated() > b.getLastEvaluated()){
+                    closest.add(j, b);
+                    closest.add(j+1, a);
+                }
+            }
+        }
+        return closest;
     }
 
     public Iterator<Services>getTag(String tag){
@@ -433,7 +482,6 @@ public class HomeAway implements HomeAwayInterface{
         }
         return result.iterator();
     }
-
 
     public Services find(String name,String type){
         FilterIterator<Services>it= new FilterIterator<>(currentArea.getServices().iterator(),s->s.getType().equalsIgnoreCase(type));
@@ -462,6 +510,8 @@ public class HomeAway implements HomeAwayInterface{
         while(it.hasNext()){
             Services s=it.next();
             if(s.getEvaluation()>highest.getEvaluation()){
+                highest=s;
+            }if(s.getEvaluation()==highest.getEvaluation() && s.getLastEvaluated()<highest.getLastEvaluated()){
                 highest=s;
             }
         }

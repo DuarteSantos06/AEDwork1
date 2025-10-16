@@ -19,6 +19,10 @@ public class ServicesWithCapacity extends Services implements ServicesWithCapaci
         this.type=type;
     }
 
+    public float getPrice(){
+        return price;
+    }
+
     public int getCapacity() {
         return capacity;
     }

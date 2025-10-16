@@ -62,6 +62,11 @@ public class Area implements AreaInterface, Serializable {
         studentsByRegistration.addLast(student);
     }
 
+    public void removeStudent(Students student){
+        students.remove(student);
+        studentsByRegistration.remove(studentsByRegistration.indexOf(student));
+    }
+
     public List<Services> getServices(){
         return services;
     }

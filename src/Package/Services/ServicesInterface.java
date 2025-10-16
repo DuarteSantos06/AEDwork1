@@ -7,7 +7,7 @@ public interface ServicesInterface {
     long getLatitude();
     long getLongitude();
 
-    int getPrice();
+    float getPrice();
 
     void evaluate(int star, String description,int evaluateCounter);
 
