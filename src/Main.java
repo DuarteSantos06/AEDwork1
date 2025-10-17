@@ -5,7 +5,7 @@ import Package.Students.Students;
 import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 
-public class Main extends HomeAway {
+public class Main  {
 
     private static final String BOUNDS="BOUNDS";
     private static final String EXIT="EXIT";
@@ -28,6 +28,7 @@ public class Main extends HomeAway {
     private static final String TAG="TAG";
     private static final String FIND="FIND";
 
+    private static final String GO_OUTPUT__DISTRACTED="%s is now at %s. %s is distracted.\n";
     private static final String LEAVE_OUTPUT="%s has left.\n";
     private static final String RANKED_PHRASE="%s services closer with %d average\n";
     private static final String NO_SERVICES_TAGGED="There are no services with this tag!";
@@ -107,6 +108,8 @@ public class Main extends HomeAway {
             }
 
         }while(!comm.equals(EXIT));
+        in.close();
+
     }
 
     private static void exit(HomeAway homeAway) {
@@ -124,7 +127,10 @@ public class Main extends HomeAway {
             long leftLongitude = in.nextLong();
             long bottomLatitude = in.nextLong();
             long rightLongitude = in.nextLong();
-            String name = in.nextLine().trim();
+            String name = in.next();
+            name += in.nextLine();
+            name = name.trim();
+
             homeAway.createArea(name, topLatitude, leftLongitude, bottomLatitude, rightLongitude);
             System.out.printf(AREA_CREATED,name);
         } catch (Exception e) {
@@ -170,7 +176,9 @@ public class Main extends HomeAway {
             long longitude=in.nextLong();
             int price=in.nextInt();
             int capacity=in.nextInt();
-            String name=in.nextLine().trim();
+            String name = in.next();
+            name += in.nextLine();
+            name = name.trim();
             if(type.equals(EATING)){
                 homeAway.createEating(latitude,longitude,price,capacity,name);
             }
@@ -189,7 +197,9 @@ public class Main extends HomeAway {
             long longitude=in.nextLong();
             int price=in.nextInt();
             int discount=in.nextInt();
-            String name=in.nextLine().trim();
+            String name = in.next();
+            name += in.nextLine();
+            name = name.trim();
             homeAway.createLeisure(latitude,longitude,price,  discount,name);
             System.out.printf(SERVICE_CREATED,LEISURE,name);
         }catch (Exception e){
@@ -256,10 +266,16 @@ public class Main extends HomeAway {
 
     private static void go(Scanner in, HomeAway homeAway) {
         try{
-            String name=capitalizeTheName(in.nextLine().trim());
+            String name=in.nextLine().trim();
             String location=in.nextLine();
-            String nameService=homeAway.go(name,location);
-            System.out.printf(GO_OUTPUT,name,nameService);
+            boolean is_distracted=homeAway.go(name,location);
+            String nameOutput=homeAway.getNameStudent(name);
+            String locationOutput=homeAway.getNameService(location);
+            if(!is_distracted){
+                System.out.printf(GO_OUTPUT,nameOutput,locationOutput);
+            }else {
+            System.out.printf(GO_OUTPUT__DISTRACTED,nameOutput,locationOutput,nameOutput);
+            }
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -267,9 +283,10 @@ public class Main extends HomeAway {
 
     private static void move(Scanner in, HomeAway homeAway) {
         try{
-            String name=capitalizeTheName(in.nextLine().trim());
+            String nameRead=in.nextLine().trim();
             String location=in.nextLine().trim();
-            String newHome=homeAway.move(name,location);
+            String newHome=homeAway.move(nameRead,location);
+            String name=homeAway.getNameStudent(nameRead);
             System.out.printf(MOVE_OUTPUT,newHome,name,name);
         }catch (Exception e){
             System.out.println(e.getMessage());

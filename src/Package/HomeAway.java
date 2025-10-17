@@ -26,19 +26,25 @@ public class HomeAway implements HomeAwayInterface{
     }
 
     public void createArea(String name, long topLatitude, long leftLongitude, long bottomLatitude, long rightLongitude)throws AreaAlreadyExists,InvalidLocation {
-        if(false){
+
+        try{
+            if(currentArea!=null){
+                String saved=saveArea();
+            }
+        }catch(Exception e) {
+        }
+        String filename = "data/" + name.replace(" ", "_") + ".ser";
+        File file = new File(filename);
+
+
+        if(file.exists()){
             throw new AreaAlreadyExists("Bounds already exists. Please load it!");
         }
         if(leftLongitude >= rightLongitude || topLatitude <= bottomLatitude){
             throw new InvalidLocation("Invalid bounds.");
 
         }
-        try{
-            if(currentArea!=null){
-                String saved=saveArea();
-            }
-        }catch(Exception e){
-        }
+
         currentArea = new Area(name,topLatitude,leftLongitude,bottomLatitude,rightLongitude);
     }
 
@@ -46,10 +52,14 @@ public class HomeAway implements HomeAwayInterface{
         if (currentArea == null) {
             throw new NoBoundsInTheSystem("System bounds not defined.");
         }
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("data/"+currentArea.getName().replace(" ", "_")+".ser"))) {
+
+        File dataFolder = new File("data");
+        if (!dataFolder.exists()) {
+            dataFolder.mkdir();
+        }
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("data/" +currentArea.getName().replace(" ", "_")+".ser"))) {
             out.writeObject(currentArea);
         } catch (IOException e) {
-
         }
         return currentArea.getName();
     }
@@ -61,10 +71,13 @@ public class HomeAway implements HomeAwayInterface{
         String fileName = "data/" + name.replace(" ", "_") + ".ser";
         File file = new File(fileName);
 
+        if(!file.exists()){
+            throw new NoBoundsInTheSystem("Bounds "+name+" does not exists!");
+        }
+
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             currentArea = (Area) in.readObject();;
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return currentArea.getName();
@@ -119,7 +132,7 @@ public class HomeAway implements HomeAwayInterface{
         List<Services>services=currentArea.getServices();
         for(int i=0;i<services.size();i++){
             Services s=services.get(i);
-            if(s.getName().equalsIgnoreCase(name.toUpperCase())){
+            if(s.getName().equalsIgnoreCase(name)){
                 return true;
             }
         }
@@ -133,7 +146,10 @@ public class HomeAway implements HomeAwayInterface{
                 latitude >= currentArea.getBottomLatitude());
     }
 
-    public Iterator<Services> listAllServices()throws NoToList{
+    public Iterator<Services> listAllServices()throws NoToList,NoBoundsInTheSystem{
+        if(currentArea==null){
+            throw new NoBoundsInTheSystem("System bounds not defined.");
+        }
         Iterator<Services>it=currentArea.getServices().iterator();
         if(!it.hasNext()){
             throw new NoToList("No services yet!");
@@ -147,10 +163,10 @@ public class HomeAway implements HomeAwayInterface{
         }else if(!lodgingExists(lodging)){
             throw new LodgingNotExists("lodging "+lodging+" does not exist!");
         }else if(lodgingIsFull(lodging)){
-            throw new LodgingIsFull("Lodging "+lodging+" is full!");
+            throw new LodgingIsFull("lodging "+lodging+" is full!");
         }else if(alreadyExistsStudent(name)){
             Students s=findStudent(name);
-            throw new StudentAlreadyExists(s.getName()+"already exists!");
+            throw new StudentAlreadyExists(s.getName()+" already exists!");
         } else{
             Students student;
             Lodging home=findLodging(lodging);
@@ -183,7 +199,7 @@ public class HomeAway implements HomeAwayInterface{
     public String leave(String name) throws StudentNotFound {
         Students s=findStudent(name);
         if(s==null){
-            throw new StudentNotFound(name+"does not exist!");
+            throw new StudentNotFound(name+" does not exist!");
         }
         String nameToReturn=s.getName();
         s.leave();
@@ -195,7 +211,7 @@ public class HomeAway implements HomeAwayInterface{
         List<Services>services=currentArea.getServices();
         for(int i=0;i<services.size();i++){
             Services s=services.get(i);
-            if(s.getName().equalsIgnoreCase(name.toUpperCase()) && s instanceof Lodging){
+            if(s.getName().equalsIgnoreCase(name) && s instanceof Lodging){
                 return (Lodging)s;
             }
         }
@@ -219,7 +235,10 @@ public class HomeAway implements HomeAwayInterface{
     }
 
 
-    public Iterator<Students> listAllStudents()throws NoToList {
+    public Iterator<Students> listAllStudents()throws NoToList ,NoBoundsInTheSystem{
+        if(currentArea==null){
+            throw new NoBoundsInTheSystem("System bounds not defined.");
+        }
         Iterator<Students>it=currentArea.getStudents().iterator();
         if(!it.hasNext()){
             throw new NoToList("No students yet!");
@@ -235,7 +254,7 @@ public class HomeAway implements HomeAwayInterface{
         return it;
     }
 
-    public String  go(String name,String location) throws StudentNotFound,InvalidLocation,AlreadyThere,Expensive{
+    public boolean  go(String name,String location) throws StudentNotFound,InvalidLocation,AlreadyThere,Expensive{
         Students s=findStudent(name);
         Services service=findService(location);
         if(service==null){
@@ -259,11 +278,27 @@ public class HomeAway implements HomeAwayInterface{
 
         if(eating!=null){
             if(s instanceof Thrifty && eating.getPrice()<service.getPrice() && service instanceof Eating){
-                throw new Expensive(name+" is now at "+ location+". "+name+" is distracted!");
+                return true;
             }
         }
-        return service.getName();
+        return false;
 
+    }
+
+    public String getNameService(String location){
+        Services s=findService(location);
+        if(s==null){
+            return null;
+        }
+        return s.getName();
+    }
+
+    public String getNameStudent(String name){
+        Students s=findStudent(name);
+        if(s==null){
+            return null;
+        }
+        return s.getName();
     }
 
     public String move(String name,String location) throws StudentNotFound,InvalidLocation,LodgingIsFull,CantMove{
@@ -275,8 +310,8 @@ public class HomeAway implements HomeAwayInterface{
         else if(s==null){
             throw new StudentNotFound(name+" does not exist!");
         }
-        else if(s.getLocation().getName().equals(location)){
-            throw new InvalidLocation("That is "+name+ "'s home!");
+        else if(s.getHome().getName().equals(location)){
+            throw new InvalidLocation("That is "+s.getName()+ "'s home!");
         }else if(service instanceof Lodging){
             if(((Lodging)service).isFull()){
                 throw new LodgingIsFull("lodging "+location+ " is full!");
@@ -377,7 +412,10 @@ public class HomeAway implements HomeAwayInterface{
         }
     }
 
-    public Iterator<Services> getRanking(){
+    public Iterator<Services> getRanking()throws NoToList{
+        if(currentArea.getServices().isEmpty()){
+            throw new NoToList("No services in the system.");
+        }
         return orderedServices().iterator();
     }
 

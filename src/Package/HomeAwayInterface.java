@@ -24,15 +24,15 @@ public interface HomeAwayInterface {
     void createStudent(String type, String name, String country, String lodging)throws InvalidStudentType,LodgingNotExists,LodgingIsFull,StudentAlreadyExists;
     String leave(String name) throws StudentNotFound;
 
-    Iterator<Students> listAllStudents()throws NoToList;
+    Iterator<Students> listAllStudents()throws NoToList,NoBoundsInTheSystem;
     Iterator<Students> listStudentsByCountry(String country)throws NoToList;
     TwoWayIterator<Students> listUsersByOrder(String place)throws ServiceNotExists,InvalidLocation,Empty;
 
-    String go(String name, String location) throws StudentNotFound,InvalidLocation,AlreadyThere, Expensive;
+    boolean go(String name, String location) throws StudentNotFound,InvalidLocation,AlreadyThere, Expensive;
     String move(String name, String location) throws StudentNotFound,InvalidLocation,LodgingIsFull,CantMove;
     Services where(String name)throws StudentNotFound;
 
     Iterator<Services> getVisited(String name)throws StudentNotFound,InvalidStudentType,NoToList;
     void evaluate(int star, String nameService, String description)throws InvalidStar,ServiceNotExists;
-    Iterator<Services> getRanking();
+    Iterator<Services> getRanking()throws NoToList;
 }
