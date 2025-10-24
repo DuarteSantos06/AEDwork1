@@ -2,6 +2,7 @@ package Package.Services;
 
 import Package.Students.Students;
 import dataStructures.DoublyLinkedList;
+import dataStructures.ListInArray;
 
 public class ServicesWithCapacity extends Services implements ServicesWithCapacityInterface{
 
@@ -11,12 +12,16 @@ public class ServicesWithCapacity extends Services implements ServicesWithCapaci
     private int currentOccupation;
     private String type;
 
-    public ServicesWithCapacity(long latitude, long longitude, int price, int capacity,String name,String type){
+    public ServicesWithCapacity(long latitude, long longitude, float price, int capacity,String name,String type){
         super(latitude,longitude,price,name,type);
         this.capacity = capacity;
         students = new DoublyLinkedList<>();
         this.currentOccupation = 0;
         this.type=type;
+    }
+
+    public void setCurrentOccupation(int capacity){
+        this.currentOccupation=capacity;
     }
 
     public float getPrice(){

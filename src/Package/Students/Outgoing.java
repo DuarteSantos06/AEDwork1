@@ -2,7 +2,7 @@ package Package.Students;
 
 import Package.Services.Lodging;
 import Package.Services.Services;
-import dataStructures.List;
+
 import dataStructures.ListInArray;
 
 public class Outgoing extends StudentsKeepVisited{

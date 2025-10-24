@@ -8,44 +8,44 @@ import Package.Exceptions.Expensive;
 
 import java.io.*;
 
-public class HomeAway implements HomeAwayInterface{
+public class HomeAway implements HomeAwayInterface {
 
-    private static final String THRIFTY="thrifty";
-    private static final String OUTGOING="outgoing";
-    private static final String BOOKISH="bookish";
-    private static final String LEISURE="leisure";
-    private static final String EATING="eating";
-    private static final String LODGING="lodging";
+    private static final String THRIFTY = "thrifty";
+    private static final String OUTGOING = "outgoing";
+    private static final String BOOKISH = "bookish";
+    private static final String LEISURE = "leisure";
+    private static final String EATING = "eating";
+    private static final String LODGING = "lodging";
 
 
     private Area currentArea;
     private int evaluateCounter;
 
     public HomeAway() {
-        this.evaluateCounter=0;
+        this.evaluateCounter = 0;
     }
 
-    public void createArea(String name, long topLatitude, long leftLongitude, long bottomLatitude, long rightLongitude)throws AreaAlreadyExists,InvalidLocation {
+    public void createArea(String name, long topLatitude, long leftLongitude, long bottomLatitude, long rightLongitude) throws AreaAlreadyExists, InvalidLocation {
 
-        try{
-            if(currentArea!=null){
-                String saved=saveArea();
+        try {
+            if (currentArea != null) {
+                String saved = saveArea();
             }
-        }catch(Exception e) {
+        } catch (Exception e) {
         }
-        String filename = "data/" + name.replace(" ", "_") + ".ser";
+        String filename = "data/" + name.toLowerCase().replace(" ", "_") + ".ser";
         File file = new File(filename);
 
 
-        if(file.exists()){
+        if (file.exists()) {
             throw new AreaAlreadyExists("Bounds already exists. Please load it!");
         }
-        if(leftLongitude >= rightLongitude || topLatitude <= bottomLatitude){
+        if (leftLongitude >= rightLongitude || topLatitude <= bottomLatitude) {
             throw new InvalidLocation("Invalid bounds.");
 
         }
 
-        currentArea = new Area(name,topLatitude,leftLongitude,bottomLatitude,rightLongitude);
+        currentArea = new Area(name, topLatitude, leftLongitude, bottomLatitude, rightLongitude);
     }
 
     public String saveArea() throws NoBoundsInTheSystem {
@@ -55,35 +55,38 @@ public class HomeAway implements HomeAwayInterface{
 
         File dataFolder = new File("data");
         if (!dataFolder.exists()) {
-            dataFolder.mkdir();
+            dataFolder.mkdirs();
         }
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("data/" +currentArea.getName().replace(" ", "_")+".ser"))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("data/" + currentArea.getName().toLowerCase().replace(" ", "_") + ".ser"))) {
             out.writeObject(currentArea);
         } catch (IOException e) {
         }
         return currentArea.getName();
     }
 
-    public String  loadArea(String name) throws NoBoundsInTheSystem {
+    public String loadArea(String name) throws NoBoundsInTheSystem {
         if (currentArea != null) {
             saveArea();
         }
-        String fileName = "data/" + name.replace(" ", "_") + ".ser";
+        String fileName = "data/" + name.toLowerCase().replace(" ", "_") + ".ser";
         File file = new File(fileName);
 
-        if(!file.exists()){
-            throw new NoBoundsInTheSystem("Bounds "+name+" does not exists!");
+        if (!file.exists()) {
+            throw new NoBoundsInTheSystem("Bounds " + name + " does not exists!");
         }
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            currentArea = (Area) in.readObject();;
+            currentArea = (Area) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
         }
-
         return currentArea.getName();
-
     }
-    
+
+
+
+
+
+
     public void createEating(long latitude, long longitude, int price, int capacity, String name)throws InvalidPrice,InvalidLocation,InvalidCapacity,ServiceAlreadyExists {
         if (isInValidBounds(latitude, longitude)) {
             throw new InvalidLocation("Invalid location!");
@@ -99,6 +102,8 @@ public class HomeAway implements HomeAwayInterface{
 
 
     }
+
+
 
     public void createLodging(long latitude, long longitude, int price, int capacity, String name)throws InvalidPrice,InvalidLocation,InvalidCapacity,ServiceAlreadyExists{
         if (isInValidBounds(latitude, longitude)) {
@@ -276,12 +281,7 @@ public class HomeAway implements HomeAwayInterface{
         Eating eating=s.getCheapestEating();
         s.go(service);
 
-        if(eating!=null){
-            if(s instanceof Thrifty && eating.getPrice()<service.getPrice() && service instanceof Eating){
-                return true;
-            }
-        }
-        return false;
+        return eating != null && s instanceof Thrifty && eating.getPrice() < service.getPrice() && service instanceof Eating;
 
     }
 
@@ -322,8 +322,6 @@ public class HomeAway implements HomeAwayInterface{
         }
         s.move((Lodging)service);
         return service.getName();
-
-
     }
 
     public TwoWayIterator<Students> listUsersByOrder(String place)throws ServiceNotExists,InvalidLocation,Empty{
@@ -371,18 +369,14 @@ public class HomeAway implements HomeAwayInterface{
     }
 
     private Services findService(String name){
-        int i=0;
-        boolean foundService=false;
-        Services s=null;
         List<Services>services=currentArea.getServices();
-        while(i<services.size()&&!foundService){
-            if(services.get(i).getName().equalsIgnoreCase(name)){
-                s=services.get(i);
-                foundService=true;
+        for (int i=0;i<services.size();i++) {
+            Services s = services.get(i);
+            if (s.getName().equalsIgnoreCase(name)) {
+                return s;
             }
-            i++;
         }
-        return s;
+        return null;
     }
 
     public Iterator<Services> getVisited(String name)throws StudentNotFound,InvalidStudentType,NoToList{

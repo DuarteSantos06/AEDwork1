@@ -3,6 +3,7 @@ package Package.Students;
 import Package.Services.Leisure;
 import Package.Services.Lodging;
 import Package.Services.Services;
+
 import dataStructures.ListInArray;
 
 public class Bookish extends StudentsKeepVisited{

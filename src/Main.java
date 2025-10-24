@@ -7,28 +7,9 @@ import dataStructures.TwoWayIterator;
 
 public class Main  {
 
-    private static final String BOUNDS="BOUNDS";
-    private static final String EXIT="EXIT";
-    private static final String HELP="HELP";
-    private static final String SAVE="SAVE";
-    private static final String LOAD="LOAD";
-    private static final String SERVICE="SERVICE";
-    private static final String SERVICES="SERVICES";
-    private static final String STUDENT="STUDENT";
-    private static final String LEAVE="LEAVE";
-    private static final String STUDENTS="STUDENTS";
-    private static final String GO="GO";
-    private static final String MOVE="MOVE";
-    private static final String USERS="USERS";
-    private static final String WHERE="WHERE";
-    private static final String VISITED="VISITED";
-    private static final String STAR="STAR";
-    private static final String RANKING="RANKING";
-    private static final String RANKED="RANKED";
-    private static final String TAG="TAG";
-    private static final String FIND="FIND";
 
-    private static final String GO_OUTPUT__DISTRACTED="%s is now at %s. %s is distracted.\n";
+
+    private static final String GO_OUTPUT__DISTRACTED="%s is now at %s. %s is distracted!\n";
     private static final String LEAVE_OUTPUT="%s has left.\n";
     private static final String RANKED_PHRASE="%s services closer with %d average\n";
     private static final String NO_SERVICES_TAGGED="There are no services with this tag!";
@@ -74,16 +55,24 @@ public class Main  {
     private static final String LEISURE="leisure";
 
 
+    private static Command getCommand(Scanner input) {
+        try {
+            String comm = input.next().toUpperCase();
+            return Command.valueOf(comm);
+        } catch (IllegalArgumentException e) {
+            return Command.UNKNOWN;
+        }
+    }
 
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        String comm;
         HomeAway homeAway = new HomeAway();
+        Command cmd;
 
         do{
-            comm=in.next().toUpperCase();
-            switch(comm) {
+            cmd = getCommand(in);
+            switch(cmd) {
                 case BOUNDS-> createArea(in,homeAway);
                 case SAVE-> saveArea(homeAway);
                 case LOAD-> loadArea(in,homeAway);
@@ -102,14 +91,19 @@ public class Main  {
                 case RANKED-> ranked(in,homeAway);
                 case TAG-> tag(in,homeAway);
                 case FIND-> find(in,homeAway);
-                case HELP->System.out.println(HELP_OUTPUT);
+                case HELP->executeHelp();
                 case EXIT->exit(homeAway);
                 default-> System.out.println(UNKNOWN_COMMAND);
             }
 
-        }while(!comm.equals(EXIT));
+        }while(!cmd.equals(cmd.EXIT));
         in.close();
 
+    }
+    private static void executeHelp() {
+        Command[] help=Command.values();
+        for(int i=0; i<help.length-1;i++)
+            System.out.println(help[i].getMsg());
     }
 
     private static void exit(HomeAway homeAway) {

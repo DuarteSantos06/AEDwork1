@@ -8,9 +8,9 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
 
 
 
-    private String name;
-    private String country;
-    private String type;
+    protected String name;
+    protected String country;
+    protected String type;
     private Services location;
     private Lodging home;
     private Eating cheapestEating;
@@ -28,6 +28,12 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
     public Lodging getHome(){
         return home;
     }
+
+    public void goSerialization(Services location){
+        this.location=location;
+    }
+
+
 
     public int compareTo(Students other) {
         return this.name.compareTo(other.name);
@@ -65,9 +71,6 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
             home.removeStudent(this);
         }
     }
-
-
-
 
     public void go(Services location){
         if(this.location instanceof ServicesWithCapacity && !this.location.equals(home)){
