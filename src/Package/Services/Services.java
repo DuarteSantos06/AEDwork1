@@ -49,21 +49,14 @@ public  abstract class Services implements ServicesInterface, Serializable {
         this.star = star;
     }
 
-    public void addReview(String review){
-        reviews.addLast(review);
-    }
-
-    public void setCountEvaluations(int countEvaluations) {
-        this.countEvaluations = countEvaluations;
-    }
     public abstract float getPrice();
 
     public void evaluate(int star,String description,int evaluateCounter){
         countEvaluations++;
         float newStar = ((this.star * (countEvaluations - 1)) + star) / countEvaluations;
-        if(this.star>5){
+        if(newStar>5){
             this.star=5;
-        }else if(this.star<1){
+        }else if(newStar<1){
             this.star=1;
         }
         if(Math.round(newStar)!=Math.round(this.star)) {

@@ -29,12 +29,6 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
         return home;
     }
 
-    public void goSerialization(Services location){
-        this.location=location;
-    }
-
-
-
     public int compareTo(Students other) {
         return this.name.compareTo(other.name);
     }

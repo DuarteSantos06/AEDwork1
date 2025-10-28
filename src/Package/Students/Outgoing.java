@@ -5,7 +5,7 @@ import Package.Services.Services;
 
 import dataStructures.ListInArray;
 
-public class Outgoing extends StudentsKeepVisited{
+public class Outgoing extends StudentsKeepVisited {
 
     private ListInArray<Services> services;
 
