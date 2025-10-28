@@ -5,6 +5,11 @@ import Package.Students.Students;
 import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 
+/**
+ * Main class to handle the application logic for managing students, services and areas
+ * in the HomeAway system. It handles user input, invokes the correct operations in
+ * the HomeAway backend, and prints formatted output.
+ */
 public class Main  {
 
 
@@ -54,7 +59,11 @@ public class Main  {
     private static final String LODGING="lodging";
     private static final String LEISURE="leisure";
 
-
+    /**
+     * Reads the next command from input and returns its respective Command enum.
+     * @param input Scanner with user input
+     * @return parsed Command or UNKNOWN if not valid
+     */
     private static Command getCommand(Scanner input) {
         try {
             String comm = input.next().toUpperCase();
@@ -64,7 +73,10 @@ public class Main  {
         }
     }
 
-
+    /**
+     * Entry point of the application. Processes user commands in a loop until EXIT is received.
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         HomeAway homeAway = new HomeAway();
@@ -100,12 +112,20 @@ public class Main  {
         in.close();
 
     }
+
+    /**
+     * Prints the help menu by iterating over all commands and displaying their messages.
+     */
     private static void executeHelp() {
         Command[] help=Command.values();
         for(int i=0; i<help.length-1;i++)
             System.out.println(help[i].getMsg());
     }
 
+    /**
+     * Handles program termination, saving current area before exiting.
+     * @param homeAway HomeAway backend instance
+     */
     private static void exit(HomeAway homeAway) {
         try{
             String name=homeAway.saveArea();
@@ -115,6 +135,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Reads area bounds and name from input and creates a new area in HomeAway.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void createArea(Scanner in, HomeAway homeAway) {
         try {
             long topLatitude = in.nextLong();
@@ -132,6 +157,10 @@ public class Main  {
         }
     }
 
+    /**
+     * Saves current area in HomeAway and prints confirmation.
+     * @param homeAway HomeAway backend instance
+     */
     private static void saveArea( HomeAway homeAway) {
         try {
             String name=homeAway.saveArea();
@@ -141,6 +170,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Loads an area from user input name in HomeAway.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void loadArea(Scanner in, HomeAway homeAway) {
         try{
             String name=in.nextLine().trim();
@@ -151,6 +185,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Creates a new service (eating, lodging or leisure) depending on user input.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void createService(Scanner in, HomeAway homeAway) {
         String type=in.next().trim().toLowerCase();
         if(type.equals(LEISURE)){
@@ -159,11 +198,17 @@ public class Main  {
         else if(type.equals(LODGING)||type.equals(EATING)){
             createServicesWithCapacity(in,homeAway,type);
         }else{
-        System.out.println(INVALID_SERVICE_TYPE);
-        in.nextLine();
+            System.out.println(INVALID_SERVICE_TYPE);
+            in.nextLine();
         }
     }
 
+    /**
+     * Creates a service with capacity and price (eating or lodging).
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     * @param type Type of service (eating or lodging)
+     */
     private static void createServicesWithCapacity(Scanner in, HomeAway homeAway,String type) {
         try{
             long latitude=in.nextLong();
@@ -185,6 +230,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Creates a leisure service with a discount and price.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void createLeisure(Scanner in, HomeAway homeAway) {
         try{
             long latitude=in.nextLong();
@@ -201,6 +251,10 @@ public class Main  {
         }
     }
 
+    /**
+     * Lists all services registered in the current area of HomeAway.
+     * @param homeAway HomeAway backend instance
+     */
     private static void listServices( HomeAway homeAway) {
         try{
             Iterator<Services> it=homeAway.listAllServices();
@@ -213,6 +267,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Adds a student with all details from input to the current area.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void createStudent(Scanner in, HomeAway homeAway) {
         try{
             String type=in.next().trim();
@@ -227,6 +286,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Removes a student (by name) from the current area.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void leave(Scanner in, HomeAway homeAway) {
         try{
             String name=in.nextLine().trim();
@@ -237,6 +301,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Lists all students, or students from a specific country, in the current area.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void listStudents(Scanner in, HomeAway homeAway) {
         try{
             String country=in.nextLine().trim();
@@ -258,6 +327,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Changes the location of a student to a new service (leisure or eating).
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void go(Scanner in, HomeAway homeAway) {
         try{
             String name=in.nextLine().trim();
@@ -268,13 +342,18 @@ public class Main  {
             if(!is_distracted){
                 System.out.printf(GO_OUTPUT,nameOutput,locationOutput);
             }else {
-            System.out.printf(GO_OUTPUT__DISTRACTED,nameOutput,locationOutput,nameOutput);
+                System.out.printf(GO_OUTPUT__DISTRACTED,nameOutput,locationOutput,nameOutput);
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
+    /**
+     * Changes the designated home (lodging) for a student.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void move(Scanner in, HomeAway homeAway) {
         try{
             String nameRead=in.nextLine().trim();
@@ -287,6 +366,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Lists users in a specific service, forwards or backwards.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void listUsers(Scanner in, HomeAway homeAway) {
         try{
             String order=in.next().trim();
@@ -311,6 +395,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Prints the current location of a student.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void where(Scanner in, HomeAway homeAway) {
         try{
             String name= in.nextLine().trim();
@@ -322,6 +411,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Lists all places visited by a given student.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void listVisited(Scanner in, HomeAway homeAway) {
         try{
             String name=in.nextLine().trim();
@@ -335,6 +429,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Adds an evaluation (star and description) to a service.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void evaluate(Scanner in, HomeAway homeAway) {
         try{
             int star=in.nextInt();
@@ -347,6 +446,10 @@ public class Main  {
         }
     }
 
+    /**
+     * Displays all services sorted by their star evaluations, descending.
+     * @param homeAway HomeAway backend instance
+     */
     private static void ranking(HomeAway homeAway) {
         try{
             System.out.println(SERVICES_DESCENDING);
@@ -360,6 +463,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Lists services matching type and star evaluation, closest to the student's location.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void ranked(Scanner in, HomeAway homeAway) {
         try{
             String type=in.next().trim();
@@ -376,12 +484,17 @@ public class Main  {
         }
     }
 
+    /**
+     * Lists all services with at least one review containing a specified word.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void tag(Scanner in, HomeAway homeAway) {
         try{
             String tag=in.nextLine().trim();
             Iterator<Services> it=homeAway.getTag(tag);
             if(!it.hasNext()){
-            System.out.println(NO_SERVICES_TAGGED);
+                System.out.println(NO_SERVICES_TAGGED);
             }
             while(it.hasNext()){
                 Services s=it.next();
@@ -392,6 +505,11 @@ public class Main  {
         }
     }
 
+    /**
+     * Finds the most relevant service of a certain type for a specific student.
+     * @param in Scanner input
+     * @param homeAway HomeAway backend instance
+     */
     private static void find (Scanner in, HomeAway homeAway){
         try{
             String name=in.nextLine().trim();
@@ -404,6 +522,12 @@ public class Main  {
     }
 
     //chatgpt
+
+    /**
+     * Capitalizes the first letter of each word in a string.
+     * @param name Input string
+     * @return Capitalized string
+     */
     private static String capitalizeTheName(String name){
         String[] words = name.trim().toLowerCase().split("\\s+");
         StringBuilder sb = new StringBuilder();

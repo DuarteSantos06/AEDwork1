@@ -25,6 +25,16 @@ public class HomeAway implements HomeAwayInterface {
         this.evaluateCounter = 0;
     }
 
+    /**
+     *
+     * @param name the name of the area
+     * @param topLatitude northern latitude of the area
+     * @param leftLongitude western longitude of the area
+     * @param bottomLatitude southern latitude of the area
+     * @param rightLongitude eastern longitude of the area
+     * @throws AreaAlreadyExists if an area file already exists with this name
+     * @throws InvalidLocation if the given boundaries are invalid
+     */
     public void createArea(String name, long topLatitude, long leftLongitude, long bottomLatitude, long rightLongitude) throws AreaAlreadyExists, InvalidLocation {
 
         try {
@@ -48,6 +58,11 @@ public class HomeAway implements HomeAwayInterface {
         currentArea = new Area(name, topLatitude, leftLongitude, bottomLatitude, rightLongitude);
     }
 
+    /**
+     *
+     * @return the name of the saved area
+     * @throws NoBoundsInTheSystem if no current area exists to save
+     */
     public String saveArea() throws NoBoundsInTheSystem {
         if (currentArea == null) {
             throw new NoBoundsInTheSystem("System bounds not defined.");
@@ -64,6 +79,12 @@ public class HomeAway implements HomeAwayInterface {
         return currentArea.getName();
     }
 
+    /**
+     *
+     * @param name the name of the area to load
+     * @return the name of the loaded area
+     * @throws NoBoundsInTheSystem if the requested area does not exist
+     */
     public String loadArea(String name) throws NoBoundsInTheSystem {
         if (currentArea != null) {
             saveArea();
@@ -83,10 +104,18 @@ public class HomeAway implements HomeAwayInterface {
     }
 
 
-
-
-
-
+    /**
+     *
+     * @param latitude latitude of the new service
+     * @param longitude longitude of the new service
+     * @param price menu price for the eating service
+     * @param capacity service capacity
+     * @param name name of the service
+     * @throws InvalidPrice if price is not positive
+     * @throws InvalidLocation if the coordinates are outside the area
+     * @throws InvalidCapacity if capacity is not positive
+     * @throws ServiceAlreadyExists if a service with the same name exists
+     */
     public void createEating(long latitude, long longitude, int price, int capacity, String name)throws InvalidPrice,InvalidLocation,InvalidCapacity,ServiceAlreadyExists {
         if (isInValidBounds(latitude, longitude)) {
             throw new InvalidLocation("Invalid location!");
@@ -104,7 +133,18 @@ public class HomeAway implements HomeAwayInterface {
     }
 
 
-
+    /**
+     *
+     * @param latitude latitude of the new service
+     * @param longitude longitude of the new service
+     * @param price room price for the lodging service
+     * @param capacity service capacity
+     * @param name name of the service
+     * @throws InvalidPrice if price is not positive
+     * @throws InvalidLocation if the coordinates are outside the area
+     * @throws InvalidCapacity if capacity is not positive
+     * @throws ServiceAlreadyExists if a service with the same name exists
+     */
     public void createLodging(long latitude, long longitude, int price, int capacity, String name)throws InvalidPrice,InvalidLocation,InvalidCapacity,ServiceAlreadyExists{
         if (isInValidBounds(latitude, longitude)) {
             throw new InvalidLocation("Invalid location!");
@@ -119,6 +159,18 @@ public class HomeAway implements HomeAwayInterface {
         currentArea.addService(lodging);
     }
 
+    /**
+     *
+     * @param latitude latitude of the new service
+     * @param longitude longitude of the new service
+     * @param price ticket price for the leisure service
+     * @param discount percentage discount (0-100)
+     * @param name name of the service
+     * @throws InvalidPrice if price is not positive
+     * @throws InvalidLocation if the coordinates are outside the area
+     * @throws InvalidDiscount if discount is out of bounds
+     * @throws ServiceAlreadyExists if a service with the same name exists
+     */
     public void createLeisure(long latitude, long longitude,int price,int discount, String name)throws InvalidPrice,InvalidLocation,InvalidDiscount,ServiceAlreadyExists{
         if (isInValidBounds(latitude, longitude)) {
             throw new InvalidLocation("Invalid location!");
@@ -133,6 +185,11 @@ public class HomeAway implements HomeAwayInterface {
         currentArea.addService(leisure);
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     private boolean alreadyExists(String name){
         List<Services>services=currentArea.getServices();
         for(int i=0;i<services.size();i++){
@@ -144,6 +201,12 @@ public class HomeAway implements HomeAwayInterface {
         return false;
     }
 
+    /**
+     *
+     * @param latitude
+     * @param longitude
+     * @return
+     */
     private boolean isInValidBounds(long latitude, long longitude) {
         return !(longitude >= currentArea.getLeftLongitude() &&
                 longitude <= currentArea.getRightLongitude() &&
@@ -151,6 +214,12 @@ public class HomeAway implements HomeAwayInterface {
                 latitude >= currentArea.getBottomLatitude());
     }
 
+    /**
+     *
+     * @return
+     * @throws NoToList
+     * @throws NoBoundsInTheSystem
+     */
     public Iterator<Services> listAllServices()throws NoToList,NoBoundsInTheSystem{
         if(currentArea==null){
             throw new NoBoundsInTheSystem("System bounds not defined.");
@@ -162,6 +231,17 @@ public class HomeAway implements HomeAwayInterface {
         return it;
     }
 
+    /**
+     *
+     * @param type
+     * @param name
+     * @param country
+     * @param lodging
+     * @throws InvalidStudentType
+     * @throws LodgingNotExists
+     * @throws LodgingIsFull
+     * @throws StudentAlreadyExists
+     */
     public void createStudent(String type,String name,String country,String lodging)throws InvalidStudentType,LodgingNotExists,LodgingIsFull,StudentAlreadyExists{
         if(!type.equals(THRIFTY) && !type.equals(OUTGOING)&&!type.equals(BOOKISH)){
             throw new InvalidStudentType("Invalid student type!");
@@ -190,6 +270,11 @@ public class HomeAway implements HomeAwayInterface {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     private boolean alreadyExistsStudent(String name){
         Iterator<Students>it=currentArea.getStudents().iterator();
         while(it.hasNext()){
@@ -201,6 +286,12 @@ public class HomeAway implements HomeAwayInterface {
         return false;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     * @throws StudentNotFound
+     */
     public String leave(String name) throws StudentNotFound {
         Students s=findStudent(name);
         if(s==null){
@@ -212,6 +303,11 @@ public class HomeAway implements HomeAwayInterface {
         return nameToReturn;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     private Lodging findLodging(String name){
         List<Services>services=currentArea.getServices();
         for(int i=0;i<services.size();i++){
@@ -223,6 +319,11 @@ public class HomeAway implements HomeAwayInterface {
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     private boolean lodgingExists(String name){
         List<Services>services=currentArea.getServices();
         for(int i=0;i<services.size();i++){
@@ -234,12 +335,22 @@ public class HomeAway implements HomeAwayInterface {
         return false;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     private boolean lodgingIsFull(String name){
         Lodging lodging=findLodging(name);
         return lodging.getCapacity()<=lodging.getCurrentOccupation();
     }
 
-
+    /**
+     *
+     * @return
+     * @throws NoToList
+     * @throws NoBoundsInTheSystem
+     */
     public Iterator<Students> listAllStudents()throws NoToList ,NoBoundsInTheSystem{
         if(currentArea==null){
             throw new NoBoundsInTheSystem("System bounds not defined.");
@@ -251,6 +362,12 @@ public class HomeAway implements HomeAwayInterface {
         return it;
     }
 
+    /**
+     *
+     * @param country
+     * @return
+     * @throws NoToList
+     */
     public Iterator<Students> listStudentsByCountry(String country)throws NoToList {
         FilterIterator<Students>it= new FilterIterator<>(currentArea.getStudentsByRegistration().iterator(),s->s.getCountry().equalsIgnoreCase(country));
         if(!it.hasNext()){
@@ -259,6 +376,16 @@ public class HomeAway implements HomeAwayInterface {
         return it;
     }
 
+    /**
+     *
+     * @param name
+     * @param location
+     * @return
+     * @throws StudentNotFound
+     * @throws InvalidLocation
+     * @throws AlreadyThere
+     * @throws Expensive
+     */
     public boolean  go(String name,String location) throws StudentNotFound,InvalidLocation,AlreadyThere,Expensive{
         Students s=findStudent(name);
         Services service=findService(location);
@@ -285,6 +412,7 @@ public class HomeAway implements HomeAwayInterface {
 
     }
 
+
     public String getNameService(String location){
         Services s=findService(location);
         if(s==null){
@@ -301,6 +429,16 @@ public class HomeAway implements HomeAwayInterface {
         return s.getName();
     }
 
+    /**
+     *
+     * @param name
+     * @param location
+     * @return
+     * @throws StudentNotFound
+     * @throws InvalidLocation
+     * @throws LodgingIsFull
+     * @throws CantMove
+     */
     public String move(String name,String location) throws StudentNotFound,InvalidLocation,LodgingIsFull,CantMove{
         Students s=findStudent(name);
         Services service=findService(location);
@@ -324,6 +462,14 @@ public class HomeAway implements HomeAwayInterface {
         return service.getName();
     }
 
+    /**
+     *
+     * @param place
+     * @return
+     * @throws ServiceNotExists
+     * @throws InvalidLocation
+     * @throws Empty
+     */
     public TwoWayIterator<Students> listUsersByOrder(String place)throws ServiceNotExists,InvalidLocation,Empty{
         Services s=findService(place);
         if(s==null){
@@ -341,6 +487,12 @@ public class HomeAway implements HomeAwayInterface {
 
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     * @throws StudentNotFound
+     */
     public Services where(String name)throws StudentNotFound{
         Students s=findStudent(name);
         if(s==null){
@@ -350,6 +502,11 @@ public class HomeAway implements HomeAwayInterface {
         return s.getLocation();
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     private Students findStudent(String name){
         if (name == null){
             return null;
@@ -368,6 +525,11 @@ public class HomeAway implements HomeAwayInterface {
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     private Services findService(String name){
         List<Services>services=currentArea.getServices();
         for (int i=0;i<services.size();i++) {
@@ -379,6 +541,14 @@ public class HomeAway implements HomeAwayInterface {
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     * @throws StudentNotFound
+     * @throws InvalidStudentType
+     * @throws NoToList
+     */
     public Iterator<Services> getVisited(String name)throws StudentNotFound,InvalidStudentType,NoToList{
         Students s=findStudent(name);
         if(s==null){
@@ -394,6 +564,14 @@ public class HomeAway implements HomeAwayInterface {
 
     }
 
+    /**
+     *
+     * @param star the star value of the evaluation (1-5)
+     * @param nameService the service name
+     * @param description review description
+     * @throws InvalidStar if the star rating is out of bounds
+     * @throws ServiceNotExists if the service doesn't exist
+     */
     public void evaluate(int star,String nameService,String description)throws InvalidStar,ServiceNotExists{
         Services s=findService(nameService);
         if(star<1||star>5){
@@ -406,6 +584,7 @@ public class HomeAway implements HomeAwayInterface {
         }
     }
 
+
     public Iterator<Services> getRanking()throws NoToList{
         if(currentArea.getServices().isEmpty()){
             throw new NoToList("No services in the system.");
@@ -413,6 +592,10 @@ public class HomeAway implements HomeAwayInterface {
         return orderedServices().iterator();
     }
 
+    /**
+     *
+     * @return
+     */
     private DoublyLinkedList<Services> orderedServices(){
         DoublyLinkedList<Services>ranking=new DoublyLinkedList<>();
         List<Services>services=currentArea.getServices();
@@ -465,6 +648,12 @@ public class HomeAway implements HomeAwayInterface {
         return result.iterator();
     }
 
+    /**
+     *
+     * @param itByStar
+     * @param student
+     * @return
+     */
     private DoublyLinkedList<Services> closest(FilterIterator<Services>itByStar,Students student){
         DoublyLinkedList<Services> closest = new DoublyLinkedList<>();
         long minDistance = Long.MAX_VALUE;
@@ -515,6 +704,12 @@ public class HomeAway implements HomeAwayInterface {
         return result.iterator();
     }
 
+    /**
+     *
+     * @param name
+     * @param type
+     * @return
+     */
     public Services find(String name,String type){
         FilterIterator<Services>it= new FilterIterator<>(currentArea.getServices().iterator(),s->s.getType().equalsIgnoreCase(type));
         Students s=findStudent(name);
@@ -526,6 +721,11 @@ public class HomeAway implements HomeAwayInterface {
         }
     }
 
+    /**
+     *
+     * @param it
+     * @return
+     */
     private Services findCheapest(FilterIterator<Services>it){
         Services cheapest=it.next();
         while(it.hasNext()){
@@ -537,6 +737,11 @@ public class HomeAway implements HomeAwayInterface {
         return cheapest;
     }
 
+    /**
+     *
+     * @param it
+     * @return
+     */
     private Services findHighestRanked(FilterIterator<Services>it){
         Services highest=it.next();
         while(it.hasNext()){
