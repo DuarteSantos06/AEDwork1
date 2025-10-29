@@ -105,7 +105,8 @@ public class HomeAway implements HomeAwayInterface {
         }
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            currentArea = (Area) in.readObject(); 
+
+            currentArea = (Area) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Erro ao carregar a área: " + e.getMessage());
             e.printStackTrace();
