@@ -3,19 +3,20 @@ package Package.Services;
 
 import dataStructures.ListInArray;
 
-import java.io.Serializable;
+import java.io.*;
 
 public  abstract class Services implements ServicesInterface, Serializable {
 
-    protected String name;
-    protected long latitude;
-    protected long longitude;
+    private String name;
+    private long latitude;
+    private long longitude;
     protected float price;
-    protected float star;
-    protected int countEvaluations;
-    protected ListInArray<String> reviews;
-    protected String type;
-    protected int numberEvaluated;
+    private float star;
+    private int countEvaluations;
+    private ListInArray<String> reviews;
+    private String type;
+    private int numberEvaluated;
+
 
     public Services(long latitude, long longitude, float price,String name,String type){
         this.latitude = latitude;
@@ -27,6 +28,10 @@ public  abstract class Services implements ServicesInterface, Serializable {
         this.type=type;
         reviews = new ListInArray<>(10) ;
     }
+
+
+
+
 
     public int getLastEvaluated(){
         return numberEvaluated;
@@ -42,11 +47,6 @@ public  abstract class Services implements ServicesInterface, Serializable {
 
     public long getLongitude() {
         return longitude;
-    }
-
-
-    public void setStar(float star) {
-        this.star = star;
     }
 
     public abstract float getPrice();

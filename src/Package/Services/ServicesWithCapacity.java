@@ -11,6 +11,7 @@ public class ServicesWithCapacity extends Services implements ServicesWithCapaci
     private int currentOccupation;
     private String type;
 
+
     public ServicesWithCapacity(long latitude, long longitude, float price, int capacity,String name,String type){
         super(latitude,longitude,price,name,type);
         this.capacity = capacity;
@@ -19,9 +20,14 @@ public class ServicesWithCapacity extends Services implements ServicesWithCapaci
         this.type=type;
     }
 
-    public void setCurrentOccupation(int capacity){
-        this.currentOccupation=capacity;
+    public void setCapacity(int capacity){
+        this.capacity=capacity;
     }
+
+    public void setCurrentOccupation(int currentOccupation){
+        this.currentOccupation=currentOccupation;
+    }
+
 
     public float getPrice(){
         return price;

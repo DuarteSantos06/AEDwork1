@@ -42,6 +42,7 @@ public class HomeAway implements HomeAwayInterface {
                 String saved = saveArea();
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         String filename = "data/" + name.toLowerCase().replace(" ", "_") + ".ser";
         File file = new File(filename);
@@ -72,10 +73,16 @@ public class HomeAway implements HomeAwayInterface {
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
         }
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("data/" + currentArea.getName().toLowerCase().replace(" ", "_") + ".ser"))) {
+
+        String fileName = "data/" + currentArea.getName().toLowerCase().replace(" ", "_") + ".ser";
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(currentArea);
         } catch (IOException e) {
+            System.err.println("Erro ao guardar a área: " + e.getMessage());
+            e.printStackTrace();
         }
+
         return currentArea.getName();
     }
 
@@ -89,19 +96,24 @@ public class HomeAway implements HomeAwayInterface {
         if (currentArea != null) {
             saveArea();
         }
+
         String fileName = "data/" + name.toLowerCase().replace(" ", "_") + ".ser";
         File file = new File(fileName);
 
         if (!file.exists()) {
-            throw new NoBoundsInTheSystem("Bounds " + name + " does not exists!");
+            throw new NoBoundsInTheSystem("Bounds " + name + " does not exist!");
         }
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            currentArea = (Area) in.readObject();
+            currentArea = (Area) in.readObject(); 
         } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Erro ao carregar a área: " + e.getMessage());
+            e.printStackTrace();
         }
+
         return currentArea.getName();
     }
+
 
 
     /**
@@ -117,14 +129,15 @@ public class HomeAway implements HomeAwayInterface {
      * @throws ServiceAlreadyExists if a service with the same name exists
      */
     public void createEating(long latitude, long longitude, int price, int capacity, String name)throws InvalidPrice,InvalidLocation,InvalidCapacity,ServiceAlreadyExists {
+        Services s=findService(name);
         if (isInValidBounds(latitude, longitude)) {
             throw new InvalidLocation("Invalid location!");
         } else if (price <= 0) {
             throw new InvalidPrice("Invalid menu price!");
         } else if (capacity <= 0) {
             throw new InvalidCapacity("Invalid capacity!");
-        }else if(alreadyExists(name)){
-            throw new ServiceAlreadyExists(findService(name).getName()+" already exists!");
+        }else if(s!=null){
+            throw new ServiceAlreadyExists(s.getName()+" already exists!");
         }
         Eating eating = new Eating(latitude,longitude,price,capacity,name);
         currentArea.addService(eating);
@@ -146,14 +159,15 @@ public class HomeAway implements HomeAwayInterface {
      * @throws ServiceAlreadyExists if a service with the same name exists
      */
     public void createLodging(long latitude, long longitude, int price, int capacity, String name)throws InvalidPrice,InvalidLocation,InvalidCapacity,ServiceAlreadyExists{
+        Services s=findService(name);
         if (isInValidBounds(latitude, longitude)) {
             throw new InvalidLocation("Invalid location!");
         } else if (price <= 0) {
             throw new InvalidPrice("Invalid room price!");
         } else if (capacity <= 0) {
             throw new InvalidCapacity("Invalid capacity!");
-        }else if(alreadyExists(name)){
-            throw new ServiceAlreadyExists(findService(name).getName()+" already exists!");
+        }else if(s!=null){
+            throw new ServiceAlreadyExists(s.getName()+" already exists!");
         }
         Lodging lodging = new Lodging(latitude,longitude,price,capacity,name);
         currentArea.addService(lodging);
@@ -172,33 +186,18 @@ public class HomeAway implements HomeAwayInterface {
      * @throws ServiceAlreadyExists if a service with the same name exists
      */
     public void createLeisure(long latitude, long longitude,int price,int discount, String name)throws InvalidPrice,InvalidLocation,InvalidDiscount,ServiceAlreadyExists{
+        Services s=findService(name);
         if (isInValidBounds(latitude, longitude)) {
             throw new InvalidLocation("Invalid location!");
         } else if (price <= 0) {
             throw new InvalidPrice("Invalid ticket price!");
         } else if (discount < 0 || discount > 100) {
             throw new InvalidDiscount("Invalid discount price!");
-        }else if(alreadyExists(name)){
-            throw new ServiceAlreadyExists(findService(name).getName()+" already exists!");
+        }else if(s!=null){
+            throw new ServiceAlreadyExists(s.getName()+" already exists!");
         }
         Leisure leisure=new Leisure(latitude,longitude,price,discount,name);
         currentArea.addService(leisure);
-    }
-
-    /**
-     *
-     * @param name
-     * @return
-     */
-    private boolean alreadyExists(String name){
-        List<Services>services=currentArea.getServices();
-        for(int i=0;i<services.size();i++){
-            Services s=services.get(i);
-            if(s.getName().equalsIgnoreCase(name)){
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -243,18 +242,20 @@ public class HomeAway implements HomeAwayInterface {
      * @throws StudentAlreadyExists
      */
     public void createStudent(String type,String name,String country,String lodging)throws InvalidStudentType,LodgingNotExists,LodgingIsFull,StudentAlreadyExists{
+        Lodging home=findLodging(lodging);
+        Students s=findStudent(name);
         if(!type.equals(THRIFTY) && !type.equals(OUTGOING)&&!type.equals(BOOKISH)){
             throw new InvalidStudentType("Invalid student type!");
-        }else if(!lodgingExists(lodging)){
+        }else if(home==null){
             throw new LodgingNotExists("lodging "+lodging+" does not exist!");
         }else if(lodgingIsFull(lodging)){
             throw new LodgingIsFull("lodging "+lodging+" is full!");
-        }else if(alreadyExistsStudent(name)){
-            Students s=findStudent(name);
+        }else if(s!=null){
+
             throw new StudentAlreadyExists(s.getName()+" already exists!");
         } else{
             Students student;
-            Lodging home=findLodging(lodging);
+
             if(type.equals(THRIFTY)){
                 student = new Thrifty(name,country,lodging,home);
             }else if(type.equals(OUTGOING)){
@@ -270,21 +271,6 @@ public class HomeAway implements HomeAwayInterface {
         }
     }
 
-    /**
-     *
-     * @param name
-     * @return
-     */
-    private boolean alreadyExistsStudent(String name){
-        Iterator<Students>it=currentArea.getStudents().iterator();
-        while(it.hasNext()){
-            Students s=it.next();
-            if(s.getName().equalsIgnoreCase(name)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      *
@@ -319,21 +305,7 @@ public class HomeAway implements HomeAwayInterface {
         return null;
     }
 
-    /**
-     *
-     * @param name
-     * @return
-     */
-    private boolean lodgingExists(String name){
-        List<Services>services=currentArea.getServices();
-        for(int i=0;i<services.size();i++){
-            Services s=services.get(i);
-            if(s.getName().equalsIgnoreCase(name) && s instanceof Lodging){
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     /**
      *
@@ -688,11 +660,12 @@ public class HomeAway implements HomeAwayInterface {
         DoublyLinkedList<Services> result = new DoublyLinkedList<>();
         List<Services>services=currentArea.getServices();
 
+
         for(int i=0;i<services.size();i++){
             Services s=services.get(i);
             List<String>tags=s.getReviews();
             for(int j=0;j<tags.size();j++){
-                String[] words = tags.get(j).split("\\s+");
+                String[] words = tags.get(j).split(" ");
                 for (String word : words) {
                     if (word.equalsIgnoreCase(tag) && result.indexOf(s) == -1) {
                         result.addLast(s);

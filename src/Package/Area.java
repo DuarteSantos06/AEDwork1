@@ -3,12 +3,13 @@ package Package;
 import Package.Services.Services;
 import Package.Students.Students;
 
-import Package.Students.StudentsInterface;
+
 import dataStructures.ListInArray;
 import dataStructures.SortedDoublyLinkedList;
 import dataStructures.SortedList;
 import dataStructures.List;
-import java.io.Serializable;
+
+import java.io.*;
 
 public class Area implements AreaInterface, Serializable {
 
@@ -17,9 +18,10 @@ public class Area implements AreaInterface, Serializable {
     private final long leftLongitude;
     private final long bottomLatitude;
     private final long rightLongitude;
-    private final List<Services> services;
-    private final SortedList<Students> students;
-    private final List<Students>studentsByRegistration;
+
+    private transient List<Services> services;
+    private transient SortedList<Students> students;
+    private transient List<Students>studentsByRegistration;
 
     public Area(String name, long topLatitude, long leftLongitude, long bottomLatitude, long rightLongitude) {
         this.name = name;
@@ -31,6 +33,8 @@ public class Area implements AreaInterface, Serializable {
         students = new SortedDoublyLinkedList<>(new StudentComparator());
         studentsByRegistration=new ListInArray<>(500);
     }
+
+
 
 
 
@@ -56,9 +60,6 @@ public class Area implements AreaInterface, Serializable {
         services.addLast(service);
     }
 
-    public List<Students> getStudentsByRegistration(){
-        return studentsByRegistration;
-    }
 
     public void addStudent(Students student){
         students.add(student);
@@ -76,5 +77,45 @@ public class Area implements AreaInterface, Serializable {
 
     public SortedList<Students> getStudents(){
         return students;
+    }
+
+    public List<Students> getStudentsByRegistration(){
+        return studentsByRegistration;
+    }
+
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.defaultWriteObject();
+        oos.writeInt(services.size());
+        for (int i = 0; i < services.size(); i++) {
+            oos.writeObject(services.get(i));
+        }
+
+
+        oos.writeInt(studentsByRegistration.size());
+        for (int i = 0; i < studentsByRegistration.size(); i++) {
+            oos.writeObject(studentsByRegistration.get(i));
+        }
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        this.services = new ListInArray<>(2500);
+        this.students = new SortedDoublyLinkedList<>(new StudentComparator());
+        this.studentsByRegistration = new ListInArray<>(500);
+
+
+        int numServices = ois.readInt();
+        for (int i = 0; i < numServices; i++) {
+            Services s = (Services) ois.readObject();
+            services.addLast(s);
+        }
+
+
+        int numByReg = ois.readInt();
+        for (int i = 0; i < numByReg; i++) {
+            Students st = (Students) ois.readObject();
+            studentsByRegistration.addLast(st);
+            students.add(st);
+        }
     }
 }

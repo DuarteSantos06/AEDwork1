@@ -14,7 +14,9 @@ public class Main  {
 
 
 
-    private static final String GO_OUTPUT__DISTRACTED="%s is now at %s. %s is distracted!\n";
+    private static final String ORDER_NOT_EXISTS="This order does not exists!";
+    private static final String LIST_OUTPUT="%s: %s (%d, %d).\n";
+    private static final String GO_OUTPUT_DISTRACTED ="%s is now at %s. %s is distracted!\n";
     private static final String LEAVE_OUTPUT="%s has left.\n";
     private static final String RANKED_PHRASE="%s services closer with %d average\n";
     private static final String NO_SERVICES_TAGGED="There are no services with this tag!";
@@ -34,26 +36,7 @@ public class Main  {
     private static final String INVALID_SERVICE_TYPE="Invalid service type!";
     private static final String SAVED="%s saved.\n";
     private static final String UNKNOWN_COMMAND="Unknown command. Type help to see available commands.";
-    private static final String HELP_OUTPUT = "bounds - Defines the new geographic bounding rectangle\n" +
-            "save - Saves the current geographic bounding rectangle to a text file\n" +
-            "load - Load a geographic bounding rectangle from a text file\n" +
-            "service - Adds a new service to the current geographic bounding rectangle. The service may be eating, lodging or leisure\n" +
-            "services - Displays the list of services in current geographic bounding rectangle, in order of registration\n" +
-            "student - Adds a student to the current geographic bounding rectangle\n" +
-            "students - Lists all the students or those of a given country in the current geographic bounding rectangle, in alphabetical order of the student's name\n" +
-            "leave - Removes a student from the the current geographic bounding rectangle\n" +
-            "go - Changes the location of a student to a leisure service, or eating service\n" +
-            "move - Changes the home of a student\n" +
-            "users - List all students who are in a given service (eating or lodging)\n" +
-            "star - Evaluates a service\n" +
-            "where - Locates a student\n" +
-            "visited - Lists locations visited by one student\n" +
-            "ranking - Lists services ordered by star\n" +
-            "ranked - Lists the service(s) of the indicated type with the given score that are closer to the student location\n" +
-            "tag - Lists all services that have at least one review whose description contains the specified word\n" +
-            "find - Finds the most relevant service of a certain type, for a specific student\n" +
-            "help - Shows the available commands\n" +
-            "exit - Terminates the execution of the program";
+
 
     private static final String EATING="eating";
     private static final String LODGING="lodging";
@@ -260,7 +243,7 @@ public class Main  {
             Iterator<Services> it=homeAway.listAllServices();
             while(it.hasNext()){
                 Services s=it.next();
-                System.out.printf("%s: %s (%d, %d).\n",s.getName(),s.getType(),s.getLatitude(),s.getLongitude());
+                System.out.printf(LIST_OUTPUT,s.getName(),s.getType(),s.getLatitude(),s.getLongitude());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -342,7 +325,8 @@ public class Main  {
             if(!is_distracted){
                 System.out.printf(GO_OUTPUT,nameOutput,locationOutput);
             }else {
-                System.out.printf(GO_OUTPUT__DISTRACTED,nameOutput,locationOutput,nameOutput);
+                System.out.printf(GO_OUTPUT_DISTRACTED,nameOutput,locationOutput,nameOutput);
+
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -388,7 +372,7 @@ public class Main  {
                     System.out.printf(LIST_USERS,s.getName(),s.getType());
                 }
             }else{
-                System.out.println("This order does not exists!");
+                System.out.println(ORDER_NOT_EXISTS);
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -404,8 +388,8 @@ public class Main  {
         try{
             String name= in.nextLine().trim();
             Services location=homeAway.where(name);
-            name=capitalizeTheName(name);
-            System.out.printf(WHERE_OUTPUT,capitalizeTheName(name),location.getName(),location.getType(),location.getLatitude(),location.getLongitude());
+            name=homeAway.getNameStudent(name);
+            System.out.printf(WHERE_OUTPUT,name,location.getName(),location.getType(),location.getLatitude(),location.getLongitude());
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -437,7 +421,7 @@ public class Main  {
     private static void evaluate(Scanner in, HomeAway homeAway) {
         try{
             int star=in.nextInt();
-            String nameService= capitalizeTheName(in.nextLine().trim());
+            String nameService= in.nextLine().trim();
             String description=in.nextLine();
             homeAway.evaluate(star,nameService,description);
             System.out.println(EVALUATION_OUTPUT);
@@ -520,29 +504,6 @@ public class Main  {
             System.out.println(e.getMessage());
         }
     }
-
-    //chatgpt
-
-    /**
-     * Capitalizes the first letter of each word in a string.
-     * @param name Input string
-     * @return Capitalized string
-     */
-    private static String capitalizeTheName(String name){
-        String[] words = name.trim().toLowerCase().split("\\s+");
-        StringBuilder sb = new StringBuilder();
-
-        for (String w : words) {
-            if (!w.isEmpty()) {
-                sb.append(Character.toUpperCase(w.charAt(0)))
-                        .append(w.substring(1))
-                        .append(" ");
-            }
-        }
-        return sb.toString().trim();
-    }
-//chatgpt
-
 
 
 }

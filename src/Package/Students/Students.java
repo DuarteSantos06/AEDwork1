@@ -2,15 +2,16 @@ package Package.Students;
 
 import Package.Services.*;
 
+import java.io.DataOutputStream;
 import java.io.Serializable;
 
 public abstract class Students implements Comparable<Students>,StudentsInterface, Serializable {
 
 
 
-    protected String name;
-    protected String country;
-    protected String type;
+    private String name;
+    private String country;
+    private String type;
     private Services location;
     private Lodging home;
     private Eating cheapestEating;
@@ -24,6 +25,8 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
         this.location=home;
         this.home =home;
     }
+
+
 
     public Lodging getHome(){
         return home;
