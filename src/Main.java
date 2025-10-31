@@ -1,10 +1,12 @@
+//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
 import java.util.Scanner;
 import Package.HomeAway;
 import Package.Services.Services;
 import Package.Students.Students;
 import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
-
+//comments done with the help of AI
 /**
  * Main class to handle the application logic for managing students, services and areas
  * in the HomeAway system. It handles user input, invokes the correct operations in
@@ -12,32 +14,52 @@ import dataStructures.TwoWayIterator;
  */
 public class Main  {
 
-
-
+    // Mensagem exibida quando uma ordem não existe.
     private static final String ORDER_NOT_EXISTS="This order does not exists!";
+    // Formato de saída para listas de serviços.
     private static final String LIST_OUTPUT="%s: %s (%d, %d).\n";
+    // Mensagem para mudança de localização distraída.
     private static final String GO_OUTPUT_DISTRACTED ="%s is now at %s. %s is distracted!\n";
+    // Mensagem para saída do estudante.
     private static final String LEAVE_OUTPUT="%s has left.\n";
+    // Frase exibida para serviços ranqueados.
     private static final String RANKED_PHRASE="%s services closer with %d average\n";
+    // Mensagem de aviso para serviços sem tag.
     private static final String NO_SERVICES_TAGGED="There are no services with this tag!";
+    // Formato de saída para tags.
     private static final String TAG_OUTPUT="%s %s\n";
+    // Mensagem para serviços ordenados por avaliação.
     private static final String SERVICES_DESCENDING= "Services sorted in descending order";
+    // Formato de saída de ranking.
     private static final String RANKING_OUTPUT="%s: %d\n";
+    // Mensagem de confirmação de avaliação.
     private static final String EVALUATION_OUTPUT="Your evaluation has been registered!";
+    // Formato de listagem de usuários.
     private static final String LIST_USERS="%s: %s\n";
+    // Mensagem de mudança de home.
     private static final String MOVE_OUTPUT="lodging %s is now %s's home. %s is at home.\n";
+    // Mensagem de mudança simples de localização.
     private static final String GO_OUTPUT="%s is now at %s.\n";
+    // Mensagem de confirmação de estudante criado.
     private static final String STUDENT_CREATED="%s added.\n";
+    // Mensagem de confirmação de serviço criado.
     private static final String SERVICE_CREATED="%s %s added.\n";
+    // Mensagem de confirmação de área criada.
     private static final String AREA_CREATED="%s created.\n";
+    // Formato de saída para localização de estudante.
     private static final String WHERE_OUTPUT="%s is at %s %s (%d, %d).\n";
+    // Formato de listagem de estudantes.
     private static final String LIST_STUDENTS="%s: %s at %s.\n";
+    // Mensagem de saída do programa.
     private static final String EXIT_OUTPUT="Bye!";
+    // Mensagem para tipo de serviço inválido.
     private static final String INVALID_SERVICE_TYPE="Invalid service type!";
+    // Mensagem de confirmação de área salva.
     private static final String SAVED="%s saved.\n";
+    // Mensagem para comando desconhecido.
     private static final String UNKNOWN_COMMAND="Unknown command. Type help to see available commands.";
 
-
+    // Tipos de serviços principais.
     private static final String EATING="eating";
     private static final String LODGING="lodging";
     private static final String LEISURE="leisure";
@@ -46,6 +68,7 @@ public class Main  {
      * Reads the next command from input and returns its respective Command enum.
      * @param input Scanner with user input
      * @return parsed Command or UNKNOWN if not valid
+     * @complexity O(1)
      */
     private static Command getCommand(Scanner input) {
         try {
@@ -59,6 +82,7 @@ public class Main  {
     /**
      * Entry point of the application. Processes user commands in a loop until EXIT is received.
      * @param args command-line arguments (not used)
+     * @complexity O(n) em relação ao número de comandos lidos até o comando EXIT
      */
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -98,6 +122,7 @@ public class Main  {
 
     /**
      * Prints the help menu by iterating over all commands and displaying their messages.
+     * @complexity O(m), onde m é o número de comandos definidos
      */
     private static void executeHelp() {
         Command[] help=Command.values();
@@ -108,6 +133,7 @@ public class Main  {
     /**
      * Handles program termination, saving current area before exiting.
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void exit(HomeAway homeAway) {
         try{
@@ -122,6 +148,7 @@ public class Main  {
      * Reads area bounds and name from input and creates a new area in HomeAway.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1) para processamento de entrada e criação de área
      */
     private static void createArea(Scanner in, HomeAway homeAway) {
         try {
@@ -143,6 +170,7 @@ public class Main  {
     /**
      * Saves current area in HomeAway and prints confirmation.
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void saveArea( HomeAway homeAway) {
         try {
@@ -157,6 +185,7 @@ public class Main  {
      * Loads an area from user input name in HomeAway.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void loadArea(Scanner in, HomeAway homeAway) {
         try{
@@ -172,6 +201,7 @@ public class Main  {
      * Creates a new service (eating, lodging or leisure) depending on user input.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void createService(Scanner in, HomeAway homeAway) {
         String type=in.next().trim().toLowerCase();
@@ -191,6 +221,7 @@ public class Main  {
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
      * @param type Type of service (eating or lodging)
+     * @complexity O(1)
      */
     private static void createServicesWithCapacity(Scanner in, HomeAway homeAway,String type) {
         try{
@@ -217,6 +248,7 @@ public class Main  {
      * Creates a leisure service with a discount and price.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void createLeisure(Scanner in, HomeAway homeAway) {
         try{
@@ -237,6 +269,7 @@ public class Main  {
     /**
      * Lists all services registered in the current area of HomeAway.
      * @param homeAway HomeAway backend instance
+     * @complexity O(s), onde s é o número de serviços
      */
     private static void listServices( HomeAway homeAway) {
         try{
@@ -254,6 +287,7 @@ public class Main  {
      * Adds a student with all details from input to the current area.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void createStudent(Scanner in, HomeAway homeAway) {
         try{
@@ -273,6 +307,7 @@ public class Main  {
      * Removes a student (by name) from the current area.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void leave(Scanner in, HomeAway homeAway) {
         try{
@@ -288,6 +323,7 @@ public class Main  {
      * Lists all students, or students from a specific country, in the current area.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(n), onde n é o número de estudantes
      */
     private static void listStudents(Scanner in, HomeAway homeAway) {
         try{
@@ -314,6 +350,7 @@ public class Main  {
      * Changes the location of a student to a new service (leisure or eating).
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void go(Scanner in, HomeAway homeAway) {
         try{
@@ -337,6 +374,7 @@ public class Main  {
      * Changes the designated home (lodging) for a student.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void move(Scanner in, HomeAway homeAway) {
         try{
@@ -354,6 +392,7 @@ public class Main  {
      * Lists users in a specific service, forwards or backwards.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(u), onde u é o número de usuários naquele serviço
      */
     private static void listUsers(Scanner in, HomeAway homeAway) {
         try{
@@ -383,6 +422,7 @@ public class Main  {
      * Prints the current location of a student.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void where(Scanner in, HomeAway homeAway) {
         try{
@@ -399,6 +439,7 @@ public class Main  {
      * Lists all places visited by a given student.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(v), onde v é o número de locais visitados
      */
     private static void listVisited(Scanner in, HomeAway homeAway) {
         try{
@@ -417,6 +458,7 @@ public class Main  {
      * Adds an evaluation (star and description) to a service.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(1)
      */
     private static void evaluate(Scanner in, HomeAway homeAway) {
         try{
@@ -433,6 +475,7 @@ public class Main  {
     /**
      * Displays all services sorted by their star evaluations, descending.
      * @param homeAway HomeAway backend instance
+     * @complexity O(s log s), onde s é o número de serviços
      */
     private static void ranking(HomeAway homeAway) {
         try{
@@ -451,6 +494,7 @@ public class Main  {
      * Lists services matching type and star evaluation, closest to the student's location.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(s), onde s é o número de serviços
      */
     private static void ranked(Scanner in, HomeAway homeAway) {
         try{
@@ -472,6 +516,7 @@ public class Main  {
      * Lists all services with at least one review containing a specified word.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(s), onde s é o número de serviços
      */
     private static void tag(Scanner in, HomeAway homeAway) {
         try{
@@ -493,6 +538,7 @@ public class Main  {
      * Finds the most relevant service of a certain type for a specific student.
      * @param in Scanner input
      * @param homeAway HomeAway backend instance
+     * @complexity O(s), onde s é o número de serviços
      */
     private static void find (Scanner in, HomeAway homeAway){
         try{
@@ -504,6 +550,4 @@ public class Main  {
             System.out.println(e.getMessage());
         }
     }
-
-
 }

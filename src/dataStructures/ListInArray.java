@@ -163,15 +163,15 @@ public class ListInArray<E> implements List<E> {
      * @param element  - element to be inserted
      * @throws InvalidPositionException - if position is not valid in the list
      */
-    public void add(int position, E element) throws InvalidPositionException{
-        if(position<0 || position>counter){
+    public void add(int position, E element) throws InvalidPositionException {
+        if (position < 0 || position > counter) {
             throw new InvalidPositionException();
         }
         if (counter == elems.length) {
             resize();
         }
-        for(int i = counter-1; i >= position; i--){
-            elems[i+1] = elems[i];
+        for (int i = counter - 1; i >= position; i--) {
+            elems[i + 1] = elems[i];
         }
 
         elems[position] = element;

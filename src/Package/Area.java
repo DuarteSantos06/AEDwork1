@@ -1,8 +1,9 @@
+//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
 package Package;
 
 import Package.Services.Services;
 import Package.Students.Students;
-
 
 import dataStructures.ListInArray;
 import dataStructures.SortedDoublyLinkedList;
@@ -34,10 +35,6 @@ public class Area implements AreaInterface, Serializable {
         studentsByRegistration=new ListInArray<>(500);
     }
 
-
-
-
-
     public String getName() {
         return name;
     }
@@ -45,6 +42,7 @@ public class Area implements AreaInterface, Serializable {
     public long getTopLatitude() {
         return topLatitude;
     }
+
     public long getLeftLongitude() {
         return leftLongitude;
     }
@@ -52,6 +50,7 @@ public class Area implements AreaInterface, Serializable {
     public long getBottomLatitude() {
         return bottomLatitude;
     }
+
     public long getRightLongitude() {
         return rightLongitude;
     }
@@ -59,7 +58,6 @@ public class Area implements AreaInterface, Serializable {
     public void addService(Services service){
         services.addLast(service);
     }
-
 
     public void addStudent(Students student){
         students.add(student);
@@ -83,6 +81,10 @@ public class Area implements AreaInterface, Serializable {
         return studentsByRegistration;
     }
 
+    /**
+     * Serializes custom fields: services and studentsByRegistration.
+     * This is a private helper for Java serialization.
+     */
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
         oos.writeInt(services.size());
@@ -90,26 +92,27 @@ public class Area implements AreaInterface, Serializable {
             oos.writeObject(services.get(i));
         }
 
-
         oos.writeInt(studentsByRegistration.size());
         for (int i = 0; i < studentsByRegistration.size(); i++) {
             oos.writeObject(studentsByRegistration.get(i));
         }
     }
 
+    /**
+     * Deserializes custom fields: services and studentsByRegistration.
+     * This is a private helper for Java serialization.
+     */
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         ois.defaultReadObject();
         this.services = new ListInArray<>(2500);
         this.students = new SortedDoublyLinkedList<>(new StudentComparator());
         this.studentsByRegistration = new ListInArray<>(500);
 
-
         int numServices = ois.readInt();
         for (int i = 0; i < numServices; i++) {
             Services s = (Services) ois.readObject();
             services.addLast(s);
         }
-
 
         int numByReg = ois.readInt();
         for (int i = 0; i < numByReg; i++) {

@@ -1,3 +1,5 @@
+//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
 package Package.Students;
 import Package.Services.Services;
 import dataStructures.ListInArray;
@@ -15,6 +17,7 @@ public interface StudentsKeepVisitedInterface extends StudentsInterface {
      * This method should be called whenever the student visits a new service.
      * 
      * @param service the service that was visited
+     * @complexity O(1) — assuming append to list
      */
     void addVisited(Services service);
     
@@ -23,6 +26,7 @@ public interface StudentsKeepVisitedInterface extends StudentsInterface {
      * The list maintains the order in which services were visited.
      * 
      * @return a list containing all visited services in chronological order
+     * @complexity O(1) — returning a reference; O(n) if copying
      */
     ListInArray<Services> getVisited();
 }

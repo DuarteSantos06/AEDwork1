@@ -1,11 +1,13 @@
-package Package.Services;
+//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
 
+package Package.Services;
 
 import dataStructures.ListInArray;
 
 import java.io.*;
 
-public  abstract class Services implements ServicesInterface, Serializable {
+public abstract class Services implements ServicesInterface, Serializable {
 
     private String name;
     private long latitude;
@@ -17,21 +19,16 @@ public  abstract class Services implements ServicesInterface, Serializable {
     private String type;
     private int numberEvaluated;
 
-
-    public Services(long latitude, long longitude, float price,String name,String type){
+    public Services(long latitude, long longitude, float price, String name, String type){
         this.latitude = latitude;
         this.longitude = longitude;
         this.price = price;
-        this.name=name;
-        this.star=4;
-        this.countEvaluations=1;
-        this.type=type;
-        reviews = new ListInArray<>(10) ;
+        this.name = name;
+        this.star = 4;
+        this.countEvaluations = 1;
+        this.type = type;
+        reviews = new ListInArray<>(10);
     }
-
-
-
-
 
     public int getLastEvaluated(){
         return numberEvaluated;
@@ -51,18 +48,25 @@ public  abstract class Services implements ServicesInterface, Serializable {
 
     public abstract float getPrice();
 
-    public void evaluate(int star,String description,int evaluateCounter){
+    /**
+     * Updates evaluation stats and adds a review description.
+     *
+     * @param star the star rating to add
+     * @param description the review description
+     * @param evaluateCounter counter for evaluation round
+     */
+    public void evaluate(int star, String description, int evaluateCounter){
         countEvaluations++;
         float newStar = ((this.star * (countEvaluations - 1)) + star) / countEvaluations;
-        if(newStar>5){
-            this.star=5;
-        }else if(newStar<1){
-            this.star=1;
+        if(newStar > 5){
+            this.star = 5;
+        } else if(newStar < 1){
+            this.star = 1;
         }
-        if(Math.round(newStar)!=Math.round(this.star)) {
-            this.numberEvaluated=evaluateCounter;
+        if(Math.round(newStar) != Math.round(this.star)) {
+            this.numberEvaluated = evaluateCounter;
         }
-        this.star=newStar;
+        this.star = newStar;
 
         reviews.addLast(description.toLowerCase());
     }

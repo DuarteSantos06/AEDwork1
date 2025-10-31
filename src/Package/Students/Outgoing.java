@@ -1,3 +1,5 @@
+//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
 package Package.Students;
 
 import Package.Services.Lodging;
@@ -20,6 +22,12 @@ public class Outgoing extends StudentsKeepVisited {
         }
     }
 
+    /**
+     * Checks if the service has already been visited.
+     *
+     * @param service the service to check
+     * @return true if service is already visited, false otherwise
+     */
     private boolean alreadyVisited(Services service){
         for(int i=0;i<services.size();i++){
             if(services.get(i).equals(service)){
