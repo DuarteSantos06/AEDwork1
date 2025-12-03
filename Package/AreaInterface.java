@@ -81,7 +81,7 @@ public interface AreaInterface {
      * @return a list containing all services
      * @complexity O(1)
      */
-    List<Services> getServices();
+    List<Services> getServices()throws NoToList;
 
     /**
      * Returns a sorted list of all students in this area.

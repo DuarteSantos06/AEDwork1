@@ -14,8 +14,8 @@ public class Bookish extends StudentsKeepVisited{
 
     public ListInArray<Services> services;
 
-    public Bookish(String name, String country, String lodging, Lodging home){
-        super(name,country,lodging,home,"bookish");
+    public Bookish(String name, String country, Lodging home){
+        super(name,country,home,StudentsType.BOOKISH);
         services=new ListInArray<>(10);
     }
 

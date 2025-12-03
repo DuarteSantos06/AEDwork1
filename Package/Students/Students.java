@@ -6,31 +6,27 @@ package Package.Students;
 import Package.Exceptions.InvalidLocation;
 import Package.Services.*;
 
-import java.io.DataOutputStream;
 import java.io.Serializable;
 
 public abstract class Students implements Comparable<Students>,StudentsInterface,IReadOnlyStudent, Serializable {
 
 
 
-    private String name;
-    private String country;
-    private String type;
-    private Services location;
+    private final String name;
+    private final String country;
+    private final StudentsType type;
+    private Services actualLocation;
     private Lodging home;
     private Eating cheapestEating;
 
 
-    public Students(String name, String country, String lodging, Lodging home,String type) {
-
+    public Students(String name, String country, Lodging home,StudentsType type) {
         this.name = name;
         this.country = country;
         this.type=type;
-        this.location=home;
+        this.actualLocation=home;
         this.home =home;
     }
-
-
 
     public Lodging getHome(){
         return home;
@@ -49,15 +45,15 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
     }
 
     public String getType(){
-        return type;
+        return type.toString();
     }
 
     public String getNameLocation() {
-        return location.getName();
+        return actualLocation.getName();
     }
 
     public Services getLocation(){
-        return location;
+        return actualLocation;
     }
 
     public Eating getCheapestEating(){
@@ -65,22 +61,22 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
     }
 
     public void leave(){
-        if(this.location instanceof ServicesWithCapacity){
-            ((ServicesWithCapacity) this.location).removeStudent(this);
+        if(this.actualLocation instanceof ServicesWithCapacity){
+            ((ServicesWithCapacity) this.actualLocation).removeStudent(this);
         }
-        if(!location.getName().equals(home.getName())){
+        if(!actualLocation.getName().equals(home.getName())){
             home.removeStudent(this);
         }
     }
 
     public void go(Services location)throws InvalidLocation {
-        if(this.location instanceof ServicesWithCapacity && !this.location.equals(home)){
-            ((ServicesWithCapacity) this.location).removeStudent(this);
+        if(this.actualLocation instanceof ServicesWithCapacity && !this.actualLocation.equals(home)){
+            ((ServicesWithCapacity) this.actualLocation).removeStudent(this);
         }
         if(location instanceof ServicesWithCapacity){
             ((ServicesWithCapacity) location).addStudent(this);
         }
-        this.location=location;
+        this.actualLocation=location;
 
         if (location instanceof Eating eating) {
             if (cheapestEating == null || eating.getPrice() < cheapestEating.getPrice()) {
@@ -95,10 +91,10 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
     public void move(Lodging home)throws InvalidLocation{
         home.addStudent(this);
         this.home.removeStudent(this);
-        this.location=home;
+        this.actualLocation=home;
         this.home =home;
         if(!(this instanceof Thrifty)){
-            ((StudentsKeepVisited)this).addVisited(location);
+            ((StudentsKeepVisited)this).addVisited(actualLocation);
         }
 
     }

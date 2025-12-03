@@ -136,6 +136,7 @@ public class ClosedHashTable<K,V> extends HashTable<K,V> {
      * @return previous value associated with key,
      * or null if the dictionary does not an entry with that key
      */
+    @SuppressWarnings("unchecked")
     @Override
     public V remove(K key) {
         int index =searchLinearProving(key);
@@ -148,8 +149,6 @@ public class ClosedHashTable<K,V> extends HashTable<K,V> {
             }
             index = (index + 1) % table.length;
         }
-
-        
         return null;
     }
 

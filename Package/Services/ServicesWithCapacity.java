@@ -19,10 +19,10 @@ public class ServicesWithCapacity extends Services implements ServicesWithCapaci
     private transient int capacity;
     private transient DoublyLinkedList<Students> students;
     private transient int currentOccupation;
-    private String type;
+    private ServicesType type;
 
 
-    public ServicesWithCapacity(long latitude, long longitude, float price, int capacity,String name,String type){
+    public ServicesWithCapacity(long latitude, long longitude, float price, int capacity,String name,ServicesType type){
         super(latitude,longitude,price,name,type);
         this.capacity = capacity;
         students = new DoublyLinkedList<>();

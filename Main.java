@@ -4,6 +4,7 @@ import java.util.Scanner;
 import Package.HomeAway;
 import Package.Services.IReadOnlyService;
 import Package.Services.Services;
+import Package.Services.ServicesType;
 import Package.Students.IReadOnlyStudent;
 import Package.Students.Students;
 import dataStructures.Iterator;
@@ -16,33 +17,6 @@ import dataStructures.TwoWayIterator;
  */
 public class Main  {
 
-
-    private static final String ORDER_NOT_EXISTS="This order does not exists!";
-    private static final String LIST_OUTPUT="%s: %s (%d, %d).\n";
-    private static final String GO_OUTPUT_DISTRACTED ="%s is now at %s. %s is distracted!\n";
-    private static final String LEAVE_OUTPUT="%s has left.\n";
-    private static final String RANKED_PHRASE="%s services closer with %d average\n";
-    private static final String NO_SERVICES_TAGGED="There are no services with this tag!";
-    private static final String TAG_OUTPUT="%s %s\n";
-    private static final String SERVICES_DESCENDING= "Services sorted in descending order";
-    private static final String RANKING_OUTPUT="%s: %d\n";
-    private static final String EVALUATION_OUTPUT="Your evaluation has been registered!";
-    private static final String LIST_USERS="%s: %s\n";
-    private static final String MOVE_OUTPUT="lodging %s is now %s's home. %s is at home.\n";
-    private static final String GO_OUTPUT="%s is now at %s.\n";
-    private static final String STUDENT_CREATED="%s added.\n";
-    private static final String SERVICE_CREATED="%s %s added.\n";
-    private static final String AREA_CREATED="%s created.\n";
-    private static final String WHERE_OUTPUT="%s is at %s %s (%d, %d).\n";
-    private static final String LIST_STUDENTS="%s: %s at %s.\n";
-    private static final String EXIT_OUTPUT="Bye!";
-    private static final String INVALID_SERVICE_TYPE="Invalid service type!";
-    private static final String SAVED="%s saved.\n";
-    private static final String UNKNOWN_COMMAND="Unknown command. Type help to see available commands.";
-
-    private static final String EATING="eating";
-    private static final String LODGING="lodging";
-    private static final String LEISURE="leisure";
 
     /**
      * Reads the next command from input and returns its respective Command enum.
@@ -92,12 +66,11 @@ public class Main  {
                 case FIND-> find(in,homeAway);
                 case HELP->executeHelp();
                 case EXIT->exit(homeAway);
-                default-> System.out.println(UNKNOWN_COMMAND);
+                default-> System.out.println(OutputEnum.UNKNOWN_COMMAND.getMessage());
             }
 
-        }while(!cmd.equals(cmd.EXIT));
+        }while(!cmd.equals(Command.EXIT));
         in.close();
-
     }
 
     /**
@@ -118,7 +91,7 @@ public class Main  {
     private static void exit(HomeAway homeAway) {
         try{
             String name=homeAway.saveArea();
-            System.out.println(EXIT_OUTPUT);
+            System.out.println(OutputEnum.EXIT_OUTPUT.getMessage());
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -141,7 +114,7 @@ public class Main  {
             name = name.trim();
 
             homeAway.createArea(name, topLatitude, leftLongitude, bottomLatitude, rightLongitude);
-            System.out.printf(AREA_CREATED,name);
+            System.out.printf(OutputEnum.AREA_CREATED.getMessage(),name);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -155,7 +128,7 @@ public class Main  {
     private static void saveArea( HomeAway homeAway) {
         try {
             String name=homeAway.saveArea();
-            System.out.printf(SAVED,name);
+            System.out.printf(OutputEnum.SAVED.getMessage(),name);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -185,13 +158,13 @@ public class Main  {
      */
     private static void createService(Scanner in, HomeAway homeAway) {
         String type=in.next().trim().toLowerCase();
-        if(type.equals(LEISURE)){
+        if(type.equals(ServicesType.LEISURE.toString())){
             createLeisure(in,homeAway);
         }
-        else if(type.equals(LODGING)||type.equals(EATING)){
+        else if(type.equals(ServicesType.LODGING.toString())||type.equals(ServicesType.EATING.toString())){
             createServicesWithCapacity(in,homeAway,type);
         }else{
-            System.out.println(INVALID_SERVICE_TYPE);
+            System.out.println(OutputEnum.INVALID_SERVICE_TYPE.getMessage());
             in.nextLine();
         }
     }
@@ -212,13 +185,13 @@ public class Main  {
             String name = in.next();
             name += in.nextLine();
             name = name.trim();
-            if(type.equals(EATING)){
+            if(type.equals(ServicesType.EATING.toString())){
                 homeAway.createEating(latitude,longitude,price,capacity,name);
             }
-            else if(type.equals(LODGING)){
+            else if(type.equals(ServicesType.LODGING.toString())){
                 homeAway.createLodging(latitude,longitude,price,capacity,name);
             }
-            System.out.printf(SERVICE_CREATED,type,name);
+            System.out.printf(OutputEnum.SERVICE_CREATED.getMessage(),type,name);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -240,7 +213,7 @@ public class Main  {
             name += in.nextLine();
             name = name.trim();
             homeAway.createLeisure(latitude,longitude,price,  discount,name);
-            System.out.printf(SERVICE_CREATED,LEISURE,name);
+            System.out.printf(OutputEnum.SERVICE_CREATED.getMessage(),ServicesType.LEISURE,name);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -256,7 +229,7 @@ public class Main  {
             Iterator<Services> it=homeAway.listAllServices();
             while(it.hasNext()){
                 IReadOnlyService s=it.next();
-                System.out.printf(LIST_OUTPUT,s.getName(),s.getType(),s.getLatitude(),s.getLongitude());
+                System.out.printf(OutputEnum.LIST_OUTPUT.getMessage(),s.getName(),s.getType(),s.getLatitude(),s.getLongitude());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -277,7 +250,7 @@ public class Main  {
             String country=in.nextLine();
             String lodging=in.nextLine();
             homeAway.createStudent(type,name,country,lodging);
-            System.out.printf(STUDENT_CREATED,name);
+            System.out.printf(OutputEnum.STUDENT_CREATED.getMessage(),name);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -293,7 +266,7 @@ public class Main  {
         try{
             String name=in.nextLine().trim();
             String nameLeft=homeAway.leave(name);
-            System.out.printf(LEAVE_OUTPUT,nameLeft);
+            System.out.printf(OutputEnum.LEAVE_OUTPUT.getMessage(),nameLeft);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -312,13 +285,13 @@ public class Main  {
                 Iterator<Students> it=homeAway.listAllStudents();
                 while(it.hasNext()){
                     IReadOnlyStudent s=it.next();
-                    System.out.printf(LIST_STUDENTS,s.getName(),s.getType(),s.getNameLocation());
+                    System.out.printf(OutputEnum.LIST_STUDENTS.getMessage(),s.getName(),s.getType(),s.getNameLocation());
                 }
             }else{
                 Iterator<Students> it=homeAway.listStudentsByCountry(country);
                 while(it.hasNext()){
                     IReadOnlyStudent s=it.next();
-                    System.out.printf(LIST_STUDENTS,s.getName(),s.getType(),s.getNameLocation());
+                    System.out.printf(OutputEnum.LIST_STUDENTS.getMessage(),s.getName(),s.getType(),s.getNameLocation());
                 }
             }
         }catch (Exception e){
@@ -340,10 +313,9 @@ public class Main  {
             String nameOutput=homeAway.getNameStudent(name);
             String locationOutput=homeAway.getNameService(location);
             if(!is_distracted){
-                System.out.printf(GO_OUTPUT,nameOutput,locationOutput);
+                System.out.printf(OutputEnum.GO_OUTPUT.getMessage(),nameOutput,locationOutput);
             }else {
-                System.out.printf(GO_OUTPUT_DISTRACTED,nameOutput,locationOutput,nameOutput);
-
+                System.out.printf(OutputEnum.GO_OUTPUT_DISTRACTED.getMessage(),nameOutput,locationOutput,nameOutput);
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -362,7 +334,7 @@ public class Main  {
             String location=in.nextLine().trim();
             String newHome=homeAway.move(nameRead,location);
             String name=homeAway.getNameStudent(nameRead);
-            System.out.printf(MOVE_OUTPUT,newHome,name,name);
+            System.out.printf(OutputEnum.MOVE_OUTPUT.getMessage(),newHome,name,name);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -382,16 +354,16 @@ public class Main  {
             if(order.equals(">")){
                 while(it.hasNext()){
                     IReadOnlyStudent s=it.next();
-                    System.out.printf(LIST_USERS,s.getName(),s.getType());
+                    System.out.printf(OutputEnum.LIST_USERS.getMessage(),s.getName(),s.getType());
                 }
             }else if(order.equals("<")){
                 it.fullForward();
                 while(it.hasPrevious()){
                     IReadOnlyStudent s=it.previous();
-                    System.out.printf(LIST_USERS,s.getName(),s.getType());
+                    System.out.printf(OutputEnum.LIST_USERS.getMessage(),s.getName(),s.getType());
                 }
             }else{
-                System.out.println(ORDER_NOT_EXISTS);
+                System.out.println(OutputEnum.ORDER_NOT_EXISTS.getMessage());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -409,7 +381,8 @@ public class Main  {
             String name= in.nextLine().trim();
             IReadOnlyService location=homeAway.where(name);
             name=homeAway.getNameStudent(name);
-            System.out.printf(WHERE_OUTPUT,name,location.getName(),location.getType(),location.getLatitude(),location.getLongitude());
+            System.out.printf(OutputEnum.WHERE_OUTPUT.getMessage(),name,location.getName(),
+                    location.getType(),location.getLatitude(),location.getLongitude());
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -446,7 +419,7 @@ public class Main  {
             String nameService= in.nextLine().trim();
             String description=in.nextLine();
             homeAway.evaluate(star,nameService,description);
-            System.out.println(EVALUATION_OUTPUT);
+            System.out.println(OutputEnum.EVALUATION_OUTPUT.getMessage());
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -459,11 +432,11 @@ public class Main  {
      */
     private static void ranking(HomeAway homeAway) {
         try{
-            System.out.println(SERVICES_DESCENDING);
+            System.out.println(OutputEnum.SERVICES_DESCENDING.getMessage());
             Iterator<Services> it=homeAway.getRanking();
             while(it.hasNext()){
                 IReadOnlyService s=it.next();
-                System.out.printf(RANKING_OUTPUT,s.getName(),s.getEvaluation());
+                System.out.printf(OutputEnum.RANKING_OUTPUT.getMessage(),s.getName(),s.getEvaluation());
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -482,7 +455,7 @@ public class Main  {
             int star=in.nextInt();
             String name=in.nextLine().trim();
             Iterator<Services> it=homeAway.getRanked(type,star,name);
-            System.out.printf(RANKED_PHRASE,type,star);
+            System.out.printf(OutputEnum.RANKED_PHRASE.getMessage(),type,star);
             while(it.hasNext()){
                 IReadOnlyService s=it.next();
                 System.out.println(s.getName());
@@ -503,11 +476,11 @@ public class Main  {
             String tag=in.nextLine().trim();
             Iterator<Services> it=homeAway.getTag(tag);
             if(!it.hasNext()){
-                System.out.println(NO_SERVICES_TAGGED);
+                System.out.println(OutputEnum.NO_SERVICES_TAGGED.getMessage());
             }
             while(it.hasNext()){
                 IReadOnlyService s=it.next();
-                System.out.printf(TAG_OUTPUT,s.getType(),s.getName());
+                System.out.printf(OutputEnum.TAG_OUTPUT.getMessage(),s.getType(),s.getName());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());

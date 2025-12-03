@@ -15,8 +15,8 @@ public class Outgoing extends StudentsKeepVisited {
     private final ListInArray<Services> services;
     private final Map<String,Services> servicesMap;
 
-    public Outgoing(String name, String country, String lodging, Lodging home){
-        super(name,country,lodging,home,"outgoing");
+    public Outgoing(String name, String country,  Lodging home){
+        super(name,country,home,StudentsType.OUTGOING);
         services=new ListInArray<>(10);
         servicesMap=new SepChainHashTable<>();
     }

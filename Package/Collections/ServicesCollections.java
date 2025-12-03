@@ -15,7 +15,7 @@ public class ServicesCollections implements Serializable {
 
     public ServicesCollections(){
         services = new ListInArray<>(2500);
-        servicesByStar = new RBSortedMap<>();
+        servicesByStar = new BSTSortedMap<>();
         servicesByName = new ClosedHashTable<>(2500);
     }
 
@@ -42,7 +42,10 @@ public class ServicesCollections implements Serializable {
         return servicesByStar;
     }
 
-    public List<Services> getServices(){
+    public List<Services> getServices()throws NoToList{
+        if(services.isEmpty()||services==null){
+            throw new NoToList("No services yet!");
+        }
         return services;
     }
 
@@ -62,6 +65,7 @@ public class ServicesCollections implements Serializable {
      * Serializes custom fields: services and studentsByRegistration.
      * This is a private helper for Java serialization.
      */
+    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
         oos.writeInt(services.size());
@@ -75,11 +79,12 @@ public class ServicesCollections implements Serializable {
      * Deserializes custom fields: services and studentsByRegistration.
      * This is a private helper for Java serialization.
      */
+    @Serial
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         ois.defaultReadObject();
         this.services = new ListInArray<>(2500);
         this.servicesByStar = new BSTSortedMap<>();
-        this.servicesByName = new SepChainHashTable<>();
+        this.servicesByName = new ClosedHashTable<>(2500);
 
         int numServices = ois.readInt();
         for (int i = 0; i < numServices; i++) {

@@ -13,8 +13,8 @@ public abstract class StudentsKeepVisited extends Students implements StudentsKe
 
 
 
-    public StudentsKeepVisited(String name, String country, String lodging, Lodging home, String location){
-        super(name,country,lodging,home,location);
+    public StudentsKeepVisited(String name, String country, Lodging home,StudentsType type){
+        super(name,country,home,type);
 
     }
 

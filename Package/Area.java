@@ -83,7 +83,7 @@ public class Area implements AreaInterface, Serializable {
         studentsCollections.removeStudent(student);
     }
 
-    public List<Services> getServices(){
+    public List<Services> getServices()throws NoToList{
         return servicesCollections.getServices();
     }
 

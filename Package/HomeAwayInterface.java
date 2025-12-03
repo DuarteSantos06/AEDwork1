@@ -111,7 +111,7 @@ public interface HomeAwayInterface {
      * @throws StudentAlreadyExists if a student with the same name already exists
      */
     void createStudent(String type, String name, String country, String lodging)
-            throws InvalidStudentType, LodgingNotExists, LodgingIsFull, StudentAlreadyExists,InvalidLocation;
+            throws InvalidStudentType, LodgingNotExists, LodgingIsFull, StudentAlreadyExists,InvalidLocation,StudentNotFound,NoToList;
 
     /**
      * Removes a student from the system.

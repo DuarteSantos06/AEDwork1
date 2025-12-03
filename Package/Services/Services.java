@@ -3,27 +3,24 @@
 
 package Package.Services;
 
-import Package.Exceptions.InvalidStar;
 import dataStructures.ListInArray;
-import dataStructures.Map;
-import dataStructures.SepChainHashTable;
 import Package.Area;
 
 import java.io.*;
 
 public abstract class Services implements ServicesInterface, IReadOnlyService,Serializable {
 
-    private String name;
-    private long latitude;
-    private long longitude;
+    private final String name;
+    private final long latitude;
+    private final long longitude;
     protected float price;
     private float star;
     private int countEvaluations;
-    private ListInArray<String> reviews;
-    private String type;
+    private final ListInArray<String> reviews;
+    private final ServicesType type;
     private int numberEvaluated;
 
-    public Services(long latitude, long longitude, float price, String name, String type){
+    public Services(long latitude, long longitude, float price, String name, ServicesType type){
         this.latitude = latitude;
         this.longitude = longitude;
         this.price = price;
@@ -59,7 +56,7 @@ public abstract class Services implements ServicesInterface, IReadOnlyService,Se
      * @param description the review description
      * @param evaluateCounter counter for evaluation round
      */
-    public void evaluate(int star, String description, int evaluateCounter, Area currentArea) throws InvalidStar{
+    public void evaluate(int star, String description, int evaluateCounter, Area currentArea){
         countEvaluations++;
         float newStar = ((this.star * (countEvaluations - 1)) + star) / countEvaluations;
         if(newStar > 5){
@@ -86,6 +83,6 @@ public abstract class Services implements ServicesInterface, IReadOnlyService,Se
     }
 
     public String getType(){
-        return type;
+        return type.toString();
     }
 }

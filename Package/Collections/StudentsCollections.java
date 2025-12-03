@@ -4,10 +4,7 @@ import Package.Exceptions.NoToList;
 import Package.Students.Students;
 import dataStructures.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 public class StudentsCollections implements Serializable {
 
@@ -16,7 +13,7 @@ public class StudentsCollections implements Serializable {
     private transient Map<String, List<Students>>studentsByRegistration;
 
     public StudentsCollections(){
-        students = new RBSortedMap<>();
+        students = new AVLSortedMap<>();
         studentsByRegistration = new SepChainHashTable<>(500);
     }
 
@@ -61,6 +58,7 @@ public class StudentsCollections implements Serializable {
         list.addLast(student);
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream oos)throws IOException{
         oos.defaultWriteObject();
         oos.writeInt(studentsByRegistration.size());
@@ -78,11 +76,11 @@ public class StudentsCollections implements Serializable {
         }
     }
 
+    @Serial
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         ois.defaultReadObject();
-        this.students = new BSTSortedMap<>();
-        this.studentsByRegistration = new SepChainHashTable<>();
-
+        this.students = new AVLSortedMap<>();
+        this.studentsByRegistration = new SepChainHashTable<>(500);
 
         int numCountries = ois.readInt();
         for (int i = 0; i < numCountries; i++) {
