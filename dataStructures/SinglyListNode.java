@@ -48,7 +48,7 @@ class SinglyListNode<E> implements Serializable {
     }
 
     /**
-     *
+     * Time complexity: O(1)
      * @return the element contained in the node
      */
     public E getElement( ) {
@@ -56,7 +56,7 @@ class SinglyListNode<E> implements Serializable {
     }
 
     /**
-     *
+     * Time complexity: O(1)
      * @return the next node
      */
     public SinglyListNode<E> getNext( ) {
@@ -64,7 +64,7 @@ class SinglyListNode<E> implements Serializable {
     }
 
     /**
-     *
+     * Time complexity: O(1)
      * @param newElement - New element to replace the current element
      */
     public void setElement( E newElement ) {
@@ -72,7 +72,7 @@ class SinglyListNode<E> implements Serializable {
     }
 
     /**
-     *
+     * Time complexity: O(1)
      * @param newNext - node to replace the next node
      */
     public void setNext( SinglyListNode<E> newNext ) {

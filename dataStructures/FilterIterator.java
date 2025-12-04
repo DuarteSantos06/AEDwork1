@@ -44,7 +44,7 @@ public class FilterIterator<E> implements Iterator<E> {
 
     /**
      * Returns true if next would return an element
-     *Time Complexity: O(n)
+     *Time Complexity: O(n) on worst case and O(1) on best case
      * @return true iff the iteration has more elements
      */
     public boolean hasNext() {

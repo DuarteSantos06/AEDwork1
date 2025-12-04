@@ -87,7 +87,7 @@ class BTNode<E> implements Node<E> {
 
     /**
      * Computes the height of the subtree rooted at this node.
-     * O(n) in worst case, where n is the number of nodes in the subtree,
+     * O(n)
      * because it recursively computes height of left and right subtrees.
      */
     public int getHeight() {

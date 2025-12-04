@@ -25,7 +25,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
 
     /**
      * Returns true iff the dictionary contains no entries.
-     *
+     * Time complexity: O(1)
      * @return true if dictionary is empty
      */
   
@@ -35,7 +35,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
 
     /**
      * Returns the number of entries in the dictionary.
-     *
+     * Time complexity: O(1)
      * @return number of elements in the dictionary
      */
     @Override
@@ -46,7 +46,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
     /**
      * If there is an entry in the dictionary whose key is the specified key,
      * returns its value; otherwise, returns null.
-     *Time complexity: O(n)
+     * Time complexity: O(n) on worst case and O(1) on best case
      * @param key whose associated value is to be returned
      * @return value of entry in the dictionary whose key is the specified key,
      * or null if the dictionary does not have an entry with that key
@@ -69,7 +69,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
      * If there is an entry in the dictionary whose key is the specified key,
      * replaces its value by the specified value and returns the old value;
      * otherwise, inserts the entry (key, value) and returns null.
-     *Time complexity: O(n)
+     *Time complexity: O(n) on worst case and O(1) on best case
      * @param key   with which the specified value is to be associated
      * @param value to be associated with the specified key
      * @return previous value associated with key,
@@ -98,7 +98,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
      * If there is an entry in the dictionary whose key is the specified key,
      * removes it from the dictionary and returns its value;
      * otherwise, returns null.
-     *Time complexity: O(n)
+     *Time complexity: O(n) on worst case and O(1) on best case
      * @param key whose entry is to be removed from the map
      * @return previous value associated with key,
      * or null if the dictionary does not an entry with that key

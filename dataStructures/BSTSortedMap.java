@@ -18,7 +18,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
     }
     /**
      * Returns the entry with the smallest key.
-     * Time Complexity: O(h)
+     * Time Complexity: O(h) on worst case and O(1) on best case,if root is already the further left element
      * @throws EmptyMapException
      */
     @Override
@@ -30,8 +30,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
 
     /**
      * Returns the entry with the largest key.
-     * Time Complexity: O(h)
-     *
+     * Time Complexity: O(h) on worst case and O(1) on best case,if root is already the further right element
      * @throws EmptyMapException
      */
     @Override
@@ -45,7 +44,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
     /**
      * If there is an entry in the dictionary whose key is the specified key,
      * returns its value; otherwise, returns null.
-     *Time Complexity: O(h)
+     * Time Complexity: O(log n ) on worst case and O(1) on best case
      * @param key whose associated value is to be returned
      * @return value of entry in the dictionary whose key is the specified key,
      * or null if the dictionary does not have an entry with that key
@@ -59,6 +58,13 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
     }
 
 
+    /**
+     * Returns the node with the given key.
+     * Time complexity O(1) on best case and O(log n) on worst case
+     * @param node
+     * @param key
+     * @return
+     */
     private BTNode<Map.Entry<K,V>> getNode(BTNode<Map.Entry<K,V>> node, K key) {
         if (node == null)
             return null;
@@ -77,7 +83,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
      * If there is an entry in the dictionary whose key is the specified key,
      * replaces its value by the specified value and returns the old value;
      * otherwise, inserts the entry (key, value) and returns null.
-     *Time Complexity: O(h)
+     * Time Complexity: O(n) on worst case and O(1) on best case
      * @param key   with which the specified value is to be associated
      * @param value to be associated with the specified key
      * @return previous value associated with key,
@@ -123,7 +129,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
      * If there is an entry in the dictionary whose key is the specified key,
      * removes it from the dictionary and returns its value;
      * otherwise, returns null.
-     *Time Complexity: O(h)
+     *Time Complexity: O(n) on worst case and O(1) on best case
      * @param key whose entry is to be removed from the map
      * @return previous value associated with key,
      * or null if the dictionary does not an entry with that key
@@ -145,7 +151,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
      * -leaf
      * - one child
      * - two children
-     * Time Complexity: O(h)
+     * Time Complexity: O(1) on best case and O(h) on worst case
      */
     private void deleteNode(BTNode<Map.Entry<K,V>> node) {
 

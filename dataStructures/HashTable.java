@@ -35,7 +35,6 @@ package dataStructures;
      // Returns the hash code of the specified key,
      // which is an integer in the range 0, ..., b-1.
      public static int hash( String key ){
-
          int a = 127; // a is a prime number.
          int b = 2147483647; // b is a prime number.
          int hashCode = 0;
@@ -44,11 +43,11 @@ package dataStructures;
              hashCode = ( hashCode * a + key.charAt(i) ) % b;
          return hashCode;
      }
-     // Protected Static Methods
 
-     // Returns a prime number that is not less than the
-     // specified number; or zero if all such primes are greater
-     // than Integer.MAX VALUE.
+     /**
+      * return the next prime number greater than the specified number
+      * Time complexity O(1) on best case and O(sqrt(n)) on worst case
+      */
      protected static int nextPrime( int number ){
          if(number<=2){
              return 2;
@@ -78,13 +77,18 @@ package dataStructures;
         return true;
     }
 
-     // Returns true iff the hash table cannot contain more entries.
+
+    /**
+     * return true if the hash table is full
+     * Time complexity O(1)
+     * @return
+     */
      protected boolean isFull( ){
          return currentSize == maxSize;
      }
      /**
       * Returns true iff the dictionary contains no entries.
-      *
+      * Time complexity O(1)
       * @return true if dictionary is empty
       */
      public boolean isEmpty() {
@@ -93,7 +97,7 @@ package dataStructures;
 
      /**
       * Returns the number of entries in the dictionary.
-      *
+      * Time complexity O(1)
       * @return number of elements in the dictionary
       */
      public int size() {
@@ -142,7 +146,7 @@ package dataStructures;
 
      /**
       * Returns an iterator of the values in the dictionary.
-      *
+      * Time complexity O(1)
       * @return iterator of the values in the dictionary
       */
 	@SuppressWarnings({"unchecked","rawtypes"})
@@ -152,7 +156,7 @@ package dataStructures;
 
      /**
       * Returns an iterator of the keys in the dictionary.
-      *
+      * Time complexity O(1)
       * @return iterator of the keys in the dictionary
       */
 	@SuppressWarnings({"unchecked","rawtypes"})

@@ -36,7 +36,7 @@ class DoublyIterator<E> implements Iterator<E> {
     }
     /**
      * Returns the next element in the iteration.
-     *
+     * Time complexity: O(1)
      * @return the next element in the iteration
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
@@ -51,6 +51,7 @@ class DoublyIterator<E> implements Iterator<E> {
 
     /**
      * Restart the iterator
+     * Time complexity: O(1)
      */
     public void rewind() {
         nextToReturn = firstNode;
@@ -58,6 +59,7 @@ class DoublyIterator<E> implements Iterator<E> {
     /**
      * Returns true if next would return an element
      * rather than throwing an exception.
+     * Time complexity: O(1)
      * @return true iff the iteration has more elements
      */
     public boolean hasNext( ) {

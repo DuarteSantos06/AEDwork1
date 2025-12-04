@@ -26,7 +26,7 @@ public class InOrderIterator<E> implements Iterator<E> {
     private BTNode<E> root;
 
     /**
-     *
+     *Time complexity: O(1)
      * @param root
      */
     public  InOrderIterator(BTNode<E> root) {
@@ -37,7 +37,7 @@ public class InOrderIterator<E> implements Iterator<E> {
     /**
      * Returns true if next would return an element
      * rather than throwing an exception.
-     *
+     *Time complexity: O(1)
      * @return true iff the iteration has more elements
      */
     @Override
@@ -47,7 +47,7 @@ public class InOrderIterator<E> implements Iterator<E> {
 
     /**
      * Returns the next element in the iteration.
-     *
+     * Time complexity: O(1) on best case and O(h) on worst case
      * @return the next element in the iteration
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
@@ -82,6 +82,7 @@ public class InOrderIterator<E> implements Iterator<E> {
 
     /**
      * Restarts the iteration.
+     * Time complexity: O(1) on best case and O(h) on worst case
      * After rewind, if the iteration is not empty, next will return the first element.
      */
     public void rewind() {

@@ -44,6 +44,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     }
 
     /**
+     * Time complexity: O(1)
      * Returns true iff the list contains no elements.
      * @return true if list is empty
      */
@@ -52,6 +53,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     }
 
     /**
+     * Time complexity: O(1)
      * Returns the number of elements in the list.
      * @return number of elements in the list
      */
@@ -61,6 +63,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     }
 
     /**
+     * Time complexity: O(1)
      * Returns an iterator of the elements in the list (in proper sequence).
      * @return Iterator of the elements in the list
      */
@@ -69,6 +72,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     }
 
     /**
+     * Time complexity: O(1)
      * Returns the first element of the list.
      * @return first element in the list
      * @throws NoSuchElementException - if size() == 0
@@ -81,6 +85,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     }
 
     /**
+     * Time complexity: O(1)
      * Returns the last element of the list.
      * @return last element in the list
      * @throws NoSuchElementException - if size() == 0
@@ -94,7 +99,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     /**
      * Returns the first occurrence of the element equals to the given element in the list.
      * @return element in the list or null
-     * Time complexity: O(n)
+     * Time complexity: O(n)on worst case and O(1)on best case
      */
     public E get(E element) {
         DoublyListNode<E> current = head;
@@ -103,7 +108,6 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
             int cmp = comparator.compare(element, current.getElement());
             if(cmp==0){
                 return current.getElement();
-
             }else if(cmp<0){
                 return null;
             }
@@ -114,7 +118,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
 
     /**
      * Returns true iff the element exists in the list.
-     *Time complexity: O(n)
+     * Time complexity: O(n) on worst case and O(1) on best case
      * @param element to be found
      * @return true iff the element exists in the list.
      */
@@ -126,7 +130,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
      * Inserts the specified element at the list, according to the natural order.
      * If there is an equal element, the new element is inserted after it.
      * @param element to be inserted
-     * Time complexity: O(n)
+     * Time complexity: O(n) on worst case and O(1) on best case
      */
     public void add(E element) {
         DoublyListNode<E> newNode = new DoublyListNode<>(element);
@@ -177,7 +181,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     /**
      * Removes and returns the first occurrence of the element equals to the given element in the list.
      * @return element removed from the list or null if !belongs(element)
-     * Time complexity: O(n)
+     * Time complexity: O(n) on worst case and O(1) on best case
      */
     public E remove(E element) {
         if(head==null){

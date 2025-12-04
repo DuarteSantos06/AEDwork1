@@ -25,7 +25,7 @@ class SepChainHashTableIterator<K,V> implements Iterator<Map.Entry<K,V>> {
 
     /**
      * Constructor initializes the iterator and positions to the first element.
-     * Time Complexity: O(m) in worst-case to find the first non-empty bucket
+     * Time Complexity: O(m) in worst-case to find the first non-empty bucket and O(1) on best case
      */
     public SepChainHashTableIterator(Map<K,V>[] table) {
         this.table = table;
@@ -35,7 +35,7 @@ class SepChainHashTableIterator<K,V> implements Iterator<Map.Entry<K,V>> {
     /**
      * Advances currentIndex to the next non-empty bucket.
      * Sets currentBucketIterator accordingly.
-     * Time Complexity: O(m) in worst-case (all remaining buckets empty)
+     * Time Complexity: O(m) in worst-case (all remaining buckets empty) and O(1) on best case
      */
     private void advanceToNextBucket() {
         currentIndex++;
@@ -81,7 +81,7 @@ class SepChainHashTableIterator<K,V> implements Iterator<Map.Entry<K,V>> {
     /**
      * Restarts the iteration.
      * After rewind, if the iteration is not empty, next will return the first element.
-     * Time Complexity: O(m)
+     * Time Complexity: O(1) on best case and O(n) on worst case
      */
     public void rewind(){
         currentIndex = -1;

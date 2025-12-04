@@ -25,7 +25,7 @@ class KeysIterator<E> implements Iterator<E> {
     /**
      * Returns true if next would return an element
      * rather than throwing an exception.
-     *
+     * Time complexity: O(1)
      * @return true iff the iteration has more elements
      */
     public boolean hasNext() {
@@ -34,7 +34,7 @@ class KeysIterator<E> implements Iterator<E> {
 
     /**
      * Returns the next element in the iteration.
-     *
+     * Time complexity: O(1)
      * @return the next element in the iteration
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
@@ -46,6 +46,7 @@ class KeysIterator<E> implements Iterator<E> {
 
     /**
      * Restarts the iteration.
+     * TIme complexity: O(1)
      * After rewind, if the iteration is not empty, next will return the first element.
      */
     public void rewind() {

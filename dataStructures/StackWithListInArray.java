@@ -37,9 +37,7 @@ public class StackWithListInArray<E> implements Stack<E> {
         this(DEFAULT_CAPACITY);
     }
     /**
-     * Returns true iff the stack contains no
-     * elements.
-     *
+     * Time complexity: O(1)
      * @return true iff the stack contains no
      * elements, false otherwise
      */
@@ -50,7 +48,7 @@ public class StackWithListInArray<E> implements Stack<E> {
 
     /**
      * Returns the number of elements in the stack.
-     *
+     * Time complexity: O(1)
      * @return number of elements in the stack
      */
     @Override
@@ -61,7 +59,7 @@ public class StackWithListInArray<E> implements Stack<E> {
     /**
      * Returns the element at the top of the stack.
      * Requires
-     *
+     * Time complexity: O(1)
      * @return element at top of stack
      * @throws EmptyStackException when size = 0
      */
@@ -76,7 +74,7 @@ public class StackWithListInArray<E> implements Stack<E> {
     /**
      * Inserts the specified <code>element</code> onto
      * the top of the stack.
-     *
+     * Time complexity: O(1)
      * @param element element to be inserted onto the stack
      * @throws FullStackException when size = capacity
      */
@@ -92,7 +90,7 @@ public class StackWithListInArray<E> implements Stack<E> {
     /**
      * Removes and returns the element at the top of the
      * stack.
-     *
+     * Time complexity: O(1)
      * @return element removed from top of stack
      * @throws EmptyStackException when size = 0
      */

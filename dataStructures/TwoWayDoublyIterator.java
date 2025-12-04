@@ -40,6 +40,7 @@ class TwoWayDoublyIterator<E> extends DoublyIterator<E>
     /**
      * Returns true if previous would return an element
      * rather than throwing an exception.
+     * Time complexity: O(1)
      * @return true iff the iteration has more elements in the reverse direction
      */
     public boolean hasPrevious( ) {
@@ -49,6 +50,7 @@ class TwoWayDoublyIterator<E> extends DoublyIterator<E>
     /**
      * Returns the next element in the iteration.
      * @return the next element in the iteration
+     * Time complexity: O(1)
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
     public E next( )throws NoSuchElementException{
@@ -58,14 +60,13 @@ class TwoWayDoublyIterator<E> extends DoublyIterator<E>
         E element=nextToReturn.getElement();
         prevToReturn=nextToReturn;
         nextToReturn=nextToReturn.getNext();
-
-
         return element;
     }
 
     /**
      * Returns the previous element in the iteration.
      * @return previous element in the iteration
+     * Time complexity : O(1)
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
     public E previous( ) {
@@ -78,6 +79,7 @@ class TwoWayDoublyIterator<E> extends DoublyIterator<E>
      * Restarts the iteration in the reverse direction.
      * After fullForward, if iteration is not empty,
      * previous will return the last element
+     * Time complexity: O(1)
      */
 
     public void fullForward() {
@@ -87,9 +89,9 @@ class TwoWayDoublyIterator<E> extends DoublyIterator<E>
     /**
      * Restarts the iteration.
      * After rewind, if the iteration is not empty, next will return the first element.
+     * Time complexity: O(1)
      */
     public void rewind() {
-
         prevToReturn = null;
     }
 }

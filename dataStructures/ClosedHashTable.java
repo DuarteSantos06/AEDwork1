@@ -68,7 +68,7 @@ public class ClosedHashTable<K,V> extends HashTable<K,V> {
      * @param key
      * @return value or null if key not found
      *
-     * Time Complexity: O(n) worst case, O(1) average
+     * Time Complexity: O(n) worst case, O(1) on best
      */
     @Override
     public V get(K key) {
@@ -83,7 +83,7 @@ public class ClosedHashTable<K,V> extends HashTable<K,V> {
      * @param value
      * @return old value if key existed, null otherwise
      *
-     * Time Complexity: O(n) worst case (linear probing or rehash), O(1) average
+     * Time Complexity: O(n) worst case (linear probing or rehash), O(1) on best
      */
     @Override
     public V put(K key, V value) {
@@ -136,7 +136,7 @@ public class ClosedHashTable<K,V> extends HashTable<K,V> {
      * @param key
      * @return previous value if key existed, null otherwise
      *
-     * Time Complexity: O(n) worst case (linear probing), O(1) average
+     * Time Complexity: O(n) worst case (linear probing), O(1) on best case
      */
     @SuppressWarnings("unchecked")
     @Override

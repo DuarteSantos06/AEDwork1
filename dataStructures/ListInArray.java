@@ -37,7 +37,7 @@ public class ListInArray<E> implements List<E> {
     }
     /**
      * Returns true iff the list contains no elements.
-     *
+     * Time complexity: O(1)
      * @return true if list is empty
      */
     public boolean isEmpty() {
@@ -46,7 +46,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Returns the number of elements in the list.
-     *
+     * Time complexity O(1)
      * @return number of elements in the list
      */
     public int size() {
@@ -55,7 +55,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Returns an iterator of the elements in the list (in proper sequence).
-     *
+     * Time complexity: O(1)
      * @return Iterator of the elements in the list
      */
     public Iterator<E> iterator() {
@@ -64,7 +64,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Returns the first element of the list.
-     *
+     * Time complexity: O(1)
      * @return first element in the list
      * @throws NoSuchElementException - if size() == 0
      */
@@ -77,7 +77,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Returns the last element of the list.
-     *
+     * Time complexity: O(1)
      * @return last element in the list
      * @throws NoSuchElementException - if size() == 0
      */
@@ -93,7 +93,7 @@ public class ListInArray<E> implements List<E> {
      * Range of valid positions: 0, ..., size()-1.
      * If the specified position is 0, get corresponds to getFirst.
      * If the specified position is size()-1, get corresponds to getLast.
-     *
+     * TIme complexity: O(1)
      * @param position - position of element to be returned
      * @return element at position
      * @throws InvalidPositionException if position is not valid in the list
@@ -148,7 +148,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Inserts the specified element at the last position in the list.
-     *Time complexity: O(n) in the worst case( need to be resized)
+     *Time complexity: O(n) in the worst case( need to be resized) and O(1) on best case
      * @param element to be inserted
      */
     public void addLast(E element) {
@@ -163,7 +163,7 @@ public class ListInArray<E> implements List<E> {
      * Range of valid positions: 0, ..., size().
      * If the specified position is 0, add corresponds to addFirst.
      * If the specified position is size(), add corresponds to addLast.
-     *Time complexity: O(n)
+     *  Time complexity: O(n)
      * @param position - position where to insert element
      * @param element  - element to be inserted
      * @throws InvalidPositionException - if position is not valid in the list
@@ -220,7 +220,7 @@ public class ListInArray<E> implements List<E> {
      * Range of valid positions: 0, ..., size()-1.
      * If the specified position is 0, remove corresponds to removeFirst.
      * If the specified position is size()-1, remove corresponds to removeLast.
-     *Time complexity: O(n)
+     *Time complexity: O(n) on worst case and O(1) on best case
      * @param position - position of element to be removed
      * @return element removed at position
      * @throws InvalidPositionException - if position is not valid in the list

@@ -23,6 +23,7 @@ abstract class BTree<E> extends Tree<E> {
 
     /**
      * Return the further left node of the tree
+     * Time complexity: O(h)
      * @return
      */
     BTNode<E> furtherLeftElement() {
@@ -33,6 +34,7 @@ abstract class BTree<E> extends Tree<E> {
 
     /**
      * Return the further right node of the tree
+     * Time complexity: O(h)
      * @return
      */
     BTNode<E> furtherRightElement() {

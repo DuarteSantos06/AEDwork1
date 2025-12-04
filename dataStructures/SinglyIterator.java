@@ -41,7 +41,7 @@ class SinglyIterator<E>  implements Iterator<E> {
 
     /**
      * Returns the next element in the iteration.
-     *
+     * Time complexity: O(1)
      * @return the next element in the iteration
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
@@ -56,6 +56,7 @@ class SinglyIterator<E>  implements Iterator<E> {
 
     /**
      * Restart the iterator
+     * Time complexity: O(1)
      */
     @Override
     public void rewind() {

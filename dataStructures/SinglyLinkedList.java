@@ -35,6 +35,7 @@ public class SinglyLinkedList<E> implements List<E>, Serializable {
     /**
      * Returns true iff the list contains no elements.
      * @return true if list is empty
+     * Time complexity: O(1)
      */
     public boolean isEmpty() {
         return currentSize==0;
@@ -43,6 +44,7 @@ public class SinglyLinkedList<E> implements List<E>, Serializable {
     /**
      * Returns the number of elements in the list.
      * @return number of elements in the list
+     * Time complexity: O(1)
      */
 
     public int size() {
@@ -52,6 +54,7 @@ public class SinglyLinkedList<E> implements List<E>, Serializable {
     /**
      * Returns an iterator of the elements in the list (in proper sequence).
      * @return Iterator of the elements in the list
+     * Time complexity: O(1)
      */
     public Iterator<E> iterator() {
         return new SinglyIterator<>(head);
@@ -84,7 +87,7 @@ public class SinglyLinkedList<E> implements List<E>, Serializable {
      * Range of valid positions: 0, ..., size()-1.
      * If the specified position is 0, get corresponds to getFirst.
      * If the specified position is size()-1, get corresponds to getLast.
-     *Time complexity: O(n)
+     * Time complexity: O(n)on worst case and O(1) on best case
      * @param position - position of element to be returned
      * @return element at position
      * @throws InvalidPositionException if position is not valid in the list
@@ -106,7 +109,7 @@ public class SinglyLinkedList<E> implements List<E>, Serializable {
      * Returns the position of the first occurrence of the specified element
      * in the list, if the list contains the element.
      * Otherwise, returns -1.
-     *Time complexity: O(n)
+     *Time complexity: O(n) on worst case and O(1) on best case
      * @param element - element to be searched in list
      * @return position of the first occurrence of the element in the list (or -1)
      */
@@ -124,7 +127,7 @@ public class SinglyLinkedList<E> implements List<E>, Serializable {
 
     /**
      * Inserts the specified element at the first position in the list.
-     *time complexity: O(1)
+     * time complexity: O(1)
      * @param element to be inserted
      */
     @Override
@@ -158,7 +161,7 @@ public class SinglyLinkedList<E> implements List<E>, Serializable {
      * Range of valid positions: 0, ..., size().
      * If the specified position is 0, add corresponds to addFirst.
      * If the specified position is size(), add corresponds to addLast.
-     *Time complexity: O(n)
+     *T ime complexity: O(n) on worst case and O(1) on best case
      * @param position - position where to insert element
      * @param element  - element to be inserted
      * @throws InvalidPositionException - if position is not valid in the list

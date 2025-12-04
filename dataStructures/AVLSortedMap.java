@@ -17,7 +17,7 @@ public class AVLSortedMap <K extends Comparable<K>,V> extends AdvancedBSTree<K,V
      * @param key key to insert
      * @param value value to insert
      * @return old value if key existed, otherwise null
-     * Time Complexity: O(log n)
+     * Time Complexity: O(log n) on worst case and O(1) on best
      */
     public V put(K key, V value) {
         if (isEmpty()) {
@@ -62,7 +62,7 @@ public class AVLSortedMap <K extends Comparable<K>,V> extends AdvancedBSTree<K,V
      *
      * @param key key to remove
      * @return removed value, or null if key does not exist
-     * Time Complexity: O(log n)
+     * Time Complexity: O(log n) on best and worst case
      */
     @Override
     public V remove(K key) {
@@ -112,7 +112,7 @@ public class AVLSortedMap <K extends Comparable<K>,V> extends AdvancedBSTree<K,V
      * Rebalances the tree starting from a node up to the root.
      *
      * @param node starting node
-     * Time Complexity: O(log n)
+     * Time Complexity: O(log n) on worst case and O(1) on best case
      */
     protected void rebalance(AVLNode<Map.Entry<K,V>> node) {
         AVLNode<Map.Entry<K,V>> current = node;
@@ -147,7 +147,7 @@ public class AVLSortedMap <K extends Comparable<K>,V> extends AdvancedBSTree<K,V
 
     /**
      * Removes node u and links its child v to the parent.
-     * Time Complexity: O(1)
+     * Time Complexity: O(1) on best and worst cases
      */
     protected void splice(BTNode<Entry<K,V>> u, BTNode<Entry<K,V>> v) {
         BTNode<Entry<K, V>> parentOfU = (BTNode<Entry<K, V>>) u.getParent();

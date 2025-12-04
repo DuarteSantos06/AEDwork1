@@ -16,7 +16,7 @@ abstract class AdvancedBSTree <K extends Comparable<K>,V> extends BSTSortedMap<K
      * Node y was a  right  child  of z before the  rotation,
      * then z becomes the left child of y after the rotation.
      *
-     * Time complexity: O(1)
+     * Time complexity: O(1) on best and worst case.
      * A rotation only adjusts a constant number of pointers.
      * @param z - root of the rotation
      * @pre: z has a right child
@@ -48,7 +48,7 @@ abstract class AdvancedBSTree <K extends Comparable<K>,V> extends BSTSortedMap<K
      * Performs a single right rotation rooted at z node.
      * Node y was a left  child  of z before the  rotation,
      * then z becomes the right child of y after the rotation.
-     * Time Complexity: O(1)
+     * Time Complexity: O(1) on best and worst case.
      * Also adjusts only a fixed number of pointers.
      * @param z - root of the rotation
      * @pre: z has a left child

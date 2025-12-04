@@ -40,7 +40,7 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
 
     // Returns the hash value of the specified key.
 
-    /** Time Complexity: O(p)
+    /** Time Complexity: O(1)
      *
      * @param key
      * @return the hash of a key
@@ -67,7 +67,7 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
      * If there is an entry in the dictionary whose key is the specified key,
      * replaces its value by the specified value and returns the old value;
      * otherwise, inserts the entry (key, value) and returns null.
-     *Time Complexity: O(1 + α) on average, O(n) worst-case if all keys collide
+     *Time Complexity: O(1) on best case , O(n) worst-case if all keys collide
      * @param key   with which the specified value is to be associated
      * @param value to be associated with the specified key
      * @return previous value associated with key,
@@ -89,6 +89,9 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
 
 
     @SuppressWarnings("unchecked")
+    /**
+     * Time Complexity: O(n)
+     */
     private void rehash() {
         Map<K, V>[] oldTable = table;
 
@@ -116,7 +119,7 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
      * If there is an entry in the dictionary whose key is the specified key,
      * removes it from the dictionary and returns its value;
      * otherwise, returns null.
-     *Time Complexity: O(1 + α) on average, O(n) worst-case if all keys collide
+     *Time Complexity: O(1 ) best case, O(n) worst-case if all keys collide
      * @param key whose entry is to be removed from the map
      * @return previous value associated with key,
      * or null if the dictionary does not an entry with that key

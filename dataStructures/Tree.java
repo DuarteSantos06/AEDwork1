@@ -30,7 +30,7 @@ abstract class Tree<E> implements Serializable {
 
     /**
      * Returns true iff the dictionary contains no entries.
-     *
+     * Time complexity: O(1)
      * @return true if dictionary is empty
      */
     public boolean isEmpty() {
@@ -39,7 +39,7 @@ abstract class Tree<E> implements Serializable {
 
     /**
      * Returns the number of entries in the dictionary.
-     *
+     * Time complexity: O(1)
      * @return number of elements in the dictionary
      */
     public int size() {
@@ -48,6 +48,7 @@ abstract class Tree<E> implements Serializable {
 
 
     /**
+     * Time complexity: O(1)
      * Return the root of the tree
      * @return
      */

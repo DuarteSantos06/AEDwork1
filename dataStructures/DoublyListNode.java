@@ -56,7 +56,7 @@ class DoublyListNode<E> implements Serializable {
         }
 
         /**
-         *
+         * Time complexity: O(1)
          * @return the element contained in the node
          */
         public E getElement( ) {
@@ -64,7 +64,7 @@ class DoublyListNode<E> implements Serializable {
         }
 
         /**
-         *
+         * Time complexity: O(1)
          * @return the previous node
          */
         public DoublyListNode<E> getPrevious( ) {
@@ -72,7 +72,7 @@ class DoublyListNode<E> implements Serializable {
         }
 
         /**
-         *
+         * Time complexity: O(1)
          * @return the next node
          */
         public DoublyListNode<E> getNext( ) {
@@ -80,7 +80,7 @@ class DoublyListNode<E> implements Serializable {
         }
 
         /**
-         *
+         * Time complexity: O(1)
          * @param newElement - New element to replace the current element
          */
         public void setElement( E newElement ) {
@@ -89,7 +89,7 @@ class DoublyListNode<E> implements Serializable {
         }
 
         /**
-         *
+         * Time complexity: O(1)
          * @param newPrevious - node to replace the current previous node
          */
         public void setPrevious( DoublyListNode<E> newPrevious ) {
@@ -98,7 +98,7 @@ class DoublyListNode<E> implements Serializable {
         }
 
         /**
-         *
+         * Time complexity: O(1)
          * @param newNext - node to replace the next node
          */
         public void setNext( DoublyListNode<E> newNext ) {
