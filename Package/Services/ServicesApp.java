@@ -132,6 +132,13 @@ public class ServicesApp implements ServicesAppInterface{
         return result.iterator();
     }
 
+    /**
+     * Performs a KMP search but only returns true if the pattern matches
+     * as a whole word inside the text. A whole word is defined as being
+     * surrounded by non-alphanumeric characters (or text boundaries).
+     * time complexity O(n + m)
+     * where n = text length and m = pattern length.
+     */
     private boolean kmpWholeWord(char[] text, char[] pattern) {
         if (pattern.length == 0) return true;
         if (text.length < pattern.length) return false;
@@ -159,6 +166,12 @@ public class ServicesApp implements ServicesAppInterface{
         return false;
     }
 
+    /**
+     * Determines whether the specified index corresponds to a word boundary.
+     * A boundary occurs when the index is outside the text or the character
+     * at that position is not a letter or digit.
+     * Time Complexity: O(1)
+     */
     private boolean isWordBoundary(char[] text, int index) {
         if (index < 0) return true;
         if (index >= text.length) {
@@ -168,6 +181,14 @@ public class ServicesApp implements ServicesAppInterface{
         return !Character.isLetterOrDigit(c);
     }
 
+    /**
+     * Builds the LPS (Longest Proper Prefix which is also Suffix) table used
+     * by the KMP algorithm to skip unnecessary comparisons after mismatches.
+     * lps[i] stores the length of the longest prefix of the pattern that is
+     * also a suffix ending at index i.
+     * Time Complexity: O(m)
+     * where m = pattern length.
+     */
     private int[] buildLps(char[] pattern) {
         int[] lps = new int[pattern.length];
         int len = 0;
