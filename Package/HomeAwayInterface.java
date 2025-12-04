@@ -1,215 +1,203 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 package Package;
+
 import Package.Exceptions.*;
 import Package.Services.Services;
 import Package.Students.Students;
-import dataStructures.Iterator;
-import dataStructures.TwoWayIterator;
-import Package.Exceptions.Expensive;
+import dataStructures.*;
 
 /**
- * Interface representing the main home away from home system.
- * This system manages areas, services (eating, lodging, leisure), and students.
- * It provides functionality for student mobility, service management, and tracking.
+ * Interface representing the HomeAway system.
+ *
+ * The system manages Areas, Services (Eating, Lodging, Leisure), and Students,
+ * allowing the creation, management, and evaluation of services and student mobility.
  */
 public interface HomeAwayInterface {
 
     /**
      * Creates a new geographical area with specified boundaries.
-     *
+     * Time Complexity: O(1)
      * @param name the name of the area
-     * @param minLongitude the minimum (left) longitude boundary
-     * @param minLatitude the minimum (bottom) latitude boundary
-     * @param maxLongitude the maximum (right) longitude boundary
-     * @param maxLatitude the maximum (top) latitude boundary
+     * @param minLongitude minimum longitude
+     * @param minLatitude minimum latitude
+     * @param maxLongitude maximum longitude
+     * @param maxLatitude maximum latitude
      * @throws AreaAlreadyExists if an area with the same name already exists
-     * @throws InvalidLocation if the location coordinates are invalid
+     * @throws InvalidBounds if the coordinates are invalid
      */
     void createArea(String name, long minLongitude, long minLatitude, long maxLongitude, long maxLatitude)
-            throws AreaAlreadyExists, InvalidLocation;
+            throws AreaAlreadyExists, InvalidBounds;
 
     /**
      * Saves the current area to persistent storage.
-     *
-     * @return confirmation message of the save operation
-     * @throws NoBoundsInTheSystem if no area boundaries are defined in the system
+     * Time Complexity: O(n), where n is the serialized area size
+     * @return confirmation message of save
+     * @throws NoBoundsInTheSystem if no area is defined
      */
     String saveArea() throws NoBoundsInTheSystem;
 
     /**
      * Loads an area from persistent storage.
-     *
+     * Time Complexity: O(n), where n is the serialized area size
      * @param name the name of the area to load
-     * @return confirmation message of the load operation
-     * @throws NoBoundsInTheSystem if no area boundaries are defined in the system
+     * @return confirmation message of load
+     * @throws NoBoundsInTheSystem if no area is defined
+     * @throws AreaDoesNotExist if area file does not exist
      */
-    String loadArea(String name) throws NoBoundsInTheSystem;
+    String loadArea(String name) throws AreaDoesNotExist, NoBoundsInTheSystem;
 
-    // Services
+    // ===== Services =====
 
     /**
-     * Creates a new eating service with specified location, price, and capacity.
-     *
-     * @param latitude the latitude coordinate of the service
-     * @param longitude the longitude coordinate of the service
-     * @param price the price per visit
-     * @param capacity the maximum capacity of the service
-     * @param name the name of the eating service
-     * @throws InvalidPrice if the price is negative or invalid
-     * @throws InvalidLocation if the location coordinates are invalid
-     * @throws InvalidCapacity if the capacity is negative or invalid
-     * @throws ServiceAlreadyExists if a service with the same name already exists
+     * Creates a new eating service.
+     * Time Complexity: O(1) insertion,O(n) if list of services needs to be resized
+     * @throws InvalidPrice if price < 0
+     * @throws InvalidLocationArea if coordinates are outside current area
+     * @throws InvalidBounds if area boundaries are invalid
+     * @throws InvalidCapacity if capacity < 0
+     * @throws ServiceAlreadyExists if service with same name exists
      */
     void createEating(long latitude, long longitude, int price, int capacity, String name)
-            throws InvalidPrice, InvalidLocation, InvalidCapacity, ServiceAlreadyExists;
+            throws InvalidPrice, InvalidLocationArea, InvalidBounds, InvalidCapacity, ServiceAlreadyExists;
 
     /**
-     * Creates a new lodging service with specified location, price, and capacity.
-     *
-     * @param latitude the latitude coordinate of the service
-     * @param longitude the longitude coordinate of the service
-     * @param price the price per stay
-     * @param capacity the maximum capacity of the lodging
-     * @param name the name of the lodging service
-     * @throws InvalidPrice if the price is negative or invalid
-     * @throws InvalidLocation if the location coordinates are invalid
-     * @throws InvalidCapacity if the capacity is negative or invalid
-     * @throws ServiceAlreadyExists if a service with the same name already exists
+     * Creates a new lodging service.
+     * Time Complexity: O(1) insertion,O(n) if list of services needs to be resized
+     * @throws InvalidPrice if price < 0
+     * @throws InvalidLocationArea if coordinates are outside current area
+     * @throws InvalidBounds if area boundaries are invalid
+     * @throws InvalidCapacity if capacity < 0
+     * @throws ServiceAlreadyExists if service with same name exists
      */
     void createLodging(long latitude, long longitude, int price, int capacity, String name)
-            throws InvalidPrice, InvalidLocation, InvalidCapacity, ServiceAlreadyExists;
+            throws InvalidPrice, InvalidLocationArea, InvalidBounds, InvalidCapacity, ServiceAlreadyExists;
 
     /**
-     * Creates a new leisure service with specified location, price, and discount.
-     *
-     * @param latitude the latitude coordinate of the service
-     * @param longitude the longitude coordinate of the service
-     * @param price the price per visit
-     * @param discount the discount percentage for eligible students
-     * @param name the name of the leisure service
-     * @throws InvalidPrice if the price is negative or invalid
-     * @throws InvalidLocation if the location coordinates are invalid
-     * @throws InvalidDiscount if the discount percentage is invalid
-     * @throws ServiceAlreadyExists if a service with the same name already exists
+     * Creates a new leisure service.
+     * Time Complexity: O(1) insertion,O(n) if list of services needs to be resized
+     * @throws InvalidPrice if price < 0
+     * @throws InvalidLocationArea if coordinates are outside current area
+     * @throws InvalidBounds if area boundaries are invalid
+     * @throws InvalidDiscount if discount invalid
+     * @throws ServiceAlreadyExists if service with same name exists
      */
     void createLeisure(long latitude, long longitude, int price, int discount, String name)
-            throws InvalidPrice, InvalidLocation, InvalidDiscount, ServiceAlreadyExists;
+            throws InvalidPrice, InvalidLocationArea, InvalidBounds, InvalidDiscount, ServiceAlreadyExists;
 
-    // Students
+    // ===== Students =====
 
     /**
-     * Creates a new student with specified type, name, country, and lodging.
-     *
-     * @param type the type of student (e.g., "regular" or "erasmus")
-     * @param name the name of the student
-     * @param country the country of origin
-     * @param lodging the name of the lodging where the student will stay
-     * @throws InvalidStudentType if the student type is not recognized
-     * @throws LodgingNotExists if the specified lodging does not exist
-     * @throws LodgingIsFull if the lodging has reached maximum capacity
-     * @throws StudentAlreadyExists if a student with the same name already exists
+     * Creates a new student assigned to a lodging.
+     * Time Complexity: O(1)
+     * @param type student type (regular, erasmus)
+     * @param name student name
+     * @param country student country
+     * @param lodging name of lodging
+     * @throws InvalidStudentType if type invalid
+     * @throws LodgingDoesNotExist if lodging does not exist
+     * @throws ServiceIsFull if lodging full
+     * @throws StudentAlreadyExists if student exists
      */
     void createStudent(String type, String name, String country, String lodging)
-            throws InvalidStudentType, LodgingNotExists, LodgingIsFull, StudentAlreadyExists,InvalidLocation,StudentNotFound,NoToList;
+            throws InvalidStudentType, LodgingDoesNotExist, ServiceIsFull, StudentAlreadyExists, InvalidLocation, StudentNotFound, NoServicesYet;
 
     /**
      * Removes a student from the system.
-     *
-     * @param name the name of the student to remove
-     * @return confirmation message of the leave operation
-     * @throws StudentNotFound if the student does not exist
+     * Time Complexity: O(1)
+     * @param name student name
+     * @return confirmation message
+     * @throws StudentNotFound if student not found
      */
     String leave(String name) throws StudentNotFound;
 
     /**
-     * Returns an iterator over all students in the system.
-     *
-     * @return an iterator over all students
-     * @throws NoToList if there are no students to list
-     * @throws NoBoundsInTheSystem if no area boundaries are defined
+     * Returns an iterator of all students.
+     * Time Complexity: O(1) to return iterator
+     * @throws NoStudentsYet if no students exist
+     * @throws NoBoundsInTheSystem if area not defined
      */
-    Iterator<Students> listAllStudents() throws NoToList, NoBoundsInTheSystem;
+    Iterator<Students> listAllStudents() throws NoStudentsYet, NoBoundsInTheSystem;
 
     /**
-     * Returns an iterator over students from a specific country.
-     *
-     * @param country the country to filter by
-     * @return an iterator over students from the specified country
-     * @throws NoToList if there are no students from the specified country
+     * Returns an iterator of students from a specific country.
+     * Time Complexity: O(1) lookup + O(k) iteration, k = students from country
+     * @param country country name
+     * @return iterator over students
+     * @throws NoStudentsFromCountry if no students from country exist
      */
-    Iterator<Students> listStudentsByCountry(String country) throws NoToList;
+    Iterator<Students> listStudentsByCountry(String country) throws NoStudentsFromCountry;
 
     /**
-     * Returns a two-way iterator over users at a specific location, ordered by arrival.
-     *
-     * @param place the name of the place/service
-     * @return a two-way iterator over users at the location
-     * @throws ServiceNotExists if the service does not exist
-     * @throws InvalidLocation if the location is invalid
-     * @throws Empty if no users are at the location
+     * Returns a two-way iterator over students at a location, ordered by arrival.
+     * Time Complexity: O(1)
+     * @param place location/service name
+     * @return two-way iterator
+     * @throws ServiceNotExists if service not found
+     * @throws InvalidLocation if location invalid
+     * @throws Empty if no students at location
      */
     TwoWayIterator<Students> listUsersByOrder(String place)
             throws ServiceNotExists, InvalidLocation, Empty;
 
     /**
-     * Sends a student to a specific location.
-     *
-     * @param name the name of the student
-     * @param location the name of the location/service
-     * @return true if the student successfully went to the location
-     * @throws StudentNotFound if the student does not exist
-     * @throws InvalidLocation if the location is invalid
-     * @throws AlreadyThere if the student is already at that location
-     * @throws Expensive if the student cannot afford the service
+     * Sends a student to a location.
+     * Time Complexity: O(1)
+     * @param name student name
+     * @param location location/service name
+     * @return true if successful
+     * @throws StudentNotFound if student not found
+     * @throws InvalidLocation if location invalid
+     * @throws AlreadyThere if already at location
      */
     boolean go(String name, String location)
-            throws StudentNotFound, InvalidLocation, AlreadyThere, Expensive;
+            throws StudentNotFound, InvalidLocation, AlreadyThere, ServiceIsFull;
 
     /**
      * Moves a student to a different lodging.
-     *
-     * @param name the name of the student
-     * @param location the name of the new lodging
-     * @return confirmation message of the move operation
-     * @throws StudentNotFound if the student does not exist
-     * @throws InvalidLocation if the location is invalid
-     * @throws LodgingIsFull if the new lodging is at capacity
-     * @throws CantMove if the student cannot move to the specified lodging
+     * Time Complexity: O(1)
+     * @param name student name
+     * @param location new lodging name
+     * @return confirmation message
+     * @throws StudentNotFound if student not found
+     * @throws InvalidLocation if location invalid
+     * @throws ServiceIsFull if new lodging full
+     * @throws CantMove if movement not allowed
+     * @throws LodgingDoesNotExist if lodging does not exist
      */
     String move(String name, String location)
-            throws StudentNotFound, InvalidLocation, LodgingIsFull, CantMove;
+            throws StudentNotFound, InvalidLocation, ServiceIsFull, CantMove, LodgingDoesNotExist;
 
     /**
-     * Returns the current location of a student.
-     *
-     * @param name the name of the student
-     * @return the service where the student is currently located
-     * @throws StudentNotFound if the student does not exist
+     * Returns the current service/location of a student.
+     * Time Complexity: O(1)
+     * @param name student name
+     * @return current service
+     * @throws StudentNotFound if student not found
      */
     Services where(String name) throws StudentNotFound;
 
     /**
      * Returns an iterator over all services visited by a student.
-     * Only applicable for students that keep track of visited locations.
-     *
-     * @param name the name of the student
-     * @return an iterator over visited services
-     * @throws StudentNotFound if the student does not exist
-     * @throws InvalidStudentType if the student type does not track visits
-     * @throws NoToList if the student has not visited any services
+     * Time Complexity: O(1)
+     * @param name student name
+     * @return iterator over visited services
+     * @throws StudentNotFound if not found
+     * @throws InvalidStudentType if type does not track visits
+     * @throws HasNotVisitedLocations if no visits
      */
     Iterator<Services> getVisited(String name)
-            throws StudentNotFound, InvalidStudentType, NoToList;
+            throws StudentNotFound, InvalidStudentType, HasNotVisitedLocations;
 
     /**
-     * Adds an evaluation/review for a service.
-     *
-     * @param star the star rating (typically 1-5)
-     * @param nameService the name of the service being evaluated
-     * @param description the review description
-     * @throws InvalidStar if the star rating is out of valid range
-     * @throws ServiceNotExists if the service does not exist
+     * Adds an evaluation/review to a service.
+     * Time Complexity: O(1)
+     * @param star rating (1-5)
+     * @param nameService service name
+     * @param description review description
+     * @throws InvalidStar if star out of bounds
+     * @throws ServiceNotExists if service not found
      */
     void evaluate(int star, String nameService, String description)
             throws InvalidStar, ServiceNotExists;

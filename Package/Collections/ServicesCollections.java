@@ -1,22 +1,28 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
 package Package.Collections;
 
-import Package.Exceptions.NoToList;
+import Package.Exceptions.NoServicesInTheSystem;
+import Package.Exceptions.NoServicesYet;
 import Package.Services.Services;
 import dataStructures.*;
 
 import java.io.*;
 
 
-public class ServicesCollections implements Serializable {
+public class ServicesCollections implements Serializable,ServicesCollectionsInterface {
 
     private transient Map<Integer, List<Services>> servicesByStar;
     private transient Map<String,Services> servicesByName;
     private transient List<Services> services;
 
     public ServicesCollections(){
-        services = new ListInArray<>(2500);
+        services = new DoublyLinkedList<>();
         servicesByStar = new BSTSortedMap<>();
         servicesByName = new ClosedHashTable<>(2500);
+
     }
 
 
@@ -35,16 +41,16 @@ public class ServicesCollections implements Serializable {
         return servicesByName.get(name);
     }
 
-    public Map<Integer,List<Services>> getServicesByStar()throws NoToList{
+    public Map<Integer,List<Services>> getServicesByStar()throws NoServicesInTheSystem{
         if(servicesByStar==null||servicesByStar.isEmpty()){
-            throw new NoToList("No services in the system.");
+            throw new NoServicesInTheSystem();
         }
         return servicesByStar;
     }
 
-    public List<Services> getServices()throws NoToList{
+    public List<Services> getServices()throws NoServicesYet{
         if(services.isEmpty()||services==null){
-            throw new NoToList("No services yet!");
+            throw new NoServicesYet();
         }
         return services;
     }
@@ -62,8 +68,11 @@ public class ServicesCollections implements Serializable {
 
 
     /**
-     * Serializes custom fields: services and studentsByRegistration.
-     * This is a private helper for Java serialization.
+     * Custom serialization for ServicesCollections.
+     * Serializes the list of services; other maps are reconstructed on deserialization.
+     * @param oos ObjectOutputStream
+     * @throws IOException if an I/O error occurs
+     * Time Complexity: O(n), n = number of services
      */
     @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
@@ -76,8 +85,17 @@ public class ServicesCollections implements Serializable {
     }
 
     /**
-     * Deserializes custom fields: services and studentsByRegistration.
-     * This is a private helper for Java serialization.
+     * Custom deserialization for ServicesCollections.
+     * Reconstructs transient fields:
+     * - servicesByStar
+     * - servicesByName
+     *
+     * @param ois ObjectInputStream
+     * @throws IOException if an I/O error occurs
+     * @throws ClassNotFoundException if a class cannot be found
+     * Time Complexity: O(n log n) worst case
+     * - O(n) to read all services
+     * - O(log n) per service to insert in BSTSortedMap
      */
     @Serial
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
@@ -91,6 +109,7 @@ public class ServicesCollections implements Serializable {
             Services s = (Services) ois.readObject();
             services.addLast(s);
         }
+
         for (int i = 0; i < services.size(); i++) {
             List<Services> list = servicesByStar.get(services.get(i).getEvaluation());
             if (list == null) {

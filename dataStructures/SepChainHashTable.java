@@ -1,3 +1,7 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
 package dataStructures;
 /**
  * SepChain Hash Table
@@ -20,6 +24,9 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * Time Complexity: O(p)
+     */
     public SepChainHashTable( int capacity ){
        super(capacity);
         int primeCapacity = nextPrime(capacity);
@@ -32,13 +39,19 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
     }
 
     // Returns the hash value of the specified key.
+
+    /** Time Complexity: O(p)
+     *
+     * @param key
+     * @return the hash of a key
+     */
     protected int hash( K key ){
         return Math.abs( key.hashCode() ) % table.length;
     }
     /**
      * If there is an entry in the dictionary whose key is the specified key,
      * returns its value; otherwise, returns null.
-     *
+     *Time Complexity: O(1)
      * @param key whose associated value is to be returned
      * @return value of entry in the dictionary whose key is the specified key,
      * or null if the dictionary does not have an entry with that key
@@ -54,7 +67,7 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
      * If there is an entry in the dictionary whose key is the specified key,
      * replaces its value by the specified value and returns the old value;
      * otherwise, inserts the entry (key, value) and returns null.
-     *
+     *Time Complexity: O(1 + α) on average, O(n) worst-case if all keys collide
      * @param key   with which the specified value is to be associated
      * @param value to be associated with the specified key
      * @return previous value associated with key,
@@ -103,7 +116,7 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
      * If there is an entry in the dictionary whose key is the specified key,
      * removes it from the dictionary and returns its value;
      * otherwise, returns null.
-     *
+     *Time Complexity: O(1 + α) on average, O(n) worst-case if all keys collide
      * @param key whose entry is to be removed from the map
      * @return previous value associated with key,
      * or null if the dictionary does not an entry with that key
@@ -122,7 +135,7 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
 
     /**
      * Returns an iterator of the entries in the dictionary.
-     *
+     *Time complexity: O(n)
      * @return iterator of the entries in the dictionary
      */
     public Iterator<Entry<K, V>> iterator() {

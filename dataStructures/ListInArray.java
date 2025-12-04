@@ -1,3 +1,8 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
+
 package dataStructures;
 import dataStructures.exceptions.*;
 /**
@@ -110,7 +115,7 @@ public class ListInArray<E> implements List<E> {
      * Returns the position of the first occurrence of the specified element
      * in the list, if the list contains the element.
      * Otherwise, returns -1.
-     *
+     *Time complexity: O(n)
      * @param element - element to be searched in list
      * @return position of the first occurrence of the element in the list (or -1)
      */
@@ -125,7 +130,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Inserts the specified element at the first position in the list.
-     *
+     *Time complexity: O(n)
      * @param element to be inserted
      */
     public void addFirst(E element) {
@@ -143,7 +148,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Inserts the specified element at the last position in the list.
-     *
+     *Time complexity: O(n) in the worst case( need to be resized)
      * @param element to be inserted
      */
     public void addLast(E element) {
@@ -158,7 +163,7 @@ public class ListInArray<E> implements List<E> {
      * Range of valid positions: 0, ..., size().
      * If the specified position is 0, add corresponds to addFirst.
      * If the specified position is size(), add corresponds to addLast.
-     *
+     *Time complexity: O(n)
      * @param position - position where to insert element
      * @param element  - element to be inserted
      * @throws InvalidPositionException - if position is not valid in the list
@@ -180,7 +185,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Removes and returns the element at the first position in the list.
-     *
+     *Time complexity: O(n)
      * @return element removed from the first position of the list
      * @throws NoSuchElementException - if size() == 0
      */
@@ -197,7 +202,7 @@ public class ListInArray<E> implements List<E> {
 
     /**
      * Removes and returns the element at the last position in the list.
-     *
+     *Time complexity: O(1)
      * @return element removed from the last position of the list
      * @throws NoSuchElementException - if size() == 0
      */
@@ -215,7 +220,7 @@ public class ListInArray<E> implements List<E> {
      * Range of valid positions: 0, ..., size()-1.
      * If the specified position is 0, remove corresponds to removeFirst.
      * If the specified position is size()-1, remove corresponds to removeLast.
-     *
+     *Time complexity: O(n)
      * @param position - position of element to be removed
      * @return element removed at position
      * @throws InvalidPositionException - if position is not valid in the list
@@ -238,6 +243,7 @@ public class ListInArray<E> implements List<E> {
     }
 
     /**
+     * Time complexity: O(n)
      * Resizes the array to more elements when the current capacity is reached.
      * This method extends the size of the array when resizing.
      */

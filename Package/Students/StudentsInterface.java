@@ -1,9 +1,11 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 
 package Package.Students;
 import Package.Exceptions.InvalidLocation;
 import Package.Exceptions.InvalidStudentType;
+import Package.Exceptions.ServiceIsFull;
 import Package.Services.Eating;
 import Package.Services.Lodging;
 import Package.Services.Services;
@@ -80,7 +82,7 @@ public interface StudentsInterface {
      * @param location the service where the student will go
      * @complexity O(1) — location change and array updates
      */
-    void go(Services location)throws InvalidLocation;
+    void go(Services location)throws InvalidLocation, ServiceIsFull;
 
     /**
      * Changes the student's home lodging to a new location.
@@ -88,7 +90,7 @@ public interface StudentsInterface {
      * @param home the new lodging to become the student's home
      * @complexity O(1)
      */
-    void move(Lodging home)throws InvalidLocation;
+    void move(Lodging home)throws InvalidLocation,ServiceIsFull;
 
     /**
      * Removes the student from the system.

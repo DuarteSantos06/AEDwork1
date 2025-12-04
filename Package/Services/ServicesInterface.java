@@ -1,6 +1,6 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
-
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 package Package.Services;
 
 import Package.Exceptions.InvalidStar;
@@ -15,7 +15,6 @@ public interface ServicesInterface {
 
     /**
      * Returns the name of the service.
-     *
      * @return the service name
      * @complexity O(1)
      */
@@ -23,7 +22,6 @@ public interface ServicesInterface {
 
     /**
      * Returns the latitude coordinate of the service location.
-     *
      * @return the latitude coordinate
      * @complexity O(1)
      */
@@ -31,7 +29,6 @@ public interface ServicesInterface {
 
     /**
      * Returns the longitude coordinate of the service location.
-     *
      * @return the longitude coordinate
      * @complexity O(1)
      */
@@ -39,7 +36,6 @@ public interface ServicesInterface {
 
     /**
      * Returns the price of the service.
-     *
      * @return the price per visit or usage
      * @complexity O(1)
      */
@@ -47,7 +43,6 @@ public interface ServicesInterface {
 
     /**
      * Adds an evaluation/rating for this service.
-     *
      * @param rating the star rating given by the user
      * @param description the text description/review
      * @param evaluateCounter the counter for tracking evaluation order
@@ -57,8 +52,6 @@ public interface ServicesInterface {
 
     /**
      * Returns the aggregated evaluation score of the service.
-     * This typically represents the average or total of all ratings.
-     *
      * @return the evaluation score
      * @complexity O(1)
      */
@@ -66,7 +59,6 @@ public interface ServicesInterface {
 
     /**
      * Returns the type of service (e.g., "eating", "lodging", "leisure").
-     *
      * @return the service type
      * @complexity O(1)
      */
@@ -75,7 +67,6 @@ public interface ServicesInterface {
     /**
      * Returns the last evaluation counter value.
      * This tracks when the service was last evaluated.
-     *
      * @return the last evaluation counter
      * @complexity O(1)
      */

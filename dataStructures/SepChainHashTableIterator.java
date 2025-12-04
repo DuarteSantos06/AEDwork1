@@ -1,3 +1,8 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
+
 package dataStructures;
 /**
  * SepChain Hash Table Iterator
@@ -7,6 +12,9 @@ package dataStructures;
  * @param <V> Generic Value
  */
 import dataStructures.exceptions.NoSuchElementException;
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 
 class SepChainHashTableIterator<K,V> implements Iterator<Map.Entry<K,V>> {
 
@@ -15,11 +23,20 @@ class SepChainHashTableIterator<K,V> implements Iterator<Map.Entry<K,V>> {
     private Iterator<Map.Entry<K,V>> currentBucketIterator;
 
 
+    /**
+     * Constructor initializes the iterator and positions to the first element.
+     * Time Complexity: O(m) in worst-case to find the first non-empty bucket
+     */
     public SepChainHashTableIterator(Map<K,V>[] table) {
         this.table = table;
         rewind();
     }
 
+    /**
+     * Advances currentIndex to the next non-empty bucket.
+     * Sets currentBucketIterator accordingly.
+     * Time Complexity: O(m) in worst-case (all remaining buckets empty)
+     */
     private void advanceToNextBucket() {
         currentIndex++;
         while (currentIndex < table.length) {
@@ -35,7 +52,7 @@ class SepChainHashTableIterator<K,V> implements Iterator<Map.Entry<K,V>> {
     /**
      * Returns true if next would return an element
      * rather than throwing an exception.
-     *
+     *Time Complexity: O(1) amortized; may be O(m) if many empty buckets need to be skipped
      * @return true iff the iteration has more elements
      */
     public boolean hasNext() {
@@ -51,7 +68,7 @@ class SepChainHashTableIterator<K,V> implements Iterator<Map.Entry<K,V>> {
 
     /**
      * Returns the next element in the iteration.
-     *
+     *Time Complexity: O(1)
      * @return the next element in the iteration
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
@@ -64,6 +81,7 @@ class SepChainHashTableIterator<K,V> implements Iterator<Map.Entry<K,V>> {
     /**
      * Restarts the iteration.
      * After rewind, if the iteration is not empty, next will return the first element.
+     * Time Complexity: O(m)
      */
     public void rewind(){
         currentIndex = -1;

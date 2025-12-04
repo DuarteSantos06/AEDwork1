@@ -1,3 +1,8 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
+
 package dataStructures;
 
 import dataStructures.exceptions.*;
@@ -22,9 +27,10 @@ public class StackWithListInArray<E> implements Stack<E> {
     // capacity
     private int capacity;
 
+    @SuppressWarnings("unchecked")
     public StackWithListInArray( int capacity ) {
         array =  new ListInArray(capacity);
-	this.capacity=capacity;
+        this.capacity=capacity;
     }
 
     public StackWithListInArray( ) {
@@ -39,8 +45,7 @@ public class StackWithListInArray<E> implements Stack<E> {
      */
     @Override
     public boolean isEmpty() {
-	//TODO: Left as an exercise.
-        return false;
+        return array.isEmpty();
     }
 
     /**
@@ -50,8 +55,7 @@ public class StackWithListInArray<E> implements Stack<E> {
      */
     @Override
     public int size() {
-        //TODO: Left as an exercise.
-	return 0;
+        return array.size();
     }
 
     /**
@@ -62,9 +66,11 @@ public class StackWithListInArray<E> implements Stack<E> {
      * @throws EmptyStackException when size = 0
      */
     @Override
-    public E top() {
-       //TODO: Left as an exercise.
-        return null;
+    public E top()throws EmptyStackException {
+        if( isEmpty()){
+            throw new EmptyStackException();
+        }
+        return array.getLast();
     }
 
     /**
@@ -75,11 +81,14 @@ public class StackWithListInArray<E> implements Stack<E> {
      * @throws FullStackException when size = capacity
      */
     @Override
-    public void push(E element) {
-        //TODO: Left as an exercise.
+    public void push(E element)throws FullStackException {
+        if( size() == capacity){
+            throw new FullStackException();
+        }
+        array.addLast(element);
     }
 
-    
+
     /**
      * Removes and returns the element at the top of the
      * stack.
@@ -88,9 +97,10 @@ public class StackWithListInArray<E> implements Stack<E> {
      * @throws EmptyStackException when size = 0
      */
     @Override
-    public E pop() {
-       //TODO: Left as an exercise.
-
-        return null;
+    public E pop()throws EmptyStackException {
+        if(size() == 0){
+            throw new EmptyStackException();
+        }
+        return array.removeLast();
     }
 }

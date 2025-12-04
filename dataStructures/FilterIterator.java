@@ -1,3 +1,7 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
 package dataStructures;
 
 import dataStructures.exceptions.NoSuchElementException;
@@ -40,7 +44,7 @@ public class FilterIterator<E> implements Iterator<E> {
 
     /**
      * Returns true if next would return an element
-     *
+     *Time Complexity: O(n)
      * @return true iff the iteration has more elements
      */
     public boolean hasNext() {
@@ -55,7 +59,7 @@ public class FilterIterator<E> implements Iterator<E> {
 
     /**
      * Returns the next element in the iteration.
-     *
+     *Time Complexity: O(1)
      * @return the next element in the iteration
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
@@ -71,6 +75,8 @@ public class FilterIterator<E> implements Iterator<E> {
     /**
      * Restarts the iteration.
      * After rewind, if the iteration is not empty, next will return the first element.
+     *Time Complexity: O(1)
+     *
      */
     public void rewind() {
         nextToReturn = null;

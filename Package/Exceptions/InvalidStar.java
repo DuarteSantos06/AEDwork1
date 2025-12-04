@@ -2,7 +2,7 @@ package Package.Exceptions;
 
 public class InvalidStar extends Exception{
 
-    public InvalidStar(String message){
-        super(message);
+    public InvalidStar(){
+        super(ExceptionsMessagesEnum.INVALID_STAR.getMessage());
     }
 }

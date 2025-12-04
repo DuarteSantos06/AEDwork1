@@ -17,9 +17,8 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
         super();
     }
     /**
-     * Returns the entry with the smallest key in the dictionary.
-     *
-     * @return
+     * Returns the entry with the smallest key.
+     * Time Complexity: O(h)
      * @throws EmptyMapException
      */
     @Override
@@ -30,9 +29,9 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
     }
 
     /**
-     * Returns the entry with the largest key in the dictionary.
+     * Returns the entry with the largest key.
+     * Time Complexity: O(h)
      *
-     * @return
      * @throws EmptyMapException
      */
     @Override
@@ -46,7 +45,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
     /**
      * If there is an entry in the dictionary whose key is the specified key,
      * returns its value; otherwise, returns null.
-     *
+     *Time Complexity: O(h)
      * @param key whose associated value is to be returned
      * @return value of entry in the dictionary whose key is the specified key,
      * or null if the dictionary does not have an entry with that key
@@ -59,6 +58,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
         return null;
     }
 
+
     private BTNode<Map.Entry<K,V>> getNode(BTNode<Map.Entry<K,V>> node, K key) {
         if (node == null)
             return null;
@@ -66,7 +66,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
         int cmp = key.compareTo(node.getElement().key());
 
         if (cmp == 0)
-            return node; // Found it
+            return node;
         else if (cmp < 0)
             return getNode((BTNode<Map.Entry<K,V>>) node.getLeftChild(), key);
         else
@@ -77,7 +77,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
      * If there is an entry in the dictionary whose key is the specified key,
      * replaces its value by the specified value and returns the old value;
      * otherwise, inserts the entry (key, value) and returns null.
-     *
+     *Time Complexity: O(h)
      * @param key   with which the specified value is to be associated
      * @param value to be associated with the specified key
      * @return previous value associated with key,
@@ -106,14 +106,13 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
             else
                 current = (BTNode<Map.Entry<K, V>>) current.getRightChild();
         }
-
-
         BTNode<Map.Entry<K, V>> newNode = new BTNode<>(new Map.Entry<>(key, value), parent);
-
-        if (key.compareTo(parent.getElement().key()) < 0)
+        if (key.compareTo(parent.getElement().key()) < 0) {
             parent.setLeftChild(newNode);
-        else
+        }
+        else {
             parent.setRightChild(newNode);
+        }
 
         currentSize++;
         return null;
@@ -124,7 +123,7 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
      * If there is an entry in the dictionary whose key is the specified key,
      * removes it from the dictionary and returns its value;
      * otherwise, returns null.
-     *
+     *Time Complexity: O(h)
      * @param key whose entry is to be removed from the map
      * @return previous value associated with key,
      * or null if the dictionary does not an entry with that key
@@ -143,6 +142,10 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
 
     /**
      * Removes the given node from the BST.
+     * -leaf
+     * - one child
+     * - two children
+     * Time Complexity: O(h)
      */
     private void deleteNode(BTNode<Map.Entry<K,V>> node) {
 
@@ -161,7 +164,6 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
         else if (node.getLeftChild() == null || node.getRightChild() == null) {
             BTNode<Map.Entry<K,V>> child = (BTNode<Map.Entry<K,V>>)
                     (node.getLeftChild() != null ? node.getLeftChild() : node.getRightChild());
-
             if (node.isRoot()) {
                 root = child;
                 child.setParent(null);
@@ -174,20 +176,16 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
                 child.setParent(parent);
             }
         }
-
         else {
-
             BTNode<Map.Entry<K,V>> successor = ((BTNode<Map.Entry<K,V>>) node.getRightChild()).furtherLeftElement();
-
             node.setElement(successor.getElement());
-
             deleteNode(successor);
         }
     }
 
     /**
      * Returns an iterator of the entries in the dictionary.
-     *
+     *Time Complexity: O(1)
      * @return iterator of the entries in the dictionary
      */
     @Override
@@ -197,22 +195,22 @@ public class BSTSortedMap<K extends Comparable<K>,V> extends BTree<Map.Entry<K,V
 
     /**
      * Returns an iterator of the values in the dictionary.
-     *
+     *Time Complexity: O(1)
      * @return iterator of the values in the dictionary
      */
     @Override
-@SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked","rawtypes"})
     public Iterator<V> values() {
         return new ValuesIterator(iterator());
     }
 
     /**
      * Returns an iterator of the keys in the dictionary.
-     *
+     *Time Complexity: O(1)
      * @return iterator of the keys in the dictionary
      */
     @Override
-@SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked","rawtypes"})
     public Iterator<K> keys() {
         return new KeysIterator(iterator());
     }

@@ -1,9 +1,9 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
-
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 package Package.Services;
 
-import dataStructures.ListInArray;
+import dataStructures.*;
 import Package.Area;
 
 import java.io.*;
@@ -16,7 +16,7 @@ public abstract class Services implements ServicesInterface, IReadOnlyService,Se
     protected float price;
     private float star;
     private int countEvaluations;
-    private final ListInArray<String> reviews;
+    private transient List<String> reviews;
     private final ServicesType type;
     private int numberEvaluated;
 
@@ -28,7 +28,7 @@ public abstract class Services implements ServicesInterface, IReadOnlyService,Se
         this.star = 4;
         this.countEvaluations = 1;
         this.type = type;
-        reviews = new ListInArray<>(10);
+        reviews = new SinglyLinkedList<>();
     }
 
     public int getLastEvaluated(){
@@ -49,13 +49,6 @@ public abstract class Services implements ServicesInterface, IReadOnlyService,Se
 
     public abstract float getPrice();
 
-    /**
-     * Updates evaluation stats and adds a review description.
-     *
-     * @param star the star rating to add
-     * @param description the review description
-     * @param evaluateCounter counter for evaluation round
-     */
     public void evaluate(int star, String description, int evaluateCounter, Area currentArea){
         countEvaluations++;
         float newStar = ((this.star * (countEvaluations - 1)) + star) / countEvaluations;
@@ -78,11 +71,46 @@ public abstract class Services implements ServicesInterface, IReadOnlyService,Se
         return Math.round(star);
     }
 
-    public ListInArray<String> getReviews(){
+    public List<String> getReviews(){
         return reviews;
     }
 
     public String getType(){
         return type.toString();
+    }
+
+    /**
+     * Custom serialization method
+     * Reconstructs transient fields:
+     * - reviews
+     * @param oos
+     * @throws IOException
+     */
+    @Serial
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.defaultWriteObject();
+        oos.writeInt(reviews.size());
+        Iterator<String> it = reviews.iterator();
+        while(it.hasNext()){
+            oos.writeObject(it.next());
+        }
+    }
+
+    /**
+     * Custom deserialization method
+     * Reconstructs transient fields:
+     * - reviews
+     * @param ois
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    @Serial
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        reviews=new SinglyLinkedList<>();
+        int numServices=ois.readInt();
+        for(int i=0;i<numServices;i++){
+            reviews.addLast((String)ois.readObject());
+        }
     }
 }

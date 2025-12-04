@@ -1,3 +1,7 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
 package Package;
 import Package.Services.Services;
 import Package.Students.Students;
@@ -6,96 +10,90 @@ import dataStructures.Map;
 import Package.Exceptions.*;
 
 /**
- * Interface representing a geographical area that contains services and students.
- * An area is defined by its name and geographical boundaries (latitude and longitude coordinates).
+ * Interface representing a geographical area containing services and students.
+ * An area is defined by its name and geographical boundaries (latitude and longitude).
+ * Provides methods to manage services, students, and query them efficiently.
  */
 public interface AreaInterface {
 
     /**
      * Returns the name of the area.
-     *
+     * Time Complexity: O(1)
      * @return the area name
-     * @complexity O(1)
      */
     String getName();
 
     /**
      * Returns the top latitude boundary of the area.
-     *
+     * Time Complexity: O(1)
      * @return the top latitude coordinate
-     * @complexity O(1)
      */
     long getTopLatitude();
 
     /**
      * Returns the left longitude boundary of the area.
-     *
+     * Time Complexity: O(1)
      * @return the left longitude coordinate
-     * @complexity O(1)
      */
     long getLeftLongitude();
 
     /**
      * Returns the bottom latitude boundary of the area.
-     *
+     * Time Complexity: O(1)
      * @return the bottom latitude coordinate
-     * @complexity O(1)
      */
     long getBottomLatitude();
 
     /**
      * Returns the right longitude boundary of the area.
-     *
+     * Time Complexity: O(1)
      * @return the right longitude coordinate
-     * @complexity O(1)
      */
     long getRightLongitude();
 
     /**
      * Adds a service to this area.
-     *
+     * Time Complexity: O(1)
      * @param service the service to be added
-     * @complexity O(1) — assuming insertion at end or fixed position
      */
     void addService(Services service);
 
     /**
      * Adds a student to this area.
-     *
+     * Time Complexity: O(1)
      * @param student the student to be added
-     * @complexity O(1) — assuming insertion into list
      */
     void addStudent(Students student);
 
     /**
      * Removes a student from this area.
-     *
+     * Time Complexity: O(n)
      * @param student the student to be removed
-     * @complexity O(n) — where n is number of students (search and removal)
      */
     void removeStudent(Students student);
 
     /**
      * Returns a list of all services in this area.
-     *
-     * @return a list containing all services
-     * @complexity O(1)
+     * Time Complexity: O(1)
+     * @return list of services
+     * @throws NoServicesYet if no services have been added
      */
-    List<Services> getServices()throws NoToList;
+    List<Services> getServices() throws NoServicesYet;
 
     /**
-     * Returns a sorted list of all students in this area.
-     *
-     * @return a sorted list containing all students
-     * @complexity O(n log n) — if sorting on retrieval
+     * Returns a map of all students in this area, keyed by student name.
+     * Time Complexity: O(1)
+     * @return map of students
+     * @throws NoStudentsYet if no students exist
      */
-    Map<String,Students> getStudents()throws NoToList;
+    Map<String, Students> getStudentsMap() throws NoStudentsYet;
 
     /**
-     * Returns a list of all students in this area ordered by registration number.
-     *
-     * @return a list of students sorted by registration
-     * @complexity O(n log n) — if sorting required
+     * Returns a list of students from a specific country, ordered by registration.
+     * Time Complexity: O(1) for lookup + O(k) for iteration, k = number of students from country
+     * @param country the country to filter by
+     * @return list of students from the specified country
+     * @throws NoStudentsFromCountry if no students from that country exist
      */
-    List<Students> getStudentsByRegistrationByCountry(String country)throws NoToList;
+    List<Students> getStudentsByRegistrationByCountry(String country) throws NoStudentsFromCountry;
 }

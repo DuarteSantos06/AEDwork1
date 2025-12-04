@@ -1,3 +1,8 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
+
 package dataStructures;
 
 import dataStructures.exceptions.*;
@@ -13,56 +18,59 @@ public class QueueInList<E> implements Queue<E> {
 
     /**
      * Returns true iff the queue contains no elements.
-     *
-     * @return
+     *Time complexity O(1)
+     * @return true if the queue contains no elements, false otherwise
      */
     @Override
     public boolean isEmpty() {
-        //TODO: Left as an exercise.
-        return false;
+        return list.isEmpty();
     }
 
     /**
      * Returns the number of elements in the queue.
-     *
-     * @return
+     *Time complexity O(1)
+     * @return number of elements in the queue
      */
     @Override
     public int size() {
-        //TODO: Left as an exercise.
-        return 0;
+        return list.size();
     }
 
     /**
      * Inserts the specified element at the rear of the queue.
-     *
+     *Time complexity O(1)
      * @param element
      */
     @Override
     public void enqueue(E element) {
-        //TODO: Left as an exercise.
+        list.addLast(element);
     }
 
     /**
      * Removes and returns the element at the front of the queue.
-     *
-     * @return
+     *Time complexity O(1)
+     * @return element removed from the front of the queue
      * @throws EmptyQueueException
      */
     @Override
     public E dequeue() {
-        //TODO: Left as an exercise.
-        return null;
+
+        if(isEmpty()){
+            throw new EmptyQueueException();
+        }
+        return list.removeFirst();
     }
     /**
      * Returns the element at the front of the queue.
-     *
-     * @return
+     *Time complexity O(1)
+     * @return element at the front of the queue
      * @throws EmptyQueueException
      */
     @Override
     public E peek() {
-        //TODO: Left as an exercise.
-        return null;
+        if (isEmpty()) {
+            throw new EmptyQueueException();
+        }
+        return list.getFirst();
     }
 }

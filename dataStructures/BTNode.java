@@ -1,134 +1,95 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 package dataStructures;
 
 /**
  * Binary Tree Node
- * @author AED  Team
+ * Represents a node in a binary tree.
+ * @author AED
  * @version 1.0
- * @param <E> Generic Element
+ * @param <E> Generic Element stored in the node
  */
 class BTNode<E> implements Node<E> {
-    // Element stored in the node.
-    private E element;
 
-    // (Pointer to) the father.
-    private Node<E> parent;
+    private E element;            // Element stored in the node
+    private Node<E> parent;       // Pointer to parent node
+    private Node<E> leftChild;    // Pointer to left child
+    private Node<E> rightChild;   // Pointer to right child
 
-    // (Pointer to) the left child.
-    private Node<E> leftChild;
-
-    // (Pointer to) the right child.
-    private Node<E> rightChild;
-
-    /**
-     * Constructor
-     * @param elem
-     */
+    // Constructor with only element
     BTNode(E elem){
-        this(elem,null,null,null);
+        this(elem, null, null, null);
     }
 
-    /**
-     * Constructor
-     * @param elem
-     * @param parent
-     */
+    // Constructor with element and parent
     BTNode(E elem, BTNode<E> parent) {
-        this(elem,parent,null,null);
-    }
-    /**
-     * Constructor
-     * @param elem
-     * @param parent
-     * @param leftChild
-     * @param rightChild
-     */
-    BTNode(E elem, BTNode<E> parent, BTNode<E> leftChild, BTNode<E> rightChild){
-        this.element=elem;
-        this.parent=parent;
-        this.leftChild=leftChild;
-        this.rightChild=rightChild;
+        this(elem, parent, null, null);
     }
 
-    /**
-     *  Returns the element of the node
-     * @return
-     */
+    // Constructor with element, parent, left and right children
+    BTNode(E elem, BTNode<E> parent, BTNode<E> leftChild, BTNode<E> rightChild){
+        this.element = elem;
+        this.parent = parent;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
+    }
+
+    /** Returns the element stored in this node. O(1) */
     public E getElement() {
         return element;
     }
-    /**
-     * Returns the left son of node
-     * @return
-     */
+
+    /** Returns the left child node. O(1) */
     public Node<E> getLeftChild(){
         return leftChild;
     }
-    /**
-     * Returns the right son of node
-     * @return
-     */
+
+    /** Returns the right child node. O(1) */
     public Node<E> getRightChild(){
         return rightChild;
     }
-    /**
-     * Returns the parent of node
-     * @return
-     */
+
+    /** Returns the parent node. O(1) */
     public Node<E> getParent(){
         return parent;
     }
 
-    /**
-     * Returns true if node n does not have any children.
-     * @return
-     */
+    /** Returns true if the node has no children. O(1) */
     boolean isLeaf() {
-        return getLeftChild()== null && getRightChild()==null;
+        return getLeftChild() == null && getRightChild() == null;
     }
 
-    /**
-     * Update the element
-     * @param elem
-     */
+    /** Sets the element of the node. O(1) */
     public void setElement(E elem) {
-        element=elem;
+        element = elem;
     }
 
-    /**
-     * Update the left child
-     * @param node
-     */
+    /** Sets the left child of the node. O(1) */
     public void setLeftChild(Node<E> node) {
-        leftChild=node;
+        leftChild = node;
     }
 
-    /**
-     * Update the right child
-     * @param node
-     */
+    /** Sets the right child of the node. O(1) */
     public void setRightChild(Node<E> node) {
-        rightChild=node;
+        rightChild = node;
     }
 
-    /**
-     * Update the parent
-     * @param node
-     */
+    /** Sets the parent of the node. O(1) */
     public void setParent(Node<E> node) {
-        parent=node;
+        parent = node;
     }
 
-    /**
-     * Returns true if is the root
-     */
+    /** Returns true if this node is the root (has no parent). O(1) */
     boolean isRoot() {
-        return getParent()==null;
+        return getParent() == null;
     }
 
     /**
-     * Returns the height of the subtree rooted at this node.
+     * Computes the height of the subtree rooted at this node.
+     * O(n) in worst case, where n is the number of nodes in the subtree,
+     * because it recursively computes height of left and right subtrees.
      */
-
     public int getHeight() {
         int leftHeight = (leftChild == null) ? -1 : ((BTNode<E>) leftChild).getHeight();
         int rightHeight = (rightChild == null) ? -1 : ((BTNode<E>) rightChild).getHeight();
@@ -136,8 +97,8 @@ class BTNode<E> implements Node<E> {
     }
 
     /**
-     *
-     * @return
+     * Returns the left-most descendant of this subtree (smallest element in BST).
+     * O(h), where h is the height of the subtree, because it traverses down left children.
      */
     BTNode<E> furtherLeftElement() {
         BTNode<E> current = this;
@@ -147,9 +108,9 @@ class BTNode<E> implements Node<E> {
         return current;
     }
 
-   /**
-     *
-     * @return
+    /**
+     * Returns the right-most descendant of this subtree (largest element in BST).
+     * O(h), where h is the height of the subtree, because it traverses down right children.
      */
     BTNode<E> furtherRightElement() {
         BTNode<E> current = this;
@@ -158,6 +119,4 @@ class BTNode<E> implements Node<E> {
         }
         return current;
     }
-
-   //new methods: Left as an exercise.
 }

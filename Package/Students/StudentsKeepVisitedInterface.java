@@ -1,8 +1,10 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 package Package.Students;
-import Package.Exceptions.NoToList;
+import Package.Exceptions.HasNotVisitedLocations;
 import Package.Services.Services;
+import dataStructures.List;
 import dataStructures.ListInArray;
 
 /**
@@ -29,5 +31,5 @@ public interface StudentsKeepVisitedInterface extends StudentsInterface {
      * @return a list containing all visited services in chronological order
      * @complexity O(1) — returning a reference; O(n) if copying
      */
-    ListInArray<Services> getVisited()throws NoToList;
+    List<Services> getVisited()throws HasNotVisitedLocations;
 }

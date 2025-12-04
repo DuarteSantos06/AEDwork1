@@ -1,11 +1,14 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
 package Package.Students;
 
-import Package.Exceptions.NoToList;
+import Package.Exceptions.HasNotVisitedLocations;
 import Package.Services.Lodging;
 import Package.Services.Services;
 
+import dataStructures.List;
 import dataStructures.ListInArray;
 
 
@@ -20,7 +23,7 @@ public abstract class StudentsKeepVisited extends Students implements StudentsKe
 
     public abstract void addVisited(Services service);
 
-    public abstract ListInArray<Services> getVisited()throws NoToList;
+    public abstract List<Services> getVisited()throws HasNotVisitedLocations;
 
 
 }

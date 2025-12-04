@@ -1,3 +1,8 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
+
 package dataStructures;
 
 import dataStructures.exceptions.*;
@@ -89,6 +94,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     /**
      * Returns the first occurrence of the element equals to the given element in the list.
      * @return element in the list or null
+     * Time complexity: O(n)
      */
     public E get(E element) {
         DoublyListNode<E> current = head;
@@ -108,7 +114,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
 
     /**
      * Returns true iff the element exists in the list.
-     *
+     *Time complexity: O(n)
      * @param element to be found
      * @return true iff the element exists in the list.
      */
@@ -120,6 +126,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
      * Inserts the specified element at the list, according to the natural order.
      * If there is an equal element, the new element is inserted after it.
      * @param element to be inserted
+     * Time complexity: O(n)
      */
     public void add(E element) {
         DoublyListNode<E> newNode = new DoublyListNode<>(element);
@@ -170,6 +177,7 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
     /**
      * Removes and returns the first occurrence of the element equals to the given element in the list.
      * @return element removed from the list or null if !belongs(element)
+     * Time complexity: O(n)
      */
     public E remove(E element) {
         if(head==null){

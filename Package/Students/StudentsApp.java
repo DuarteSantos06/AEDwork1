@@ -1,3 +1,7 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
 package Package.Students;
 
 import Package.Area;
@@ -5,26 +9,19 @@ import Package.Exceptions.*;
 import Package.Services.*;
 import dataStructures.*;
 
-public class StudentsApp {
+public class StudentsApp implements StudentsAppInterface{
 
     private Area currentArea;
 
     public StudentsApp(){
     }
 
-    /**
-     * @param type
-     * @param name
-     * @param country
-     * @throws InvalidStudentType
-     * @throws StudentAlreadyExists
-     */
-    public void createStudent(String type, String name, String country,Lodging home) throws InvalidStudentType, StudentAlreadyExists, InvalidLocation,StudentNotFound {
+    public void createStudent(String type, String name, String country,Lodging home) throws InvalidStudentType, StudentAlreadyExists,ServiceIsFull,StudentNotFound {
         StudentsType studentType = StudentsType.fromString(type);
         if (studentType == null) {
-            throw new InvalidStudentType("Invalid student type!");
+            throw new InvalidStudentType();
         } else if (alreadyExistsStudent(name)) {
-            throw new StudentAlreadyExists(findStudent(name).getName() + " already exists!");
+            throw new StudentAlreadyExists(findStudent(name).getName());
         } else {
             Students student;
             if (studentType.equals(StudentsType.THRIFTY)) {
@@ -40,56 +37,51 @@ public class StudentsApp {
         }
     }
 
-    /**
-     * @param name
-     * @param location
-     * @return
-     * @throws StudentNotFound
-     * @throws InvalidLocation
-     * @throws LodgingIsFull
-     * @throws CantMove
-     */
-    public String move(String name, Services service,String location) throws StudentNotFound, InvalidLocation, LodgingIsFull, CantMove {
+    public String move(String name, Services service,String location) throws StudentNotFound, InvalidLocation, ServiceIsFull, CantMove {
         Students s = findStudent(name);
-        if (service == null) {
-            throw new InvalidLocation("lodging " + location + " does not exist!");
-        } else if (s.getHome().getName().equals(location)) {
-            throw new InvalidLocation("That is " + s.getName() + "'s home!");
+        if (s.getHome().getName().equals(location)) {
+            throw new AlreadyAtHome(s.getName());
         } else if (service instanceof Lodging && s instanceof Thrifty && s.getHome().getPrice() < service.getPrice()) {
-            throw new CantMove("Move is not acceptable for " + name + '!');
+            throw new CantMove(name);
         }
         s.move((Lodging) service);
         return service.getName();
     }
 
-    public Iterator<Services> getVisited(String name) throws StudentNotFound, InvalidStudentType, NoToList {
+    public Iterator<Services> getVisited(String name) throws StudentNotFound, ThriftyDoesNotStoreServices,HasNotVisitedLocations {
         Students s = findStudent(name);
         if (s instanceof Thrifty) {
-            throw new InvalidStudentType(s.getName() + " is thrifty!");
+            throw new ThriftyDoesNotStoreServices(s.getName() );
         }
-        ListInArray<Services> visited = ((StudentsKeepVisited) s).getVisited();
+        List<Services> visited = ((StudentsKeepVisited) s).getVisited();
         return visited.iterator();
     }
 
-    public Iterator<Services>getRanked(String type,int star,String name)throws StudentNotFound,InvalidType,ServiceNotExists,NoToList{
+    public Iterator<Services>getRanked(String type,int star,String name)throws StudentNotFound,InvalidType,ServiceNotExists,NoServicesInTheSystem{
 
         Students student = findStudent(name);
         ServicesType serviceType = ServicesType.fromString(type);
         if(serviceType==null){
-            throw new InvalidType("Invalid service type!");
+            throw new InvalidType();
         }
         List<Services> servicesWithStar = currentArea.getServicesByStar().get(star);
         if (servicesWithStar == null || servicesWithStar.isEmpty()) {
-            throw new ServiceNotExists("No " + type + " services with average!");
+            throw new NoServicesWithAverage( type );
         }
         FilterIterator<Services> it=new FilterIterator<>(servicesWithStar.iterator(), s->s.getType().equalsIgnoreCase(type));
         if(!it.hasNext()){
-            throw new ServiceNotExists("No "+type+" services!");
+            throw new ServiceNotExists(type);
         }
         DoublyLinkedList<Services> result=closest(it,student);
         return result.iterator();
     }
 
+
+    /**
+     * @param itByStar - iterator of services by star
+     * @param student  - student to find the closest services
+     *Returns the closest services to the student
+     */
     private DoublyLinkedList<Services> closest(FilterIterator<Services>itByStar,Students student){
         DoublyLinkedList<Services> closest = new DoublyLinkedList<>();
         long minDistance = Long.MAX_VALUE;
@@ -120,15 +112,15 @@ public class StudentsApp {
         return closest;
     }
 
-    public boolean go(String name, String location,Services service) throws StudentNotFound, InvalidLocation, AlreadyThere, Expensive {
+    public boolean go(String name, String location,Services service) throws StudentNotFound, InvalidLocation, AlreadyThere,ServiceIsFull {
         Students s = findStudent(name);
 
         if (service == null) {
-            throw new InvalidLocation("Unknown " + location + '!');
+            throw new InvalidLocation(location);
         } else if (service instanceof Lodging) {
-            throw new InvalidLocation(location + " is not a valid service!");
+            throw new ServiceIsNotValid(location);
         } else if (s.getLocation().getName().equals(location)) {
-            throw new AlreadyThere("Already there!");
+            throw new AlreadyThere();
         }
 
         Eating eating = s.getCheapestEating();
@@ -138,23 +130,14 @@ public class StudentsApp {
 
     }
 
-    /**
-     * @return
-     * @throws NoToList
-     * @throws NoBoundsInTheSystem
-     */
-    public Iterator<Students> listAllStudents() throws NoToList, NoBoundsInTheSystem {
+
+    public Iterator<Students> listAllStudents() throws NoStudentsYet, NoBoundsInTheSystem {
         if (currentArea == null) {
-            throw new NoBoundsInTheSystem("System bounds not defined.");
+            throw new NoBoundsInTheSystem();
         }
-        return currentArea.getStudents().values();
+        return currentArea.getStudentsMap().values();
     }
 
-    /**
-     * @param name
-     * @return
-     * @throws StudentNotFound
-     */
     public String leave(String name) throws StudentNotFound {
         Students s = findStudent(name);
         String nameToReturn = s.getName();
@@ -163,7 +146,6 @@ public class StudentsApp {
         return nameToReturn;
     }
 
-
     public void setCurrentArea(Area currentArea){
         this.currentArea=currentArea;
     }
@@ -171,11 +153,17 @@ public class StudentsApp {
     public Students findStudent(String name)throws StudentNotFound {
         Students s=currentArea.getStudentByName(name.toLowerCase().trim());
         if (s == null) {
-            throw new StudentNotFound(name + " does not exist!");
+            throw new StudentNotFound(name);
         }
         return s;
     }
 
+
+    /**
+     * @param name
+     * checks if a student already exists in the current area
+     * return true if exists, false otherwise
+     */
     private boolean alreadyExistsStudent(String name) {
         return currentArea.getStudentByName(name.toLowerCase().trim()) != null;
     }

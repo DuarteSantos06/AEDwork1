@@ -1,3 +1,8 @@
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
+
 package dataStructures;
 /**
  * Map with a singly linked list with head and size
@@ -41,7 +46,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
     /**
      * If there is an entry in the dictionary whose key is the specified key,
      * returns its value; otherwise, returns null.
-     *
+     *Time complexity: O(n)
      * @param key whose associated value is to be returned
      * @return value of entry in the dictionary whose key is the specified key,
      * or null if the dictionary does not have an entry with that key
@@ -64,7 +69,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
      * If there is an entry in the dictionary whose key is the specified key,
      * replaces its value by the specified value and returns the old value;
      * otherwise, inserts the entry (key, value) and returns null.
-     *
+     *Time complexity: O(n)
      * @param key   with which the specified value is to be associated
      * @param value to be associated with the specified key
      * @return previous value associated with key,
@@ -84,10 +89,8 @@ class MapSinglyList<K,V> implements Map<K, V> {
 
             current = current.getNext();
         }
-
         head = new SinglyListNode<>(new Entry<>(key, value), head);
         size++;
-
         return null;
     }
 
@@ -95,7 +98,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
      * If there is an entry in the dictionary whose key is the specified key,
      * removes it from the dictionary and returns its value;
      * otherwise, returns null.
-     *
+     *Time complexity: O(n)
      * @param key whose entry is to be removed from the map
      * @return previous value associated with key,
      * or null if the dictionary does not an entry with that key
@@ -103,10 +106,8 @@ class MapSinglyList<K,V> implements Map<K, V> {
     public V remove(K key) {
         SinglyListNode<Entry<K,V>> current = head;
         SinglyListNode<Entry<K,V>> previous = null;
-
         while (current != null) {
             Entry<K,V> entry = current.getElement();
-
             if (entry.key().equals(key)) {
                 V oldValue = entry.value();
                 if (previous == null) {
@@ -115,11 +116,9 @@ class MapSinglyList<K,V> implements Map<K, V> {
                 else {
                     previous.setNext(current.getNext());
                 }
-
                 size--;
                 return oldValue;
             }
-
             previous = current;
             current = current.getNext();
         }
@@ -129,7 +128,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
 
     /**
      * Returns an iterator of the entries in the dictionary.
-     *
+     *Time complexity: O(1)
      * @return iterator of the entries in the dictionary
      */
     public Iterator<Entry<K, V>> iterator() {
@@ -138,7 +137,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
 
     /**
      * Returns an iterator of the values in the dictionary.
-     *
+     *Time complexity O(1)
      * @return iterator of the values in the dictionary
      */
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -148,7 +147,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
 
     /**
      * Returns an iterator of the keys in the dictionary.
-     *
+     *Time complexity O(1)
      * @return iterator of the keys in the dictionary
      */
 @SuppressWarnings({"unchecked","rawtypes"})

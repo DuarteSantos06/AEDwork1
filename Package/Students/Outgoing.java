@@ -1,24 +1,29 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
+
 package Package.Students;
 
-import Package.Exceptions.NoToList;
+import Package.Exceptions.HasNotVisitedLocations;
 import Package.Services.Lodging;
 import Package.Services.Services;
 
-import dataStructures.ListInArray;
-import dataStructures.Map;
-import dataStructures.SepChainHashTable;
+import dataStructures.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
 
 public class Outgoing extends StudentsKeepVisited {
 
-    private final ListInArray<Services> services;
-    private final Map<String,Services> servicesMap;
+    private transient  List<Services> services;
+    private transient  Map<String,Services> servicesMap;
 
     public Outgoing(String name, String country,  Lodging home){
         super(name,country,home,StudentsType.OUTGOING);
-        services=new ListInArray<>(10);
-        servicesMap=new SepChainHashTable<>();
+        services=new SinglyLinkedList<>();
+        servicesMap=new ClosedHashTable<>(100);
     }
 
     public void addVisited(Services service){
@@ -39,10 +44,48 @@ public class Outgoing extends StudentsKeepVisited {
         return s!=null;
     }
 
-    public ListInArray<Services> getVisited()throws NoToList{
+    public List<Services> getVisited()throws HasNotVisitedLocations {
         if(services.isEmpty()){
-            throw  new NoToList(this.getName()+ " has not visited any locations!");
+            throw  new HasNotVisitedLocations(this.getName());
         }
         return services;
     }
+
+    /**
+     * Custom serialization for Outgoing.
+     * Reconstructs transient fields:
+     * - services
+     * @param oos
+     * @throws IOException
+     */
+    @Serial
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.defaultWriteObject();
+        oos.writeInt(services.size());
+        Iterator<Services> it = services.iterator();
+        while(it.hasNext()){
+            oos.writeObject(it.next());
+        }
+    }
+
+
+    /**
+     * Custom deserialization for Outgoing.
+     * Reconstructs transient fields:
+     * - services
+     * - servicesMap
+     */
+    @Serial
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        services=new SinglyLinkedList<>();
+        servicesMap=new ClosedHashTable<>(100);
+        int numServices=ois.readInt();
+        for(int i=0;i<numServices;i++){
+            services.addLast((Services)ois.readObject());
+            servicesMap.put((services.getLast()).getName(),services.getLast());
+        }
+    }
+
+
 }

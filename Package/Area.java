@@ -1,10 +1,11 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 package Package;
 
 import Package.Collections.ServicesCollections;
 import Package.Collections.StudentsCollections;
-import Package.Exceptions.NoToList;
+import Package.Exceptions.*;
 import Package.Services.Services;
 import Package.Students.Students;
 import dataStructures.*;
@@ -51,7 +52,7 @@ public class Area implements AreaInterface, Serializable {
         return studentsCollections.getStudentByName(name);
     }
 
-    public Map<Integer,List<Services>> getServicesByStar()throws NoToList{
+    public Map<Integer,List<Services>> getServicesByStar()throws NoServicesInTheSystem {
         return servicesCollections.getServicesByStar();
     }
 
@@ -83,15 +84,15 @@ public class Area implements AreaInterface, Serializable {
         studentsCollections.removeStudent(student);
     }
 
-    public List<Services> getServices()throws NoToList{
+    public List<Services> getServices()throws NoServicesYet {
         return servicesCollections.getServices();
     }
 
-    public Map<String,Students> getStudents()throws NoToList{
+    public Map<String,Students> getStudentsMap()throws NoStudentsYet {
         return studentsCollections.getStudents();
     }
 
-    public List<Students> getStudentsByRegistrationByCountry(String country)throws NoToList{
+    public List<Students> getStudentsByRegistrationByCountry(String country)throws NoStudentsFromCountry {
         return studentsCollections.getStudentsByRegistrationByCountry(country);
     }
 }

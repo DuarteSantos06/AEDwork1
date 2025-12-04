@@ -1,5 +1,6 @@
-//@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
-//@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt
+/**
+ //@author Duarte Santos (70847) djp.santos@campus.fct.unl.pt
+ //@author Rodrigo Marcelino (71260) r.marcelino@campus.fct.unl.pt */
 import java.util.Scanner;
 import Package.HomeAway;
 import Package.Services.IReadOnlyService;
@@ -13,10 +14,9 @@ import dataStructures.TwoWayIterator;
 /**
  * Main class to handle the application logic for managing students, services and areas
  * in the HomeAway system. It handles user input, invokes the correct operations in
- * the HomeAway backend, and prints formatted output.
+ * the HomeAway class, and prints formatted output.
  */
 public class Main  {
-
 
     /**
      * Reads the next command from input and returns its respective Command enum.
@@ -75,7 +75,7 @@ public class Main  {
 
     /**
      * Prints the help menu by iterating over all commands and displaying their messages.
-     * @complexity O(m), onde m é o número de comandos definidos
+     * @complexity O(m), where m is the number of commands
      */
     private static void executeHelp() {
         Command[] help=Command.values();
@@ -85,7 +85,7 @@ public class Main  {
 
     /**
      * Handles program termination, saving current area before exiting.
-     * @param homeAway HomeAway backend instance
+     * @param homeAway, App class
      * @complexity O(1)
      */
     private static void exit(HomeAway homeAway) {
@@ -100,8 +100,8 @@ public class Main  {
     /**
      * Reads area bounds and name from input and creates a new area in HomeAway.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(1) para processamento de entrada e criação de área
+     * @param homeAway ,App class
+     * @complexity O(1)
      */
     private static void createArea(Scanner in, HomeAway homeAway) {
         try {
@@ -122,7 +122,7 @@ public class Main  {
 
     /**
      * Saves current area in HomeAway and prints confirmation.
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @complexity O(1)
      */
     private static void saveArea( HomeAway homeAway) {
@@ -137,7 +137,7 @@ public class Main  {
     /**
      * Loads an area from user input name in HomeAway.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @complexity O(1)
      */
     private static void loadArea(Scanner in, HomeAway homeAway) {
@@ -153,7 +153,7 @@ public class Main  {
     /**
      * Creates a new service (eating, lodging or leisure) depending on user input.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @complexity O(1)
      */
     private static void createService(Scanner in, HomeAway homeAway) {
@@ -172,7 +172,7 @@ public class Main  {
     /**
      * Creates a service with capacity and price (eating or lodging).
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @param type Type of service (eating or lodging)
      * @complexity O(1)
      */
@@ -200,7 +200,7 @@ public class Main  {
     /**
      * Creates a leisure service with a discount and price.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @complexity O(1)
      */
     private static void createLeisure(Scanner in, HomeAway homeAway) {
@@ -221,8 +221,8 @@ public class Main  {
 
     /**
      * Lists all services registered in the current area of HomeAway.
-     * @param homeAway HomeAway backend instance
-     * @complexity O(s), onde s é o número de serviços
+     * @param homeAway ,App class
+     * @complexity O(s), where s is the number of services
      */
     private static void listServices( HomeAway homeAway) {
         try{
@@ -239,8 +239,8 @@ public class Main  {
     /**
      * Adds a student with all details from input to the current area.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(1)
+     * @param homeAway ,App class
+     * @complexity O(log n)
      */
     private static void createStudent(Scanner in, HomeAway homeAway) {
         try{
@@ -259,8 +259,8 @@ public class Main  {
     /**
      * Removes a student (by name) from the current area.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(1)
+     * @param homeAway ,App class
+     * @complexity O(log n)
      */
     private static void leave(Scanner in, HomeAway homeAway) {
         try{
@@ -275,8 +275,8 @@ public class Main  {
     /**
      * Lists all students, or students from a specific country, in the current area.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(n), onde n é o número de estudantes
+     * @param homeAway ,App class
+     * @complexity O(n), where n is the number of students
      */
     private static void listStudents(Scanner in, HomeAway homeAway) {
         try{
@@ -302,7 +302,7 @@ public class Main  {
     /**
      * Changes the location of a student to a new service (leisure or eating).
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @complexity O(1)
      */
     private static void go(Scanner in, HomeAway homeAway) {
@@ -325,7 +325,7 @@ public class Main  {
     /**
      * Changes the designated home (lodging) for a student.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @complexity O(1)
      */
     private static void move(Scanner in, HomeAway homeAway) {
@@ -343,8 +343,8 @@ public class Main  {
     /**
      * Lists users in a specific service, forwards or backwards.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(u), onde u é o número de usuários naquele serviço
+     * @param homeAway ,App class
+     * @complexity O(u), where u is the number of users
      */
     private static void listUsers(Scanner in, HomeAway homeAway) {
         try{
@@ -373,7 +373,7 @@ public class Main  {
     /**
      * Prints the current location of a student.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @complexity O(1)
      */
     private static void where(Scanner in, HomeAway homeAway) {
@@ -391,8 +391,8 @@ public class Main  {
     /**
      * Lists all places visited by a given student.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(v), onde v é o número de locais visitados
+     * @param homeAway ,App class
+     * @complexity O(v)
      */
     private static void listVisited(Scanner in, HomeAway homeAway) {
         try{
@@ -410,7 +410,7 @@ public class Main  {
     /**
      * Adds an evaluation (star and description) to a service.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
+     * @param homeAway ,App class
      * @complexity O(1)
      */
     private static void evaluate(Scanner in, HomeAway homeAway) {
@@ -427,8 +427,8 @@ public class Main  {
 
     /**
      * Displays all services sorted by their star evaluations, descending.
-     * @param homeAway HomeAway backend instance
-     * @complexity O(s log s), onde s é o número de serviços
+     * @param homeAway ,App class
+     * @complexity O(m)
      */
     private static void ranking(HomeAway homeAway) {
         try{
@@ -446,8 +446,8 @@ public class Main  {
     /**
      * Lists services matching type and star evaluation, closest to the student's location.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(s), onde s é o número de serviços
+     * @param homeAway ,App class
+     * @complexity O(n+m)
      */
     private static void ranked(Scanner in, HomeAway homeAway) {
         try{
@@ -468,8 +468,8 @@ public class Main  {
     /**
      * Lists all services with at least one review containing a specified word.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(s), onde s é o número de serviços
+     * @param homeAway ,App class
+     * @complexity O(m*r),where m is the number of services and r is the number of reviews per service
      */
     private static void tag(Scanner in, HomeAway homeAway) {
         try{
@@ -490,8 +490,8 @@ public class Main  {
     /**
      * Finds the most relevant service of a certain type for a specific student.
      * @param in Scanner input
-     * @param homeAway HomeAway backend instance
-     * @complexity O(s), onde s é o número de serviços
+     * @param homeAway ,App class
+     * @complexity O(s),where s is the number of services
      */
     private static void find (Scanner in, HomeAway homeAway){
         try{
