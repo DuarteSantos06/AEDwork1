@@ -95,7 +95,7 @@ public class SepChainHashTable<K,V> extends HashTable<K,V> {
     private void rehash() {
         Map<K, V>[] oldTable = table;
 
-        int newCapacity = nextPrime(2 * table.length);
+        int newCapacity = nextPrime(table.length*2);
 
         table = (Map<K, V>[]) new Map[newCapacity];
         for (int i = 0; i < newCapacity; i++) {

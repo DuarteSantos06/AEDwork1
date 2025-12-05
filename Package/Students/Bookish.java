@@ -14,7 +14,6 @@ import dataStructures.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serial;
 
 public class Bookish extends StudentsKeepVisited{
 
@@ -53,7 +52,6 @@ public class Bookish extends StudentsKeepVisited{
      * @param oos
      * @throws IOException
      */
-    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
         oos.writeInt(services.size());
@@ -72,7 +70,6 @@ public class Bookish extends StudentsKeepVisited{
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    @Serial
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         ois.defaultReadObject();
         services=new SinglyLinkedList<>();

@@ -95,6 +95,7 @@ public class StackWithListInArray<E> implements Stack<E> {
      * @throws EmptyStackException when size = 0
      */
     @Override
+
     public E pop()throws EmptyStackException {
         if(size() == 0){
             throw new EmptyStackException();

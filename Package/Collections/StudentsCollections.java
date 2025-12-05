@@ -16,6 +16,8 @@ public class StudentsCollections implements Serializable,StudentsCollectionsInte
 
     private transient Map<String, Students> students;
     private transient Map<String, List<Students>>studentsByCountry;
+    @Serial
+    private static final long serialVersionUID = 4L;
 
     public StudentsCollections(){
         students = new AVLSortedMap<>();

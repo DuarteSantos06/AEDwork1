@@ -8,6 +8,7 @@ import Package.Exceptions.InvalidLocation;
 import Package.Exceptions.ServiceIsFull;
 import Package.Services.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public abstract class Students implements Comparable<Students>,StudentsInterface,IReadOnlyStudent, Serializable {
@@ -20,6 +21,8 @@ public abstract class Students implements Comparable<Students>,StudentsInterface
     private Services actualLocation;
     private Lodging home;
     private Eating cheapestEating;
+    @Serial
+    private static final long serialVersionUID = 2L;
 
 
     public Students(String name, String country, Lodging home,StudentsType type) {

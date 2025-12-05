@@ -140,7 +140,7 @@ class MapSinglyList<K,V> implements Map<K, V> {
      *Time complexity O(1)
      * @return iterator of the values in the dictionary
      */
-@SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked","rawtypes"})
     public Iterator<V> values() {
         return new ValuesIterator(iterator());
     }

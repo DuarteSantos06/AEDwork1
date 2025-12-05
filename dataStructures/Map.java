@@ -5,6 +5,7 @@
 
 package dataStructures;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Dictionary Abstract Data Type 
@@ -18,14 +19,14 @@ import java.io.Serializable;
 public interface Map<K,V> extends Serializable {
 
     record Entry<K,V>(K key,V value) implements Serializable {
-        
+
         public boolean equals(Object obj) {
             if (this == obj)
                 return true;
             if (!(obj instanceof Entry<?, ?> other))
                 return false;
-            return (key == null ? other.key == null : key.equals(other.key))
-                    && (value == null ? other.value == null : value.equals(other.value));
+            return (Objects.equals(key, other.key))
+                    && (Objects.equals(value, other.value));
         }
     }
     /**

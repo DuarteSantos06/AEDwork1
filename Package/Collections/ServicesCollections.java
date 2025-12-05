@@ -17,6 +17,8 @@ public class ServicesCollections implements Serializable,ServicesCollectionsInte
     private transient Map<Integer, List<Services>> servicesByStar;
     private transient Map<String,Services> servicesByName;
     private transient List<Services> services;
+    @Serial
+    private static final long serialVersionUID = 3L;
 
     public ServicesCollections(){
         services = new DoublyLinkedList<>();

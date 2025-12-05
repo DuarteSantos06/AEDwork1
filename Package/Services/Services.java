@@ -19,6 +19,8 @@ public abstract class Services implements ServicesInterface, IReadOnlyService,Se
     private transient List<String> reviews;
     private final ServicesType type;
     private int numberEvaluated;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     public Services(long latitude, long longitude, float price, String name, ServicesType type){
         this.latitude = latitude;

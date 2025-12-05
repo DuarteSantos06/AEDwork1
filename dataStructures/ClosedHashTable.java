@@ -156,7 +156,6 @@ public class ClosedHashTable<K,V> extends HashTable<K,V> {
 
     /**
      * Returns iterator of non-null entries
-     *
      * Time Complexity: O(n) to iterate all table slots
      */
     @Override

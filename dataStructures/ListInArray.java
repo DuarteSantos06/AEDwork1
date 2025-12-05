@@ -5,6 +5,9 @@
 
 package dataStructures;
 import dataStructures.exceptions.*;
+
+import java.io.Serializable;
+
 /**
  * List in Array
  * @author AED  Team

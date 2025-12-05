@@ -12,7 +12,6 @@ import dataStructures.Iterator;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serial;
 
 public class ServicesWithCapacity extends Services implements ServicesWithCapacityInterface{
 
@@ -74,7 +73,6 @@ public class ServicesWithCapacity extends Services implements ServicesWithCapaci
      * @param oos
      * @throws IOException
      */
-    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         oos.defaultWriteObject();
         oos.writeInt(capacity);
@@ -94,7 +92,6 @@ public class ServicesWithCapacity extends Services implements ServicesWithCapaci
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    @Serial
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         ois.defaultReadObject();
         this.capacity = ois.readInt();
